@@ -1,16 +1,22 @@
-"""
-Django settings for cubi project.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
-"""
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+#-*- coding: utf-8 -*-
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT_PATH = os.path.join(BASE_DIR, 'static_root')
+MEDIA_PATH = os.path.join(BASE_DIR, 'media')
+
+TEMPLATE_DIRS = (
+    TEMPLATE_PATH,
+)
+STATICFILES_DIRS = (
+    STATIC_PATH,
+)
+
+STATIC_URL = '/static/'
+STATIC_ROOT = STATIC_ROOT_PATH
+MEDIA_ROOT = MEDIA_PATH
+MEDIA_URL = '/media/'
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,11 +29,7 @@ SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
 DEBUG = True
 
 TEMPLATE_DEBUG = True
-
 ALLOWED_HOSTS = []
-
-
-# Application definition
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -36,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,12 +51,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'cubi.urls'
-
 WSGI_APPLICATION = 'cubi.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -65,14 +63,10 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'ko-kr'
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
