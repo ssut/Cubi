@@ -39,6 +39,7 @@ class CubiUser(AbstractUser):
     nickname = models.CharField("닉네임", max_length=8)
     gender = models.CharField("성별", max_length=1, choices=TYPE_GENDER_CHOICES, blank=True)
     tel = models.CharField("연락처", max_length=14, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     access_token = models.CharField("페이스북 엑세스 토큰", max_length=255, blank=True)
 
