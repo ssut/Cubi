@@ -1,5 +1,13 @@
 #-*- coding: utf-8 -*-
 import os
+import djcelery
+
+HOST = 'localhost:8000'
+
+BROKER_URL = "django://"
+CELERY_IMPORTS = ()
+djcelery.setup_loader()
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
@@ -39,6 +47,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
+    'kombu.transport.django',
+    'djcelery',
+
+    
 )
 
 MIDDLEWARE_CLASSES = (
