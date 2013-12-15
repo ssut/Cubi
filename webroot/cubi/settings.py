@@ -1,5 +1,13 @@
 #-*- coding: utf-8 -*-
 import os
+import djcelery
+
+HOST = 'localhost:8000'
+
+BROKER_URL = "django://"
+CELERY_IMPORTS = ()
+djcelery.setup_loader()
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
@@ -18,12 +26,9 @@ STATIC_ROOT = STATIC_ROOT_PATH
 MEDIA_ROOT = MEDIA_PATH
 MEDIA_URL = '/media/'
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
+FACEBOOK_APP_ID = '442841165838586'
+FACEBOOK_APP_SECRET = '31a520eaf17fe3224f3c2b3151ebfae7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +44,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
+    'kombu.transport.django',
+    'djcelery',
+
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,6 +57,17 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
 )
 
 ROOT_URLCONF = 'cubi.urls'

@@ -7,6 +7,6 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'cubi.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
-
+        
     url(r'^django_admin/', include(admin.site.urls)),
 )
