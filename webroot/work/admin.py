@@ -1,3 +1,12 @@
 from django.contrib import admin
+from work.models import *
 
-# Register your models here.
+class WorkAdmin(admin.ModelAdmin):
+    list_display = ['id', 'author', 'title', 'created']
+
+class ChapterAdmin(admin.ModelAdmin):
+    list_display = ['id', 'title', 'work', 'created']
+
+class ContentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'sequence', 'chapter']
+

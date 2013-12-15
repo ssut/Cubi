@@ -40,6 +40,16 @@ def get_image_content_path(content_instance):
     path2 = os.path.join(path1, str(content_instance.chapter.id))
     return path2
 
+'''
+- 구조 -
+Work(작품)
+    Chapter(각 화)
+        Content(내용)
+            Comic, Text, Comic.... Content의 Sequence순으로 배열
+    Chapter(각 화)
+        Content(내용)
+            Comic, Text, Comic.... Content의 Sequence순으로 배열
+'''
 # 작품
 class Work(models.Model):
     author = models.ForeignKey(User)
@@ -67,6 +77,7 @@ class Chapter(models.Model):
 내용(Content)
     이미지 : Image
     글 : Text
+    링크 : 어떻게 구현할지 고민(Text에 링크속성?)
     추후 추가 가능
 '''
 class Content(models.Model):
