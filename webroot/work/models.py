@@ -22,23 +22,26 @@ path_image_chapter_thumbnail = os.path.join(path_image_chapter, 'thumbnail')
 path_image_content = os.path.join(path_image, 'content')
 
 # Dynamic upload path
-def get_work_cover_path(work_instance):
+def get_work_cover_path(work_instance, filename):
     path = '%s'
-def get_work_thumbnail_path(work_instance):
+def get_work_thumbnail_path(work_instance, filename):
     path = '%s'
 
-def get_image_chapter_cover_path(chapter_instance):
+def get_image_chapter_cover_path(chapter_instance, filename):
     path1 = os.path.join(path_image_chapter_cover, str(chapter_instance.work.id))
-    return path1
+    path2 = os.path.join(path1, filename)
+    return path2
 
-def get_image_chapter_thumbnail_path(chapter_instance):
+def get_image_chapter_thumbnail_path(chapter_instance, filename):
     path1 = os.path.join(path_image_chapter_thumbnail, str(chapter_instance.work.id))
-    return path1
+    path2 = os.path.join(path1, filename)
+    return path2
 
-def get_image_content_path(content_instance):
+def get_image_content_path(content_instance, filename):
     path1 = os.path.join(path_image_content, str(content_instance.chapter.work.id))
     path2 = os.path.join(path1, str(content_instance.chapter.id))
-    return path2
+    path3 = os.path.join(path2, filename)
+    return path3
 
 '''
 - 구조 -
@@ -66,8 +69,8 @@ class Chapter(models.Model):
     work = models.ForeignKey(Work)
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
-    thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path())
-    cover = models.ImageField(upload_to=get_image_chapter_cover_path())
+    thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path)
+    cover = models.ImageField(upload_to=get_image_chapter_cover_path)
 
     def __unicode__(self):
         return self.title
@@ -87,7 +90,7 @@ class Content(models.Model):
         return u'%s - %s (%d)' % (self.chapter.work.title, self.chapter.title, self.sequence)
 
 class Image(Content):
-    image = models.ImageField(upload_to=get_image_content_path())
+    image = models.ImageField(upload_to=get_image_content_path)
     def __unicode__(self):
         return u'%s - %s (Image, %d)' % (self.chapter.work.title, self.chapter.title, self.sequence)
 

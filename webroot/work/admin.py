@@ -10,3 +10,6 @@ class ChapterAdmin(admin.ModelAdmin):
 class ContentAdmin(admin.ModelAdmin):
     list_display = ['id', 'sequence', 'chapter']
 
+admin.site.register(Work, WorkAdmin)
+admin.site.register(Chapter, ChapterAdmin)
+admin.site.register(Content, ContentAdmin)
