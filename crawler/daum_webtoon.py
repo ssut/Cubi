@@ -4,15 +4,40 @@ import re
 import StringIO
 from bs4 import BeautifulSoup
 from datetime import datetime
+import mechanize
+import json
 
 list_url = 'http://cartoon.media.daum.net/webtoon/view/'
 comic_title = 'dogandrabbit'
 
 detail_url = 'http://cartoon.media.daum.net/webtoon/viewer/'
-detail_num = '23549'
-
+detail_url_json = 'http://cartoon.media.daum.net/webtoon/viewer_images.js?webtoon_episode_id='
 
 def detail(detail_num):
+    br = mechanize.Browser()
+    url_open = '%s%d' % (detail_url, detail_num)
+    url_detail = '%s%d' % (detail_url_json, detail_num)
+    print url_open
+    print url_detail
+
+    br.open(url_open)
+    response = br.open(url_detail)
+
+    data = json.loads(response.read())
+    episode_title = data['episodeTitle']
+
+    imgs = data['images']
+    img_src_list = []
+    for img in imgs:
+        img_src = img['url']
+        img_src_list.append(img_src)
+
+    d = {
+        'episode_title': episode_title,
+        'img_src_list': img_src_list,
+    }
+
+    return d
 
 
 def list(comic_title):
