@@ -37,7 +37,6 @@ def detail(detail_num):
         'episode_title': episode_title,
         'img_src_list': img_src_list,
     }
-
     return d
 
 # 웹툰의 리스트정보 반환

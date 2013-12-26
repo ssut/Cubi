@@ -9,4 +9,7 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
         
     url(r'^django_admin/', include(admin.site.urls)),
+
+
+    url(r'^$', 'structure.views.index', name='index'),
 )

@@ -58,23 +58,23 @@ class Work(models.Model):
     author = models.ForeignKey(User)
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
-    thumbnail = models.ImageField(upload_to=path_image_work_thumbnail)
-    cover = models.ImageField(upload_to=path_image_work_cover)
+    thumbnail = models.ImageField(upload_to=path_image_work_thumbnail, blank=True)
+    cover = models.ImageField(upload_to=path_image_work_cover, blank=True)
 
     def __unicode__(self):
         return self.title
 
 # 챕터(각 작품의 1,2,3화....)
 class Chapter(models.Model):
+    reg_no = models.CharField(blank=True, max_length=100)
     work = models.ForeignKey(Work)
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
-    thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path)
-    cover = models.ImageField(upload_to=get_image_chapter_cover_path)
+    thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
+    cover = models.ImageField(upload_to=get_image_chapter_cover_path, blank=True)
 
     def __unicode__(self):
         return self.title
-
 
 '''
 내용(Content)
