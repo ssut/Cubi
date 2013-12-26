@@ -66,3 +66,9 @@ class CubiUser(AbstractUser):
 
     def add_work(self, work_instance):
         self.own_works.add(work_instance)
+
+    def remove_favorite(self, work_instance):
+        self.favorites.remove(work_instance)
+
+    def remove_work(self, work_instance):
+        self.own_works.remove(work_instance)

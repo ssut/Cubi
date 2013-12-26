@@ -6,7 +6,7 @@ from work.models import *
 work_category_list = [u'웹툰', u'만화', u'일러스트', u'소설']
 work_list = [
     {
-        'category': WorkCategory.objects.get(id=1),
+        'category': WorkCategory.objects.get(title=u'웹툰'),
         'author': User.objects.get(id=1),
         'title': 'Test',
         'description': 'Test Description',
@@ -37,6 +37,9 @@ def create_work():
             print u'\tWork [%s]\t\t이미있음' % (work_instance.title)
 
     print '\n== Work모델 초기 데이터 설정 완료 ==\n'
+
+
+
 
 class Command(BaseCommand):
     args = ''

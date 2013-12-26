@@ -1,3 +1,4 @@
 from django.contrib import admin
+from member.models import CubiUser
 
-# Register your models here.
+admin.site.register(CubiUser)

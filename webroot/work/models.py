@@ -43,13 +43,22 @@ def get_image_content_path(content_instance, filename):
     path3 = os.path.join(path2, filename)
     return path3
 
+# 공통적으로 사용할 댓글 클래스
 class Comment(models.Model):
     author = models.ForeignKey(User)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-
     def __unicode__(self):
         return u'%s%s Comment(%s)' % (self.author.last_name, self.author.first_name, self.created)
+
+# 공통적으로 사용할 평점 클래스
+CHOICES_RATING = [(i,i+1) for i in range(10)]
+class Rating(models.Model):
+    author = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
+    score = models.IntegerField(choices=CHOICES_RATING)
+    def __unicode__(self):
+        return u'%s%s Rating(%d)' % (self.author.last_name, self.author.first_name, self.score)
 
 
 '''
@@ -101,6 +110,13 @@ class ChapterComment(Comment):
 
     def __unicode__(self):
         return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.chapter.title)
+
+# 챕터 평점
+class ChapterRating(Rating):
+    chapter = models.ForeignKey(Chapter)
+
+    def __unicode__(self):
+        return u'%s%s - %s Rating(%d)' % (self.author.last_name, self.author.first_name, self.chapter.title, self.score)
 
 '''
 내용(Content)
