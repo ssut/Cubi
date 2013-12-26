@@ -1,0 +1,573 @@
+{% extends 'registration/base.html' %}
+{% load staticfiles %}
+
+{% block style %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" media="all" />
+<style>
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+<div class="content container-fluid">
+	<div class="row-fluid">
+		<div class="span8 offset2">
+			<h2 class="page-title">회원가입 <small>Registration</small></h2>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span8 offset2">
+			<section class="widget">
+				<header>
+					<legend class="section"><i class="icon-file"></i> 이용약관 <small>Terms &amp; conditions of use</small></legend>
+				</header>
+				<div class="body">
+					<form id="validation-form" class="form-horizontal label-left" novalidate="novalidate" method="POST" enctype="multipart/form-data" data-validate="parsley">
+						{% csrf_token %}
+						<div class="row-fluid">
+							<div class="span12" style="padding: 10px;   ">
+								제 1 조 (목적)<br/>
+								<br/>
+								이 약관은 네이버 주식회사 ("회사" 또는 "네이버")가 제공하는 네이버, 미투데이(me2day.net) 및 네이버와 미투데이 관련 제반 서비스의 이용과 관련하여 회사와 회원과의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.<br/>
+								제 2 조 (정의)<br/>
+								<br/>
+								이 약관에서 사용하는 용어의 정의는 다음과 같습니다.<br/>
+								①"서비스"라 함은 구현되는 단말기(PC, TV, 휴대형단말기 등의 각종 유무선 장치를 포함)와 상관없이 "회원"이 이용할 수 있는 네이버, 미투데이(me2day.net) 및 네이버와 미투데이 관련 제반 서비스를 의미합니다.<br/>
+								②"회원"이라 함은 회사의 "서비스"에 접속하여 이 약관에 따라 "회사"와 이용계약을 체결하고 "회사"가 제공하는 "서비스"를 이용하는 고객을 말합니다.
+								③"아이디(ID)"라 함은 "회원"의 식별과 "서비스" 이용을 위하여 "회원"이 정하고 "회사"가 승인하는 문자와 숫자의 조합을 의미합니다.<br/>
+								④"비밀번호"라 함은 "회원"이 부여 받은 "아이디와 일치되는 "회원"임을 확인하고 비밀보호를 위해 "회원" 자신이 정한 문자 또는 숫자의 조합을 의미합니다.<br/>
+								⑤"유료서비스"라 함은 "회사"가 유료로 제공하는 각종 온라인디지털콘텐츠(각종 정보콘텐츠, VOD, 아이템 기타 유료콘텐츠를 포함) 및 제반 서비스를 의미합니다.
+								⑥"포인트"라 함은 서비스의 효율적 이용을 위해 회사가 임의로 책정 또는 지급, 조정할 수 있는 재산적 가치가 없는 "서비스" 상의 가상 데이터를 의미합니다.<br/>
+								⑦"게시물"이라 함은 "회원"이 "서비스"를 이용함에 있어 "서비스상"에 게시한 부호ㆍ문자ㆍ음성ㆍ음향ㆍ화상ㆍ동영상 등의 정보 형태의 글, 사진, 동영상 및 각종 파일과 링크 등을 의미합니다.<br/>
+							</div>
+						</div>
+						<fieldset>
+
+						</fieldset>
+						<fieldset>
+							<legend class="section"><i class="icon-circle-blank"></i>    기본 정보</legend>
+							<div class="control-group">
+								<label for="{{ form.username.id_for_label }}" class="control-label">
+									{{ form.username.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.username }}
+									<span class="help-inline">
+										{{ form.username.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.first_name.id_for_label }}" class="control-label">
+									{{ form.first_name.label }} / {{ form.last_name.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.first_name }}  {{ form.last_name }}
+									<span class="help-inline">
+										{{ form.first_name.errors }} {{ form.last_name.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.password.id_for_label }}" class="control-label">
+									{{ form.password.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.password }}
+									<span class="help-inline">
+										{{ form.password.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.password_confirm.id_for_label }}" class="control-label">
+									{{ form.password_confirm.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.password_confirm }}
+									<span class="help-inline">
+										{{ form.password_confirm.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.email.id_for_label }}" class="control-label">
+									{{ form.email.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.email }}
+									<span class="help-inline">
+										{{ form.email.errors }}
+									</span>
+								</div>
+							</div>
+
+
+							<legend class="section"><i class="icon-circle-blank"></i>    신상 정보</legend>
+							<div class="control-group">
+								<label for="{{ form.age.id_for_label }}" class="control-label">
+									{{ form.age.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.age }}
+									<span class="help-inline">
+										{{ form.age.errors }}
+									</span>
+								</div>
+							</div>
+
+
+							<div class="control-group">
+								<label class="control-label" for="{{ form.gender.id_for_label}}">
+									{{ form.gender.label }}
+								</label>
+								<div class="controls">
+									{{ form.gender }}
+									<span class="help-inline">
+										{{ form.gender.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.birthday.id_for_label }}" class="control-label">
+									{{ form.birthday.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.birthday }}
+									<span class="help-inline">
+										{{ form.birthday.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.rr_number.id_for_label }}" class="control-label">
+									{{ form.rr_number.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.rr_number }}
+									<span class="help-inline">
+										{{ form.rr_number.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.home_number.id_for_label }}" class="control-label">
+									{{ form.home_number.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.home_number }}
+									<span class="help-inline">
+										{{ form.home_number.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.phone_number.id_for_label }}" class="control-label">
+									{{ form.phone_number.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.phone_number }}
+									<span class="help-inline">
+										{{ form.phone_number.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.education_level.id_for_label }}" class="control-label">
+									{{ form.education_level.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.education_level }}
+									<span class="help-inline">
+										{{ form.education_level.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.military.id_for_label }}" class="control-label">
+									{{ form.military.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.military }}
+									<span class="help-inline">
+										{{ form.military.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.photo.id_for_label }}" class="control-label">
+									{{ form.photo.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.photo }}
+									<span class="help-inline">
+										{{ form.photo.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.school.id_for_label }}" class="control-label">
+									{{ form.school.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.school }}
+									<span class="help-inline">
+										{{ form.school.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.zipcode.id_for_label }}" class="control-label">
+									{{ form.zipcode.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.zipcode }}
+									<span class="help-inline">
+										{{ form.zipcode.errors }}
+									</span>
+									<input type="button" value="검색" onclick="find_zipcode()">
+								</div>
+							</div>
+							<div class="control-group">
+								<label for="{{ form.address1.id_for_label }}" class="control-label">
+									주소
+								</label>
+								<div class="controls controls-row">
+									{{ form.address1 }}
+									<span class="help-inline">
+										{{ form.address1.errors }}
+									</span>
+								</div>
+							</div>
+							<div class="control-group">
+								<label for="{{ form.address2.id_for_label }}" class="control-label">
+								</label>
+								<div class="controls controls-row">
+									{{ form.address2 }}
+									<span class="help-inline">
+										{{ form.address2.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div id="zip_search" class="control-group" style="display: none">
+								<label class="control-label">주소(동, 빌딩명) 입력</label>
+								<div class="controls controls-row">
+									<input type="text" id="zip_keyword" onkeydown="if(event.keyCode == 13) { find_zipcode(this.value); return false; }"> <input type="button" value="검색" onclick="find_zipcode($('#zip_keyword').val())">
+									<div style="height: 200px; overflow-y: scroll">
+										<ul id="zip_list"></ul>
+									</div>
+								</div>
+							</div>
+
+							<legend class="section"><i class="icon-circle-blank"></i>    선택 사항</legend>
+							<div class="control-group">
+								<label for="{{ form.google.id_for_label }}" class="control-label">
+									{{ form.google.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.google }}
+									<span class="help-inline">
+										{{ form.google.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.twitter.id_for_label }}" class="control-label">
+									{{ form.twitter.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.twitter }}
+									<span class="help-inline">
+										{{ form.twitter.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.facebook.id_for_label }}" class="control-label">
+									{{ form.facebook.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.facebook }}
+									<span class="help-inline">
+										{{ form.facebook.errors }}
+									</span>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label for="{{ form.field.id_for_label }}" class="control-label">
+									{{ form.field.label }}
+								</label>
+								<div class="controls controls-row">
+									{{ form.field }}
+									<span class="help-inline">
+										{{ form.field.errors }}
+									</span>
+								</div>
+							</div>
+
+						</fieldset>
+						<div class="form-actions">
+							<button type="submit" class="btn btn-primary span9">가입신청</button>
+						</div>
+					</form>
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+</div>
+{% endblock %}
+
+
+{% block bottom_script %}
+<!-- jquery and friends -->
+<script src="{% static 'lib/jquery/jquery.1.9.0.min.js' %}"> </script>
+<script src="{% static 'lib/jquery/jquery-migrate-1.1.0.min.js' %}"> </script>
+
+<!-- jquery plugins -->
+<script src="{% static 'js/jquery/jquery.maskedinput.js' %}"></script>
+<script src="{% static 'js/parsley/parsley.js' %}"> </script>
+<script src="{% static 'js/jquery/jquery.uniform.js' %}"></script>
+<script src="{% static 'js/jquery/jquery.select2.js' %}"></script>
+<script src="{% static 'js/jquery/jquery.autogrow-textarea.js' %}"></script>
+
+<!--backbone and friends -->
+<script src="{% static 'js/backbone/underscore-min.js' %}"></script>
+
+<!-- bootstrap default plugins -->
+<script src="{% static 'js/bootstrap/bootstrap-transition.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-collapse.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-alert.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-tooltip.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-popover.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-button.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-dropdown.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-modal.js' %}"></script>
+
+<!-- bootstrap custom plugins -->
+<script src="{% static 'js/bootstrap/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-select.js' %}"></script>
+
+
+<script src="{% static 'js/bootstrap/bootstrap-switch.js' %}"></script>
+<script src="{% static 'js/bootstrap/bootstrap-colorpicker.js' %}"></script>
+
+<!-- basic application js-->
+<script src="{% static 'js/bootstrap/app.js' %}"></script>
+<script src="{% static 'js/bootstrap/settings.js' %}"></script>
+
+<!-- page specific -->
+<script src="{% static 'js/forms-elemets.js' %}"></script>
+<script src="{% static 'js/forms.js' %}"></script>
+
+{% endblock %}
+
+{% block after_script %}
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script> 적용하면 selector안바뀜-->
+<!-- <script src="http://code.jquery.com/ui/1.8.18/jquery-ui.min.js" type="text/javascript"></script> -->
+<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#validation-form").validate({
+		rules:{
+			username: {
+				required: true,
+				minlength: 4
+			},
+			email:{
+				required:true,
+				email: true
+			},
+			password:{
+				required:true,
+				minlength: 4,
+			},
+			password_confirm:{
+				required:true,
+				equalTo: "#id_password"
+			},
+			age: {
+				required: true,
+				digits: true,
+				min: 15,
+				max: 99,
+			},
+			gender:"required",
+			birthday: {
+				required: true,
+				date: true,
+			},
+			rr_number_0: {
+				required: true,
+				minlength: 6,
+				digits: true,
+			},
+			rr_number_1: {
+				required: true,
+				minlength: 7,
+				digits: true,
+			},
+			home_number_0: {
+				required: true,
+				minlength: 2,
+				digits: true,
+			},
+			home_number_1: {
+				required: true,
+				minlength: 3,
+				digits: true,
+			},
+			home_number_2: {
+				required: true,
+				minlength: 3,
+				digits: true,
+			},
+			phone_number_0: {
+				required: true,
+				minlength: 3,
+				digits: true,
+			},
+			phone_number_1: {
+				required: true,
+				minlength: 3,
+				digits: true,
+			},
+			phone_number_2: {
+				required: true,
+				minlength: 3,
+				digits: true,
+			},
+			school: {
+				required: true,
+			}
+		},
+		messages:{
+			username: {
+				required: "아이디를 입력해주세요",
+				minlength: "아이디는 최소 4글자 이상이어야 합니다",
+			},
+			email:{
+				required: "이메일을 입력해주세요",
+				email: "이메일 형식이 올바르지 않습니다",
+			},
+			password: {
+				required: "비밀번호를 입력해주세요",
+				minlength: "비밀번호는 최소 4글자 이상이어야 합니다",
+			},
+			password_confirm: {
+				required: "비밀번호 확인란을 입력해주세요",
+				equalTo: "비밀번호와 확인란의 비밀번호가 같지 않습니다",
+			},
+			gender: "성별을 선택해주세요",
+			birthday: {
+				required: "생일을 입력해주세요",
+				date: "날짜 형식에 맞게 입력해주세요. ex)1988-03-24",
+},
+rr_number_0: {
+	required: "주민등록번호 앞자리를 입력해주세요",
+	minlength: "",
+	digits: "숫자만 입력해주세요",
+},
+rr_number_1: {
+	required: "주민등록번호 뒷자리를 입력해주세요",
+	minlength: "",
+	digits: "숫자만 입력해주세요",
+},
+school: {
+	required: "학교명을 입력해주세요",
+}
+},
+errorElement: "span", 
+errorClass: "help-inline",
+validClass: "help-inline",
+highlight: function(element, errorClass, validClass) {
+	$(element).removeClass('valid');
+	$(element).parents('.control-group').removeClass('success');
+	$(element).parents('.control-group').addClass('error');
+},
+unhighlight: function(element, errorClass, validClass) {
+	$(element).addClass('valid');
+	$(element).parents('.control-group').removeClass('error');
+	$(element).parents('.control-group').addClass('success');
+}
+});
+});
+
+$(function() {
+	$( "#id_birthday" ).datepicker({
+		yearRange: '-40:-15',
+		changeMonth: true,
+		changeYear: true,
+
+		dateFormat: 'yy-mm-dd',
+		prevText: '이전 달',
+		nextText: '다음 달',
+		monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+		dayNames: ['일','월','화','수','목','금','토'],
+		dayNamesShort: ['일','월','화','수','목','금','토'],
+		dayNamesMin: ['일','월','화','수','목','금','토'],
+		showMonthAfterYear: true,
+		yearSuffix: '년'
+	});
+});
+
+var find_zipcode = function(keyword) {
+	if(!keyword) {
+		$('#zip_search').show();
+		$('#zip_list').html('');
+	} else {
+		$.ajax({
+			url: '/korzip/search',
+			data: { keyword: keyword },
+			success: function(data) {
+				if(!data.status) {
+					alert('검색 오류');
+					return;
+				}
+
+				if(data.count == 0) {
+					alert('결과값이 없습니다.');
+					return;
+				} else {
+					$('#zip_list').html('');
+					for(var d in data.data) {
+						$('#zip_list').append(
+							'<li onclick=\'select_zipcode("' + data.data[d].zipcode + '", "' + data.data[d].address + '")\'><strong>' + data.data[d].zipcode + '</strong> ' + data.data[d].address + '</li>'
+							);
+					}
+				}
+			}
+		});
+	}
+};
+var select_zipcode = function(zipcode, address) {
+	$('#zip_list').html('');
+	zipcode = zipcode.split("-");
+	$('#id_zipcode_0').val(zipcode[0]);
+	$('#id_zipcode_1').val(zipcode[1]);
+	$('#{{ form.address1.id_for_label }}').val(address);
+	$('#{{ form.address2.id_for_label }}').removeAttr('readonly');
+
+	$('#zip_search').hide();
+};
+</script>
+{% endblock %}

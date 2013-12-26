@@ -1,0 +1,120 @@
+<form id="validation-form" class="form-horizontal label-left" novalidate="novalidate" method="POST" enctype="multipart/form-data" data-validate="parsley">
+	<fieldset>
+		<legend class="section"><i class="icon-circle-blank"></i>    기본 정보</legend>
+		<div class="control-group">
+			<label for="{{ form.username.id_for_label }}" class="control-label">
+				{{ form.username.label }}
+			</label>
+			<div class="controls controls-row">
+				{{ form.username }}
+				<span class="help-inline">
+					{{ form.username.errors }}
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="{{ form.first_name.id_for_label }}" class="control-label">
+				{{ form.first_name.label }} / {{ form.last_name.label }}
+			</label>
+			<div class="controls controls-row">
+				{{ form.first_name }}  {{ form.last_name }}
+				<span class="help-inline">
+					{{ form.first_name.errors }} {{ form.last_name.errors }}
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="{{ form.password.id_for_label }}" class="control-label">
+				{{ form.password.label }}
+			</label>
+			<div class="controls controls-row">
+				{{ form.password }}
+				<span class="help-inline">
+					{{ form.password.errors }}
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="{{ form.password_confirm.id_for_label }}" class="control-label">
+				{{ form.password_confirm.label }}
+			</label>
+			<div class="controls controls-row">
+				{{ form.password_confirm }}
+				<span class="help-inline">
+					{{ form.password_confirm.errors }}
+				</span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label for="{{ form.email.id_for_label }}" class="control-label">
+				{{ form.email.label }}
+			</label>
+			<div class="controls controls-row">
+				{{ form.email }}
+				<span class="help-inline">
+					{{ form.email.errors }}
+				</span>
+			</div>
+		</div>
+	</fieldset>
+</form>
+
+<script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#validation-form").validate({
+		rules:{
+			username: {
+				required: true,
+				minlength: 4
+			},
+			email:{
+				required:true,
+				email: true
+			},
+			password:{
+				required:true,
+				minlength: 4,
+			},
+			password_confirm:{
+				required:true,
+				equalTo: "#id_password"
+			},
+		},
+		messages:{
+			username: {
+				required: "아이디를 입력해주세요",
+				minlength: "아이디는 최소 4글자 이상이어야 합니다",
+			},
+			email:{
+				required: "이메일을 입력해주세요",
+				email: "이메일 형식이 올바르지 않습니다",
+			},
+			password: {
+				required: "비밀번호를 입력해주세요",
+				minlength: "비밀번호는 최소 4글자 이상이어야 합니다",
+			},
+			password_confirm: {
+				required: "비밀번호 확인란을 입력해주세요",
+				equalTo: "비밀번호와 확인란의 비밀번호가 같지 않습니다",
+			},
+		},
+		errorElement: "span", 
+		errorClass: "help-inline",
+		validClass: "help-inline",
+		highlight: function(element, errorClass, validClass) {
+			$(element).removeClass('valid');
+			$(element).parents('.control-group').removeClass('success');
+			$(element).parents('.control-group').addClass('error');
+		},
+		unhighlight: function(element, errorClass, validClass) {
+			$(element).addClass('valid');
+			$(element).parents('.control-group').removeClass('error');
+			$(element).parents('.control-group').addClass('success');
+		}
+	});
+});

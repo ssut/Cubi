@@ -1,0 +1,27 @@
+{% extends 'registration/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block style %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="single-widget-container">
+	<section class="widget login-widget">
+		<header class="text-align-center">
+			<h3>SoMa IN<br/><small>Admin</small></h3>
+			<legend><small>SW Maestro Intranet</small></legend>
+			<h5>Your account is now activated.</h5>
+		</header>
+		<div class="body" style="padding-bottom: 10px;">
+			<a href="{% url 'manager:login' %}" class="btn btn-block btn-large btn-primary">
+				<span class="small-circle"><i class="icon-caret-right"></i></span>
+				<small>Go to login page</small>
+			</a>            
+		</div>
+	</section>
+</div>
+{% endblock %}

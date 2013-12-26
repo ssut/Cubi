@@ -92,6 +92,12 @@ class Work(models.Model):
     def __unicode__(self):
         return self.title
 
+# 작품 댓글
+class WorkComment(Comment):
+    work = models.ForeignKey(Work)
+    def __unicode__(self):
+        return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.work.title)
+
 # 챕터(각 작품의 1,2,3화....)
 class Chapter(models.Model):
     reg_no = models.CharField(blank=True, max_length=100)
@@ -107,14 +113,12 @@ class Chapter(models.Model):
 # 챕터 댓글
 class ChapterComment(Comment):
     chapter = models.ForeignKey(Chapter)
-
     def __unicode__(self):
         return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.chapter.title)
 
 # 챕터 평점
 class ChapterRating(Rating):
     chapter = models.ForeignKey(Chapter)
-
     def __unicode__(self):
         return u'%s%s - %s Rating(%d)' % (self.author.last_name, self.author.first_name, self.chapter.title, self.score)
 

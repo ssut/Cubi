@@ -27,6 +27,7 @@ MEDIA_ROOT = MEDIA_PATH
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'member.CubiUser'
+ACCOUNT_ACTIVATION_DAYS = 7
 
 SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
 FACEBOOK_APP_ID = '442841165838586'
@@ -45,9 +46,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'south',
     'kombu.transport.django',
     'djcelery',
+    'registration',
 
     'member',
     'work',
