@@ -58,7 +58,7 @@ class NaverWebtoon(object):
             tmp.close()
             data.append(tmp)
 
-       return data
+        return data
     
 # exmaple
 # NaverWebtoon().list(81482)

@@ -14,15 +14,15 @@ detail_url = 'http://cartoon.media.daum.net/webtoon/viewer/'
 detail_url_json = 'http://cartoon.media.daum.net/webtoon/viewer_images.js?webtoon_episode_id='
 
 def detail(detail_num):
+    # mechanize를 이용해서 detail_url에서 쿠키얻어 저장한 뒤(자동) detail_url_json에 요청해야만 값 받아옴
     br = mechanize.Browser()
     url_open = '%s%d' % (detail_url, detail_num)
     url_detail = '%s%d' % (detail_url_json, detail_num)
-    print url_open
-    print url_detail
 
     br.open(url_open)
     response = br.open(url_detail)
 
+    # json형식으로 데이터 받아옴. episodeTitle과 images를 사용
     data = json.loads(response.read())
     episode_title = data['episodeTitle']
 
@@ -32,6 +32,7 @@ def detail(detail_num):
         img_src = img['url']
         img_src_list.append(img_src)
 
+    # 현재 화의 제목과 이미지 경로 목록을 리턴
     d = {
         'episode_title': episode_title,
         'img_src_list': img_src_list,
@@ -39,7 +40,7 @@ def detail(detail_num):
 
     return d
 
-
+# 웹툰의 리스트정보 반환
 def list(comic_title):
     data = urllib.urlopen(list_url + comic_title)
     soup = BeautifulSoup(data)
@@ -116,6 +117,7 @@ def list(comic_title):
         # print chapter_info
         chapter_list.append(chapter_info)
 
+    # 제목, 작가명, 작품정보, 이용가, 장르, 각 화 chapter_number를 포함한 chapter_info 리스트 반환
     d = {
         'comic_title': comic_title,
         'author_name': author_name,
