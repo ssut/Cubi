@@ -43,6 +43,15 @@ def get_image_content_path(content_instance, filename):
     path3 = os.path.join(path2, filename)
     return path3
 
+class Comment(models.Model):
+    author = models.ForeignKey(User)
+    content = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return u'%s%s Comment(%s)' % (self.author.last_name, self.author.first_name, self.created)
+
+
 '''
 - 구조 -
 Work(작품)
@@ -53,10 +62,20 @@ Work(작품)
         Content(내용)
             Comic, Text, Comic.... Content의 Sequence순으로 배열
 '''
+# 작품 카테고리
+class WorkCategory(models.Model):
+    title = models.CharField(max_length=100)
+    def __unicode__(self):
+        return self.title
+
 # 작품
 class Work(models.Model):
+    category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
     title = models.CharField(max_length=200)
+    description = models.TextField()
+    market_android = models.CharField(max_length=100, blank=True)
+    market_ios = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to=path_image_work_thumbnail, blank=True)
     cover = models.ImageField(upload_to=path_image_work_cover, blank=True)
@@ -75,6 +94,13 @@ class Chapter(models.Model):
 
     def __unicode__(self):
         return self.title
+
+# 챕터 댓글
+class ChapterComment(Comment):
+    chapter = models.ForeignKey(Chapter)
+
+    def __unicode__(self):
+        return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.chapter.title)
 
 '''
 내용(Content)

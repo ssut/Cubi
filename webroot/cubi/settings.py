@@ -26,6 +26,8 @@ STATIC_ROOT = STATIC_ROOT_PATH
 MEDIA_ROOT = MEDIA_PATH
 MEDIA_URL = '/media/'
 
+AUTH_USER_MODEL = 'member.CubiUser'
+
 SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
 FACEBOOK_APP_ID = '442841165838586'
 FACEBOOK_APP_SECRET = '31a520eaf17fe3224f3c2b3151ebfae7'
@@ -47,6 +49,7 @@ INSTALLED_APPS = (
     'kombu.transport.django',
     'djcelery',
 
+    'member',
     'work',
 )
 
