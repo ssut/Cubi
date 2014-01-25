@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+
+<style>
+#reg2, #reg3 {
+	display: none;
+	/*visibility: hidden;*/
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+	<h3>작품등록</h3>
+</div>
+
+<div id="result">
+</div>
+
+<div id="reg1">
+	<h4>reg1</h4>
+	<div class="control">
+		<label class="control-label" for="reg1-1" >reg1-1</label>
+		<input class="input_reg_work" type="text" id="reg1-1"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg1-2" >reg1-2</label>
+		<input class="input_reg_work" type="text" id="reg1-2"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg1-3" >reg1-3</label>
+		<input class="input_reg_work" type="text" id="reg1-3"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg1-4" >reg1-4</label>
+		<input class="input_reg_work" type="text" id="reg1-4"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg1-5" >reg1-5</label>
+		<input class="input_reg_work" type="text" id="reg1-5"/>			
+	</div>
+	<button id="btn_reg1_next">Next</button>
+</div>
+
+<div id="reg2">
+	<h4>reg2</h4>
+	<div class="control">
+		<label class="control-label" for="reg2-1" >reg2-1</label>
+		<input class="input_reg_work" type="text" id="reg2-1"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg2-2" >reg2-2</label>
+		<input class="input_reg_work" type="text" id="reg2-2"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg2-3" >reg2-3</label>
+		<input class="input_reg_work" type="text" id="reg2-3"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg2-4" >reg2-4</label>
+		<input class="input_reg_work" type="text" id="reg2-4"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg2-5" >reg2-5</label>
+		<input class="input_reg_work" type="text" id="reg2-5"/>			
+	</div>
+	<button id="btn_reg2_prev">Prev</button>
+	<button id="btn_reg2_next">Next</button>
+</div>
+
+<div id="reg3">
+	<h4>reg3</h4>
+	<div class="control">
+		<label class="control-label" for="reg3-1" >reg3-1</label>
+		<input class="input_reg_work" type="text" id="reg3-1"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg3-2" >reg3-2</label>
+		<input class="input_reg_work" type="text" id="reg3-2"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg3-3" >reg3-3</label>
+		<input class="input_reg_work" type="text" id="reg3-3"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg3-4" >reg3-4</label>
+		<input class="input_reg_work" type="text" id="reg3-4"/>			
+	</div>
+	<div class="control">
+		<label class="control-label" for="reg3-5" >reg3-5</label>
+		<input class="input_reg_work" type="text" id="reg3-5"/>			
+	</div>
+	<button id="btn_reg3_prev">Prev</button>
+	<button id="btn_reg3_complete" type="submit">
+		Complete
+	</button>
+</div>
+
+<script type="text/javascript">
+	$("#btn_reg1_next").click(function(){
+		$("#reg1").hide();
+		$("#reg2").show();
+	});
+	$("#btn_reg2_next").click(function(){
+		$("#reg2").hide();
+		$("#reg3").show();
+	});
+	$("#btn_reg2_prev").click(function(){
+		$("#reg1").show();
+		$("#reg2").hide();
+	});
+	$("#btn_reg3_complete").click(function(){
+		$("#reg3").hide();
+		$("#result").html("Complete");
+		
+		value_result = '';
+		$(".input_reg_work").each(function(){
+			var value = $(this).val();
+			value_result += value + '\n';
+		});
+		alert(value_result);
+	});
+	$("#btn_reg3_prev").click(function(){
+		$("#reg3").hide();
+		$("#reg2").show();
+
+	});
+
+
+</script>
+
+{% endblock %}

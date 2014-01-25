@@ -1,5 +1,4 @@
 #-*- coding: utf-8 -*-
-
 from django.db import models
 
 class Notice(models.Model):
@@ -9,7 +8,6 @@ class Notice(models.Model):
     post_href = models.CharField("링크", max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    objects = NoticeManager()
-
     def __unicode__(self):
         return self.title
+

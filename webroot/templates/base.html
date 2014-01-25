@@ -1,45 +1,134 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}Cubi Base Title{% endblock %}</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- CSS -->
-	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-
-	<!-- Google Webfont -->
-	<!--<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>-->
-
-	{% block head %}
-	{% endblock %}
-</head>
-<body>
-<div class="container">
-	<!-- Static navbar -->
-	<div class="navbar navbar-default" role="navigation">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#">Cubi</a>
-		</div>
-		<div class="navbar-collapse collapse">
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="{% url 'index' %}">홈</a></li>
-				<li><a href="#">공지사항</a></li>
-				<li><a href="#">작품목록</a></li>
-				<li><a href="#">즐겨찾기</a></li>
-				<li><a>/</a></li>
-				<li><a href="{% url 'reg_author' %}">작품등록하기</a></li>
-			</ul>
-		</div><!--/.nav-collapse -->
-	</div>
-</div>
-<div class="container">
-	{% block content %}
-	{% endblock %}
-</div>
-
-
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/jquery.js' %}"></script>
-</body>
+<html lang="ko">
+	<head>
+		<title>{% block title %}Cubi Base{% endblock %}</title>
+		<meta charset="utf-8">
+		<title>Cubi</title>
+		<link rel="stylesheet" href="{% static 'css/common.css' %}">
+		<link rel="stylesheet" href="{% static 'css/header.css' %}">
+		<link rel="stylesheet" href="{% static 'css/footer.css' %}">
+		
+		<!-- Web Font -->
+		<link href="{% static 'css/font.css' %}" rel="stylesheet">
+	</head>
+	<body>
+		<header>
+			<section>
+				<section>
+					<a href="./">
+						<img src="{% static 'img/logo.png' %}" alt="Cubi">
+					</a>
+					<section>
+						<form action="#" method="post">
+							<input type="text">
+							<a href="javascript:(function(){})()" onclick="">
+								<img src="static/img/btn.search.png" alt="Search button">
+							</a>
+						</form>
+					</section>
+				</section>
+			</section>
+			<section>
+				<section>
+					<ul>
+						<li>
+							<a href="{% url 'index' %}">
+								<span>홈</span>
+							</a>
+						</li>
+						<li>
+							<a href="{% url 'about' %}">
+								<span>Cubi?</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>|</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>공지사항</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>작품 목록</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>작가 목록</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>|</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>FAQ</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>Q&A</span>
+							</a>
+						</li>
+					</ul>
+					<ul>
+						<li>
+							<a href="#">
+								<span>로그인</span>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<span>회원 가입</span>
+							</a>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</header>
+		<section>
+			{% block content %}
+			{% endblock %}
+		</section>
+		<footer>
+			<section>
+				<ul>
+					<li>
+						<a href="#">
+							<span>홈</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span>블로그</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span>이용 약관</span>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<span>개인정보취급방침</span>
+						</a>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<a href="#">
+							<span>맨 위로</span>
+						</a>
+					</li>
+				</ul>
+			</section>
+		</footer>
+	</body>
 </html>

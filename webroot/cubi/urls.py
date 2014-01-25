@@ -12,5 +12,8 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.backends.default.urls')),
 
     url(r'^$', 'structure.views.index', name='index'),
+    url(r'^about/$', 'structure.views.about', name='about'),
+
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),
+    url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 )
