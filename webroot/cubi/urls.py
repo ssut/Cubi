@@ -1,19 +1,21 @@
+#-*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'cubi.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-        
     url(r'^django_admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
+    # 1단계 메뉴
     url(r'^$', 'structure.views.index', name='index'),
     url(r'^about/$', 'structure.views.about', name='about'),
 
+    # 공지사항
+    url(r'^noticelist/$', 'board.views.noticelist', name='noticelist'),
+
+    # 작품등록
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 )
