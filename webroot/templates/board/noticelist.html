@@ -21,28 +21,29 @@ Cubi - 공지사항 목록
 {% endif %}
 
 
-{% if notices.has_previous %}
-<li><a href="?page={{ notices.previous_page_number }}">Prev</a></li>
-{% endif %}
+<ul class="pagination">
+	{% if notices.has_previous %}
+	<li><a href="?page={{ notices.previous_page_number }}">Prev</a></li>
+	{% endif %}
 
-{% if notices.page_range_data.show_first %}
-<li><a href="?page=1">1</a></li>
-{% endif %}
+	{% if notices.page_range_data.show_first %}
+	<li><a href="?page=1">1</a></li>
+	{% endif %}
 
-{% for i in notices.page_range_data.page_range %}
-	{% ifequal i notices.number %}
-		<li class="active"><a>{{ i }}</a></li>
-	{% else %}
-		<li><a href="?page={{ i }}">{{ i }}</a></li>
-	{% endifequal %}
-{% endfor %}
+	{% for i in notices.page_range_data.page_range %}
+		{% ifequal i notices.number %}
+			<li class="active"><a>{{ i }}</a></li>
+		{% else %}
+			<li><a href="?page={{ i }}">{{ i }}</a></li>
+		{% endifequal %}
+	{% endfor %}
 
-{% if notices.page_range_data.show_last %}
-<li><a href="?page={{ i }}">{{ notices.paginator.num_pages }}</a></li>
-{% endif %}
+	{% if notices.page_range_data.show_last %}
+	<li><a href="?page={{ i }}">{{ notices.paginator.num_pages }}</a></li>
+	{% endif %}
 
-{% if notices.has_next %}
-<li><a href="?page={{ notices.next_page_number }}">Next</a></li>
-{% endif %}
-
+	{% if notices.has_next %}
+	<li><a href="?page={{ notices.next_page_number }}">Next</a></li>
+	{% endif %}
+</ul>
 {% endblock %}
