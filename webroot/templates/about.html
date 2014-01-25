@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+
 {% block title %}
 Cubi란?
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/about.css' %}">
 {% endblock %}
 
 {% block content %}

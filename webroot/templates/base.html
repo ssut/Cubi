@@ -11,6 +11,9 @@
 		
 		<!-- Web Font -->
 		<link href="{% static 'css/font.css' %}" rel="stylesheet">
+
+		{% block head %}
+		{% endblock %}
 	</head>
 	<body>
 		<header>
@@ -23,7 +26,7 @@
 						<form action="#" method="post">
 							<input type="text">
 							<a href="javascript:(function(){})()" onclick="">
-								<img src="static/img/btn.search.png" alt="Search button">
+								<img src="{% static 'img/btn.search.png' %}" alt="Search button">
 							</a>
 						</form>
 					</section>
