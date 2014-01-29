@@ -82,7 +82,7 @@ class Work(models.Model):
     category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     market_android = models.CharField(max_length=100, blank=True)
     market_ios = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -103,7 +103,7 @@ class Chapter(models.Model):
     reg_no = models.CharField(blank=True, max_length=100)
     work = models.ForeignKey(Work)
     title = models.CharField(max_length=200)
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField()
     thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
     cover = models.ImageField(upload_to=get_image_chapter_cover_path, blank=True)
 

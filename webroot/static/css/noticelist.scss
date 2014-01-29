@@ -1,3 +1,5 @@
+$paginator-active-color: rgb(149, 165, 166);
+
 body{
 	> section {
 		width: 960px;
@@ -12,21 +14,24 @@ body{
 	padding-bottom: 10px;
 }
 .pagination {
+	list-style: none;
 	font-size: 8pt;
+
 	.active {
-		background-color: rgb(149, 165, 166);
+		background-color: $paginator-active-color;
+		border-color: $paginator-active-color;
 		color: white;
 	}
-	list-style: none;
+
 	& > li {
 		> a {
-			text-decoration: none;	
+			text-decoration: none;
 		}
 		display: block;
 		padding: 6px 12px;
 		border: 1px solid #ddd;
 		margin: 0;
-		float: right;
+		float: left;
 		z-index: 2;
 
 		&:after {

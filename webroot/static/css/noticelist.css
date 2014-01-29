@@ -12,11 +12,12 @@ body > section {
 }
 
 .pagination {
-  font-size: 8pt;
   list-style: none;
+  font-size: 8pt;
 }
 .pagination .active {
   background-color: #95a5a6;
+  border-color: #95a5a6;
   color: white;
 }
 .pagination > li {
@@ -24,7 +25,7 @@ body > section {
   padding: 6px 12px;
   border: 1px solid #ddd;
   margin: 0;
-  float: right;
+  float: left;
   z-index: 2;
 }
 .pagination > li > a {
