@@ -7,12 +7,14 @@ from datetime import datetime
 import mechanize
 import json
 
+# 정식웹툰
 list_url = 'http://cartoon.media.daum.net/webtoon/view/'
 comic_title = 'dogandrabbit'
 
 detail_url = 'http://cartoon.media.daum.net/webtoon/viewer/'
 detail_url_json = 'http://cartoon.media.daum.net/webtoon/viewer_images.js?webtoon_episode_id='
 
+# 정식웹툰
 def detail(detail_num):
     # mechanize를 이용해서 detail_url에서 쿠키얻어 저장한 뒤(자동) detail_url_json에 요청해야만 값 받아옴
     br = mechanize.Browser()
@@ -41,7 +43,7 @@ def detail(detail_num):
 
 # 웹툰의 리스트정보 반환
 def list(comic_title):
-    data = urllib.urlopen(list_url + comic_title)
+    data = urllib.urlopen(list2_url + comic_title)
     soup = BeautifulSoup(data)
 
     div_wrap_title = soup.find('div', 'wrap_title')
@@ -54,6 +56,10 @@ def list(comic_title):
     div_comic_info = soup.find('div', 'wrap_more')
     dl_list_intro = div_comic_info.find('dl', 'list_intro')
     comic_description = dl_list_intro.contents[3].string
+
+    # 아이콘
+    div_icon = soup.find('div', 'wrap_image')
+    icon_src = div_icon.find('img')['src']
 
     # 장르, 등급
     dl_list_more_info = div_comic_info.find('dl', 'list_more_info')
@@ -120,6 +126,7 @@ def list(comic_title):
     d = {
         'comic_title': comic_title,
         'author_name': author_name,
+        'comic_icon': icon_src,
         'comic_description': comic_description,
         'comic_grade': comic_grade,
         'comic_genre': comic_genre,
