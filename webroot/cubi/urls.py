@@ -1,4 +1,5 @@
 #-*- coding: utf-8 -*-
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
@@ -19,3 +20,8 @@ urlpatterns = patterns('',
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 )
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += patterns('',
+        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT}))

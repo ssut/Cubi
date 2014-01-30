@@ -93,10 +93,25 @@ def list(comic_number):
 
 def detail(detail_num):
     br = mechanize.Browser()
-    url_open = '%s%d' % (detail_url, detail_num)
-    url_detail = '%s%d' % (detail_url_json, detail_num)
+    url_open = '%s%s' % (detail_url, detail_num)
+    url_detail = '%s%s' % (detail_url_json, detail_num)
 
     br.open(url_open)
     response = br.open(url_detail)
 
-    data = json.loads(response.read())
+    # Sequence 이미지 리스트
+    image_list = []
+    info_list = json.loads(response.read())['data']
+    for info in info_list:
+        image_name = info['name']
+        image_url = info['url']
+        image_order = info['imageOrder']
+
+        dict = {
+            'name': image_name,
+            'url': image_url,
+            'order': image_order
+        }
+        image_list.append(dict)
+
+    return image_list
