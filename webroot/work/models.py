@@ -9,6 +9,8 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
+from cubi.functions import day_to_string
+
 # Upload path
 path_image = 'image/'
 path_image_work = os.path.join(path_image, 'work')
@@ -109,6 +111,15 @@ class Chapter(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def json(self):
+        return {
+            'reg_no': self.reg_no,
+            'title': self.title,
+            'created': day_to_string(self.created),
+            'thumbnail_url': thumbnail,
+            'cover': cover,
+        }
 
 # 챕터 댓글
 class ChapterComment(Comment):

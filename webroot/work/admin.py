@@ -12,4 +12,5 @@ class ContentAdmin(admin.ModelAdmin):
 
 admin.site.register(Work, WorkAdmin)
 admin.site.register(Chapter, ChapterAdmin)
+admin.site.register(Image)
 admin.site.register(Content, ContentAdmin)

@@ -182,7 +182,7 @@ def crawl_daumleague(comic_number, user):
                 fieldpath = content_path2 + filename
                 filepath = media_path + fieldpath
 
-                crop_image.save(filepath, save_ext)
+                crop_image.save(filepath, save_ext, quality=90)
 
                 image_instance = Image(chapter=chapter_instance, sequence=j, image=fieldpath)
                 image_instance.save()

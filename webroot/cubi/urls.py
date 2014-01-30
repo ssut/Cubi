@@ -19,6 +19,9 @@ urlpatterns = patterns('',
     # 작품등록
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
+
+    # 모바일
+    url(r'^mobile/(\d+)/(\d+)/$', 'work.views.mobile', name='mobile'),
 )
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)
