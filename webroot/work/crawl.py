@@ -27,13 +27,14 @@ except ImportError:
 from work.models import *
 
 media_path = media_path + '/'
-work_path2 = '%04d/'
+work_path_base = 'work/'
+work_path2 = 'work/%04d/'
 thumbnail_path = 'image/thumbnail/'
 cover_path = 'image/cover/'
 content_path = 'image/content/'
 content_ori_path = 'image/content/ori/'
 
-
+# 아마추어(웹툰리그)
 def crawl_daumleague(comic_number, user):
     league_info = daum_league_list(comic_number)
     comic_title = league_info['comic_title']
@@ -46,37 +47,42 @@ def crawl_daumleague(comic_number, user):
     work, work_created = Work.objects.get_or_create(category=work_category, title=comic_title, author=user)
 
     # 디렉토리 생성
-    # (work.id)/ 디렉토리 생성
+    # work/(work.id)/ 디렉토리 생성
+    work_dir_base = media_path + work_path_base
+    if not os.path.isdir(work_dir_base):
+        os.mkdir(work_dir_base)
+
+    # work/(work.id)/ 디렉토리 생성
     work_path = work_path2 % (work.id)
     print 'workpath :', work_path
     work_dir = media_path + work_path
     if not os.path.isdir(work_dir):
         os.mkdir(work_dir)
 
-    # (work.id)/image/ 디렉토리 생성
+    # work/(work.id)/image/ 디렉토리 생성
     work_image_dir = work_dir + 'image/'
     if not os.path.isdir(work_image_dir):
         os.mkdir(work_image_dir)
 
-    # (work.id)/image/cover/ 디렉토리 생성
+    # work/(work.id)/image/cover/ 디렉토리 생성
     cover_dir = media_path + work_path + cover_path
     cover_path2 = work_path + cover_path
     if not os.path.isdir(cover_dir):
         os.mkdir(cover_dir)
 
-    # (work.id)/image/thumbnail/ 디렉토리 생성
+    # work/(work.id)/image/thumbnail/ 디렉토리 생성
     thumbnail_dir = media_path + work_path + thumbnail_path
-    thumbnail_path2 = work_path + cover_path
+    thumbnail_path2 = work_path + thumbnail_path
     if not os.path.isdir(thumbnail_dir):
         os.mkdir(thumbnail_dir)
 
-    # (work.id)/image/content/ 디렉토리 생성
+    # work/(work.id)/image/content/ 디렉토리 생성
     content_dir = media_path + work_path + content_path
     content_path2 = work_path + content_path
     if not os.path.isdir(content_dir):
         os.mkdir(content_dir)
 
-    # (work.id)/image/content/ori/ 디렉토리 생성
+    # work/(work.id)/image/content/ori/ 디렉토리 생성
     content_ori_dir = media_path + work_path + content_ori_path
     content_ori_path2 = work_path + content_ori_path
     if not os.path.isdir(content_ori_dir):
@@ -189,7 +195,7 @@ def crawl_daumleague(comic_number, user):
 
 
 
-# dogandrabbit
+# 정식웹툰
 def crawl_daum(comic_title, user):
     list_info = daum_list(comic_title)
     title = list_info['comic_title']
