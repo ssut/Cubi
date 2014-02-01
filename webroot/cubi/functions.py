@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+from django.conf import settings
+SITE_URL = settings.SITE_URL
 #Custom User model
 try:
     from django.contrib.auth import get_user_model
@@ -34,7 +36,7 @@ def time_to_string(value):
 # 이미지 정보
 def imageinfo(instance):
     return {
-        'width': self.width,
-        'height': self.height,
-        'url': self.instance.url if self.instance else '',
+        'width': instance.width if instance else '',
+        'height': instance.height if instance else '',
+        'url': SITE_URL + instance.url if instance else '',
     }

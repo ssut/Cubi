@@ -52,9 +52,9 @@ class CubiUser(AbstractUser):
     access_token = models.CharField("페이스북 엑세스 토큰", max_length=255, blank=True)
 
     # 즐겨찾기, ManyToMany로 연결
-    favorites = models.ManyToManyField('work.Work', related_name='user_by_favorites')
+    favorites = models.ManyToManyField('work.Work', related_name='user_by_favorites', blank=True)
     # 자신의 작품, ManyToMany로 연결
-    own_works = models.ManyToManyField('work.Work', related_name='user_by_own_works')
+    own_works = models.ManyToManyField('work.Work', related_name='user_by_own_works', blank=True)
 
     objects = CubiUserManager()
 

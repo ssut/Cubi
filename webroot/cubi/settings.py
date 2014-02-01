@@ -33,6 +33,8 @@ SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
 FACEBOOK_APP_ID = '442841165838586'
 FACEBOOK_APP_SECRET = '31a520eaf17fe3224f3c2b3151ebfae7'
 
+SITE_URL = 'http://192.168.56.1:8000'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'site',
 
     'south',
     'kombu.transport.django',
