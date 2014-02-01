@@ -34,6 +34,7 @@ cover_path = 'image/cover/'
 content_path = 'image/content/'
 content_ori_path = 'image/content/ori/'
 
+
 # 아마추어(웹툰리그)
 def crawl_daumleague(comic_number, user):
     league_info = daum_league_list(comic_number)
@@ -47,47 +48,9 @@ def crawl_daumleague(comic_number, user):
     work, work_created = Work.objects.get_or_create(category=work_category, title=comic_title, author=user)
 
     # 디렉토리 생성
-    # work/(work.id)/ 디렉토리 생성
-    work_dir_base = media_path + work_path_base
-    if not os.path.isdir(work_dir_base):
-        os.mkdir(work_dir_base)
+    make_directory(work.id)
 
-    # work/(work.id)/ 디렉토리 생성
-    work_path = work_path2 % (work.id)
-    print 'workpath :', work_path
-    work_dir = media_path + work_path
-    if not os.path.isdir(work_dir):
-        os.mkdir(work_dir)
-
-    # work/(work.id)/image/ 디렉토리 생성
-    work_image_dir = work_dir + 'image/'
-    if not os.path.isdir(work_image_dir):
-        os.mkdir(work_image_dir)
-
-    # work/(work.id)/image/cover/ 디렉토리 생성
-    cover_dir = media_path + work_path + cover_path
-    cover_path2 = work_path + cover_path
-    if not os.path.isdir(cover_dir):
-        os.mkdir(cover_dir)
-
-    # work/(work.id)/image/thumbnail/ 디렉토리 생성
-    thumbnail_dir = media_path + work_path + thumbnail_path
-    thumbnail_path2 = work_path + thumbnail_path
-    if not os.path.isdir(thumbnail_dir):
-        os.mkdir(thumbnail_dir)
-
-    # work/(work.id)/image/content/ 디렉토리 생성
-    content_dir = media_path + work_path + content_path
-    content_path2 = work_path + content_path
-    if not os.path.isdir(content_dir):
-        os.mkdir(content_dir)
-
-    # work/(work.id)/image/content/ori/ 디렉토리 생성
-    content_ori_dir = media_path + work_path + content_ori_path
-    content_ori_path2 = work_path + content_ori_path
-    if not os.path.isdir(content_ori_dir):
-        os.mkdir(content_ori_dir)
-
+    # 각 챕터 리스트 돌며 챕터 저장
     for chapter in reversed(chapter_list):
         chapter_number = chapter['detail_num']
         chapter_title = chapter['title']
@@ -193,7 +156,48 @@ def crawl_daumleague(comic_number, user):
                 image_instance = Image(chapter=chapter_instance, sequence=j, image=fieldpath)
                 image_instance.save()
 
+# 디렉토리 생성
+def make_directory(work_id):
+    # work/(work.id)/ 디렉토리 생성
+    work_dir_base = media_path + work_path_base
+    if not os.path.isdir(work_dir_base):
+        os.mkdir(work_dir_base)
 
+    # work/(work.id)/ 디렉토리 생성
+    work_path = work_path2 % (work_id)
+    print 'workpath :', work_path
+    work_dir = media_path + work_path
+    if not os.path.isdir(work_dir):
+        os.mkdir(work_dir)
+
+    # work/(work.id)/image/ 디렉토리 생성
+    work_image_dir = work_dir + 'image/'
+    if not os.path.isdir(work_image_dir):
+        os.mkdir(work_image_dir)
+
+    # work/(work.id)/image/cover/ 디렉토리 생성
+    cover_dir = media_path + work_path + cover_path
+    cover_path2 = work_path + cover_path
+    if not os.path.isdir(cover_dir):
+        os.mkdir(cover_dir)
+
+    # work/(work.id)/image/thumbnail/ 디렉토리 생성
+    thumbnail_dir = media_path + work_path + thumbnail_path
+    thumbnail_path2 = work_path + thumbnail_path
+    if not os.path.isdir(thumbnail_dir):
+        os.mkdir(thumbnail_dir)
+
+    # work/(work.id)/image/content/ 디렉토리 생성
+    content_dir = media_path + work_path + content_path
+    content_path2 = work_path + content_path
+    if not os.path.isdir(content_dir):
+        os.mkdir(content_dir)
+
+    # work/(work.id)/image/content/ori/ 디렉토리 생성
+    content_ori_dir = media_path + work_path + content_ori_path
+    content_ori_path2 = work_path + content_ori_path
+    if not os.path.isdir(content_ori_dir):
+        os.mkdir(content_ori_dir)
 
 # 정식웹툰
 def crawl_daum(comic_title, user):

@@ -94,6 +94,19 @@ class Work(models.Model):
     def __unicode__(self):
         return self.title
 
+    def json(self):
+        return {
+            'category': self.category.title,
+            'author': self.author.nickname,
+            'title': self.title,
+            'description': self.description,
+            'market_android': self.market_android,
+            'market_ios': self.market_ios,
+            'created': day_to_string(self.created),
+            'thumbnail': self.thumbnail.url if self.thumbnail else '',
+            'cover': self.cover.url,
+        }
+
 # 작품 댓글
 class WorkComment(Comment):
     work = models.ForeignKey(Work)
@@ -117,8 +130,8 @@ class Chapter(models.Model):
             'reg_no': self.reg_no,
             'title': self.title,
             'created': day_to_string(self.created),
-            'thumbnail_url': thumbnail,
-            'cover': cover,
+            'thumbnail_url': self.thumbnail.url if self.thumbnail else '',
+            'cover': self.cover.url if self.cover else '',
         }
 
 # 챕터 댓글
