@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 
     # 모바일
-    url(r'^mobile/main/(\d+)/$', 'work.api.main', name='mobile_main'),
+    url(r'^mobile/list/(\d+)/$', 'work.api.list', name='mobile_list'),
     url(r'^mobile/(\d+)/(\d+)/$', 'work.views.mobile', name='mobile_detail'),
 )
 if settings.DEBUG:

@@ -29,3 +29,12 @@ def time_to_string(value):
         return value.strftime('%H:%M')
     else:
         return u'None'
+
+
+# 이미지 정보
+def imageinfo(instance):
+    return {
+        'width': self.width,
+        'height': self.height,
+        'url': self.instance.url if self.instance else '',
+    }

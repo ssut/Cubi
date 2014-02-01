@@ -10,6 +10,7 @@ except ImportError:
     from django.contrib.auth.models import User
 
 from cubi.functions import day_to_string
+from cubi.functions import imageinfo
 
 # Upload path
 path_image = 'image/'
@@ -103,8 +104,8 @@ class Work(models.Model):
             'market_android': self.market_android,
             'market_ios': self.market_ios,
             'created': day_to_string(self.created),
-            'thumbnail': self.thumbnail.url if self.thumbnail else '',
-            'cover': self.cover.url,
+            'thumbnail': imageinfo(self.thumbnail),
+            'cover': imageinfo(self.cover),
         }
 
 # 작품 댓글
@@ -130,8 +131,8 @@ class Chapter(models.Model):
             'reg_no': self.reg_no,
             'title': self.title,
             'created': day_to_string(self.created),
-            'thumbnail_url': self.thumbnail.url if self.thumbnail else '',
-            'cover': self.cover.url if self.cover else '',
+            'thumbnail': imageinfo(self.thumbnail),
+            'cover': imageinfo(self.cover),
         }
 
 # 챕터 댓글
