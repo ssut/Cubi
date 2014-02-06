@@ -2,15 +2,28 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<title>{% block title %}Cubi Base{% endblock %}</title>
 		<meta charset="utf-8">
-		<title>Cubi</title>
-		<link rel="stylesheet" href="{% static 'css/common.css' %}">
-		<link rel="stylesheet" href="{% static 'css/header.css' %}">
-		<link rel="stylesheet" href="{% static 'css/footer.css' %}">
-		
-		<!-- Web Font -->
-		<link href="{% static 'css/font.css' %}" rel="stylesheet">
+		<title>{% block title %}Cubi{% endblock %}</title>
+		<link rel="stylesheet" href="static/css/common.css">
+		<link rel="stylesheet" href="static/css/header.css">
+		<link rel="stylesheet" href="static/css/footer.css">
+		<script src="static/js/jquery.js"></script>
+		<script src="static/js/cubi.js"></script>
+		<script src="http://www.google.com/jsapi"></script>
+		<script>
+			google.load('webfont', '1');
+			google.setOnLoadCallback(function() {
+				WebFont.load({
+					custom: {
+						families: ['NanumGothic', 'NanumGothicBold'],
+						urls: ['http://fontface.kr/NanumGothic/css', 'http://fontface.kr/NanumGothicBold/css']
+					}
+				});
+			});
+		</script>
+		<!--[if lt IE 9]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
 
 		{% block head %}
 		{% endblock %}
@@ -20,13 +33,13 @@
 			<section>
 				<section>
 					<a href="./">
-						<img src="{% static 'img/logo.png' %}" alt="Cubi">
+						<img src="static/img/logo.png" alt="Cubi">
 					</a>
 					<section>
 						<form action="#" method="post">
 							<input type="text">
 							<a href="javascript:(function(){})()" onclick="">
-								<img src="{% static 'img/btn.search.png' %}" alt="Search button">
+								<img src="static/img/btn.search.png" alt="Search button">
 							</a>
 						</form>
 					</section>
@@ -36,27 +49,17 @@
 				<section>
 					<ul>
 						<li>
-							<a href="{% url 'index' %}">
+							<a href="./">
 								<span>홈</span>
 							</a>
 						</li>
 						<li>
-							<a href="{% url 'about' %}">
-								<span>Cubi?</span>
-							</a>
-						</li>
-						<li>
 							<a href="#">
-								<span>|</span>
-							</a>
-						</li>
-						<li>
-							<a href="{% url 'noticelist' %}">
 								<span>공지사항</span>
 							</a>
 						</li>
 						<li>
-							<a href="#">
+							<a href="artworks.html">
 								<span>작품 목록</span>
 							</a>
 						</li>
@@ -65,6 +68,7 @@
 								<span>작가 목록</span>
 							</a>
 						</li>
+
 						<li>
 							<a href="#">
 								<span>|</span>
@@ -77,18 +81,18 @@
 						</li>
 						<li>
 							<a href="#">
-								<span>Q&A</span>
+								<span>Q&amp;A</span>
 							</a>
 						</li>
 					</ul>
 					<ul>
 						<li>
-							<a href="#">
+							<a href="javascript:Cubi.invokeEvent('userSignIn')">
 								<span>로그인</span>
 							</a>
 						</li>
 						<li>
-							<a href="#">
+							<a href="javascript:Cubi.invokeEvent('userRegister')">
 								<span>회원 가입</span>
 							</a>
 						</li>
@@ -126,7 +130,7 @@
 				</ul>
 				<ul>
 					<li>
-						<a href="#">
+						<a href="javascript:Cubi.invokeEvent('goTop')">
 							<span>맨 위로</span>
 						</a>
 					</li>
@@ -135,3 +139,4 @@
 		</footer>
 	</body>
 </html>
+

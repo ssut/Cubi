@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+input { margin-left: 5px; vertical-align: middle }
+input:first-child { margin: 0 }
+input[type=text], input[type=password], select, textarea { border: solid 1px rgb(185, 185, 185); border-radius: 2px; box-shadow: 0 1px 0 rgb(245, 245, 245); font: normal normal normal 9pt/normal 'Malgun Gothic', 'AppleGothic', sans-serif; color: rgb(45, 45, 45) }
+input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus { border-color: rgb(0, 165, 255) }
+input[type=text], input[type=password] { height: 16px; padding: 2px 4px }
+select { padding: 1px 2px }
+textarea { padding: 5px; resize: none }
+input[type=button], button { cursor: pointer; padding: 4px 6px; border: solid 1px rgb(205, 205, 205); border-radius: 3px; background: linear-gradient(to bottom, rgb(245, 245, 245) 0%, rgb(215, 215, 215) 100%); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), inset 0 0 2px rgb(255, 255, 255); font: normal normal bold 8pt/normal 'Malgun Gothic', 'AppleGothic', sans-serif; color: rgb(45, 45, 45) }
+input[type=button]:hover, button:hover { border-color: rgb(220, 220, 220); background: linear-gradient(to bottom, rgb(255, 255, 255) 0%, rgb(230, 230, 230) 100%) }
+input[type=button]:active, button:active { background: linear-gradient(to bottom, rgb(235, 235, 235) 0%, rgb(205, 205, 205) 100%) }
+
+.wf-active input, .wf-active select, .wf-active textarea, .wf-active button { font-family: 'NanumGothic', 'Malgun Gothic', 'AppleGothic', sans-serif }
