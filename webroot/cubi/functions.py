@@ -36,6 +36,7 @@ def time_to_string(value):
 # 이미지 정보
 def imageinfo(instance):
     return {
+        'has_image': True if instance else False,
         'width': instance.width if instance else '',
         'height': instance.height if instance else '',
         'url': SITE_URL + instance.url if instance else '',

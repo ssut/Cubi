@@ -128,6 +128,7 @@ class Chapter(models.Model):
 
     def json(self):
         return {
+            'id': self.id,
             'reg_no': self.reg_no,
             'title': self.title,
             'created': day_to_string(self.created),

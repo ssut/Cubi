@@ -22,7 +22,7 @@ urlpatterns = patterns('',
 
     # 모바일
     url(r'^mobile/list/(\d+)/$', 'work.api.list', name='mobile_list'),
-    url(r'^mobile/(\d+)/(\d+)/$', 'work.views.mobile', name='mobile_detail'),
+    url(r'^mobile/detail/(\d+)/(\d+)/$', 'work.api.detail', name='mobile_detail'),
 )
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)
