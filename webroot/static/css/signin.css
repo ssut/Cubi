@@ -1,0 +1,13 @@
+@charset "utf-8";
+
+body > section.blind section#signIn { width: 300px; height: 220px; margin: -110px 0 0 -150px; background: rgb(255, 255, 255); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35); position: absolute; top: 50%; left: 50% }
+body > section.blind section#signIn h1 { height: 45px; padding-left: 15px; background: rgb(90, 130, 221); position: relative; font: normal normal normal 14pt/45px 'Malgun Gothic', 'AppleGothic', sans-serif; color: rgb(255, 255, 255) }
+body > section.blind section#signIn h1 a { width: 19px; height: 19px; position: absolute; top: 13px; right: 13px }
+body > section.blind section#signIn h1 a img { display: block }
+body > section.blind section#signIn > input { display: block; width: 228px; height: 28px; margin: 0 25px 10px; padding: 5px 10px; font-size: 11pt }
+body > section.blind section#signIn > input:nth-child(2) { margin-top: 25px }
+body > section.blind section#signIn > section { margin: 10px 25px 0 }
+body > section.blind section#signIn > section input { float: left; margin: 0 5px 0 0 }
+body > section.blind section#signIn > section input:first-child { float: right; margin: 0 }
+
+.wf-active body > section.blind section#signIn h1 { font-family: 'NanumGothic', 'Malgun Gothic', 'AppleGothic', sans-serif }

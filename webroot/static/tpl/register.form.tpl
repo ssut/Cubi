@@ -1,0 +1,60 @@
+<table>
+	<tbody>
+		<tr>
+			<th>
+				<section>
+					<section>이메일</section>
+				</section>
+			</th>
+			<td>
+				<section>
+					<section>
+						<input id="registerEmail" type="text">
+					</section>
+				</section>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<section>
+					<section>닉네임</section>
+				</section>
+			</th>
+			<td>
+				<section>
+					<section>
+						<input id="registerNick" type="text">
+					</section>
+				</section>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<section>
+					<section>비밀번호</section>
+				</section>
+			</th>
+			<td>
+				<section>
+					<section>
+						<input id="registerPw" type="password">
+					</section>
+				</section>
+			</td>
+		</tr>
+		<tr>
+			<th>
+				<section>
+					<section>비밀번호 확인</section>
+				</section>
+			</th>
+			<td>
+				<section>
+					<section>
+						<input id="registerPwCheck" type="password">
+					</section>
+				</section>
+			</td>
+		</tr>
+	</tbody>
+</table>
