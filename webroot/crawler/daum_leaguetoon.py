@@ -30,7 +30,7 @@ def list(comic_number):
 
     # 타이틀
     div_title = soup.find('div', 'wrap_title')
-    comic_title = div_title.find('span').string
+    comic_title = div_title.find('h3')['title']
 
     # 작가명, 장르
     div_cont = soup.find('div', 'wrap_cont')
@@ -41,7 +41,13 @@ def list(comic_number):
     comic_author_name = dl_author.dd.string
     comic_genre = dl_genre.dd.contents[0].strip()
 
-
+    # 작품소개
+    div_more = soup.find('div', 'wrap_more')
+    # print div_more
+    dl_description = div_more.find_all('dl')[0]
+    # print dl_description
+    comic_description = dl_description.dd['title']
+    # print comic_description
 
     ### 작품 리스트 ###
     url_rss = '%s%s' % (rss_url, comic_number)
@@ -83,6 +89,7 @@ def list(comic_number):
     d = {
         'comic_title': comic_title,
         'comic_author_name': comic_author_name,
+        'comic_description': comic_description,
         'comic_genre': comic_genre,
         'comic_url_img_title': comic_url_img_title,
         'chapter_list': dict_list,

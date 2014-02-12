@@ -10,7 +10,7 @@ except ImportError:
     from django.contrib.auth.models import User
 
 from cubi.functions import day_to_string
-from cubi.functions import imageinfo
+from cubi.functions import imageinfo, imageinfo2
 
 # Upload path
 path_image = 'image/'
@@ -105,7 +105,7 @@ class Work(models.Model):
             'market_ios': self.market_ios,
             'created': day_to_string(self.created),
             'thumbnail': imageinfo(self.thumbnail),
-            'cover': imageinfo(self.cover),
+            'cover': imageinfo2(self.cover),
         }
 
 # 작품 댓글

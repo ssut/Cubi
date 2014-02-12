@@ -12,6 +12,8 @@ except ImportError:
 from datetime import datetime, time, date
 
 
+default_image = 'http://192.168.56.1:8000/static/img/default_title.png'
+
 
 ### datetime -> String 변환 함수 ###
 def day_to_string(value):
@@ -40,4 +42,12 @@ def imageinfo(instance):
         'width': instance.width if instance else '',
         'height': instance.height if instance else '',
         'url': SITE_URL + instance.url if instance else '',
+    }
+
+def imageinfo2(instance):
+    return {
+        'has_image': True if instance else False,
+        'width': instance.width if instance else '',
+        'height': instance.height if instance else '',
+        'url': SITE_URL + instance.url if instance else default_image,
     }
