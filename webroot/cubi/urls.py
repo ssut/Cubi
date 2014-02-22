@@ -21,8 +21,11 @@ urlpatterns = patterns('',
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 
     # 모바일
+    url(r'^mobile/login/$', 'member.api.login', name='mobile_login'),
     url(r'^mobile/list/(\d+)/$', 'work.api.list', name='mobile_list'),
     url(r'^mobile/detail/(\d+)/(\d+)/$', 'work.api.detail', name='mobile_detail'),
+    url(r'^mobile/chapter/commentrating/$', 'work.api.chapter_commentrating', name='mobile_chapter_commentrating'),
+    url(r'^mobile/chapter/comment/add/$', 'work.api.chapter_comment_add', name='mobile_chapter_comment_add'),
 
 
 

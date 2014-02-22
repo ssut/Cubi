@@ -1,15 +1,17 @@
 #-*- coding: utf-8 -*-
 from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 SITE_URL = settings.SITE_URL
 #Custom User model
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+# try:
+#     from django.contrib.auth import get_user_model
+#     User = get_user_model()
+# except ImportError:
+#     from django.contrib.auth.models import User
 
 # datetime
 from datetime import datetime, time, date
+import json
 
 
 default_image = 'http://192.168.56.1:8000/static/img/default_title.png'
@@ -51,3 +53,17 @@ def imageinfo2(instance):
         'height': instance.height if instance else '',
         'url': SITE_URL + instance.url if instance else default_image,
     }
+
+# json리턴
+def return_failed_json(reason=''):
+    dict = {'return_status': 'failed'}
+    if reason != '' and reason != u'':
+        dict['reason'] = reason
+    return HttpResponse(json.dumps(dict), content_type='application/json')
+
+
+def return_success_json(reason=''):
+    dict = {'return_status': 'success'}
+    if reason != '' and reason != u'':
+        dict['reason'] = reason
+    return HttpResponse(json.dumps(dict), content_type='application/json')

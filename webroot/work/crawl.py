@@ -134,7 +134,6 @@ def crawl_daumleague(comic_number, user):
             chapter_instance.save()
             print 'Chapter (reg_no:%s) end create' % (chapter_number)
 
-
         # Chapter의 Content 인스턴스 생성 작업
         image_list = daum_league_detail(chapter_number)
 
