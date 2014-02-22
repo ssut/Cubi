@@ -5,7 +5,7 @@ from django.template import RequestContext
 from work.models import *
 
 def index(request):
-    return render_to_response('index.html')
+    return render_to_response('index/index.html')
 
 def about(request):
     return render_to_response('about.html')
