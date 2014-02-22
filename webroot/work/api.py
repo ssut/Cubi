@@ -18,37 +18,44 @@ from work.models import *
 
 
 @csrf_exempt
-def list(request, work_id):
-    work = Work.objects.get(id=work_id)
-    chapters = Chapter.objects.filter(work=work).order_by('-created')
+def chapter_list(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        work_id = int(query_dict['work_id'])
+        work = Work.objects.get(id=work_id)
+        chapters = Chapter.objects.filter(work=work).order_by('-created')
 
-    chapter_info_list = []
-    for chapter in chapters:
-        chapter_dict = chapter.json()
-        ratings = ChapterRating.objects.filter(chapter=chapter)
-        if ratings:
-            total_rating = 0.0
-            for rating in ratings:
-                total_rating = total_rating + rating.score
-            avg_rating = total_rating / len(ratings)
-            chapter_dict['rating'] = avg_rating
-            chapter_dict['rating_number'] = len(ratings)
-            chapter_info_list.append(chapter_dict)
-        else:
-            chapter_dict['rating'] = 0.0
-            chapter_dict['rating_number'] = 0
-            chapter_info_list.append(chapter_dict)
+        chapter_info_list = []
+        for chapter in chapters:
+            chapter_dict = chapter.json()
 
-    data = {
-        'work': work.json(),
-        # 'chapters': [chapter.json() for chapter in chapters],
-        'chapters': chapter_info_list,
-    }
+            # 평점 분석. 너무 비효율적인 것 같음
+            ratings = ChapterRating.objects.filter(chapter=chapter)
+            if ratings:
+                total_rating = 0.0
+                for rating in ratings:
+                    total_rating = total_rating + rating.score
+                avg_rating = total_rating / len(ratings)
+                chapter_dict['rating'] = avg_rating
+                chapter_dict['rating_number'] = len(ratings)
+                chapter_info_list.append(chapter_dict)
+            else:
+                chapter_dict['rating'] = 0.0
+                chapter_dict['rating_number'] = 0
+                chapter_info_list.append(chapter_dict)
 
-    return HttpResponse(json.dumps(data), content_type="application/json")
+        data = {
+            'work': work.json(),
+            # 'chapters': [chapter.json() for chapter in chapters],
+            'chapters': chapter_info_list,
+        }
+
+        return HttpResponse(json.dumps(data), content_type="application/json")
+    else:
+        return return_failed_json('Must POST Request')
 
 @csrf_exempt
-def detail(request, work_id, chapter_id):
+def chapter_view(request, work_id, chapter_id):
     work = Work.objects.get(id=work_id)
     chapter = Chapter.objects.get(work=work, id=chapter_id)
     images = Image.objects.filter(chapter=chapter)
@@ -67,7 +74,7 @@ def detail(request, work_id, chapter_id):
 Chapter - 댓글(Comment), 평점(Rating)
 '''
 @csrf_exempt
-def chapter_commentrating(request):
+def chapter_comment_list(request):
     if request.method == 'POST':
         query_dict = request.POST
         work_id = int(query_dict['work_id'])
