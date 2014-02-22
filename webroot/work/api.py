@@ -55,20 +55,25 @@ def chapter_list(request):
         return return_failed_json('Must POST Request')
 
 @csrf_exempt
-def chapter_view(request, work_id, chapter_id):
-    work = Work.objects.get(id=work_id)
-    chapter = Chapter.objects.get(work=work, id=chapter_id)
-    images = Image.objects.filter(chapter=chapter)
-    print images
-    contents = Content.objects.filter(chapter=chapter)
-    print contents
+def chapter_view(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        work_id = int(query_dict['work_id'])
+        chapter_id = int(query_dict['chapter_id'])
 
-    d = {
-        'images': images,
-        'media_url': MEDIA_URL,
-    }
+        work = Work.objects.get(id=work_id)
+        chapter = Chapter.objects.get(work=work, id=chapter_id)
+        images = Image.objects.filter(chapter=chapter)
+        contents = Content.objects.filter(chapter=chapter)
 
-    return render_to_response('mobile/chapter.html', d)
+        d = {
+            'images': images,
+            'media_url': MEDIA_URL,
+        }
+
+        return render_to_response('mobile/chapter.html', d)
+    else:
+        return return_failed_json('Must POST Request')
 
 '''
 Chapter - 댓글(Comment), 평점(Rating)
