@@ -1,0 +1,3 @@
+{% for work in works %}
+{{ work.author.nickname }} / {{ work.title }}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ work.author.id }}, {{ work.id }}<br/><br>
+{% endfor %}

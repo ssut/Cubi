@@ -1,0 +1,205 @@
+/* Pentagon stylesheet framework (Version Alpha) * Lesser GNU Public License v3 * Written by Heaven (heaven@isdev.kr) */
+
+/* Common */
+$turquoise: rgb(26, 188, 156);
+$green-sea: rgb(22, 160, 133);
+$emerald: rgb(46, 204, 113);
+$nephritis: rgb(39, 174, 96);
+$peter-river: rgb(52, 152, 219);
+$belize-hole: rgb(41, 128, 185);
+$amethyst: rgb(155, 89, 182);
+$wisteria: rgb(142, 68, 173);
+$wet-asphalt: rgb(52, 73, 94);
+$midnight-blue: rgb(44, 62, 80);
+$sunflower: rgb(241, 196, 15);
+$orange: rgb(243, 156, 18);
+$carrot: rgb(230, 126, 34);
+$pumpkin: rgb(211, 84, 0);
+$alizarin: rgb(231, 76, 60);
+$pomegranate: rgb(192, 57, 43);
+$clouds: rgb(236, 240, 241);
+$silver: rgb(189, 195, 199);
+$concrete: rgb(149, 165, 166);
+$asbestos: rgb(127, 140, 141);
+
+@font-face { font-family: 'Titillium'; font-weight: 100; src: url(/static/fonts/TitilliumThin.eot); src: local(※), url(/static/fonts/TitilliumThin.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: lighter; src: url(/static/fonts/TitilliumThinItalic.eot); src: local(※), url(/static/fonts/TitilliumThinItalic.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-weight: 200; src: url(/static/fonts/TitilliumLight.eot); src: local(※), url(/static/fonts/TitilliumLight.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: 200; src: url(/static/fonts/TitilliumLightItalic.eot); src: local(※), url(/static/fonts/TitilliumLightItalic.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-weight: 400; src: url(/static/fonts/TitilliumRegular.eot); src: local(※), url(/static/fonts/TitilliumRegular.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: normal; src: url(/static/fonts/TitilliumRegularItalic.eot); src: local(※), url(/static/fonts/TitilliumRegularItalic.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-weight: 500; src: url(/static/fonts/TitilliumSemiBold.eot); src: local(※), url(/static/fonts/TitilliumSemiBold.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: 500; src: url(/static/fonts/TitilliumSemiBoldItalic.eot); src: local(※), url(/static/fonts/TitilliumSemiBoldItalic.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-weight: 700; src: url(/static/fonts/TitilliumBold.eot); src: local(※), url(/static/fonts/TitilliumBold.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: bold; src: url(/static/fonts/TitilliumBoldItalic.eot); src: local(※), url(/static/fonts/TitilliumBoldItalic.woff) format('woff') }
+@font-face { font-family: 'Titillium'; font-weight: 900; src: url(/static/fonts/TitilliumBlack.eot); src: local(※), url(/static/fonts/TitilliumBlack.woff) format('woff') }
+@font-face { font-family: 'NanumGothic'; font-weight: 100; src: url(/static/fonts/NanumGothicLight.eot); src: local(※), local('나눔고딕 Light'), local('NanumGothic Light'), url(/static/fonts/NanumGothicLight.woff) format('woff') }
+@font-face { font-family: 'NanumGothic'; font-weight: 400; src: url(/static/fonts/NanumGothic.eot); src: local(※), local('나눔고딕'), local('NanumGothic'), url(/static/fonts/NanumGothic.woff) format('woff') }
+@font-face { font-family: 'NanumGothic'; font-weight: 700; src: url(/static/fonts/NanumGothicBold.eot); src: local(※), local('나눔고딕'), local('NanumGothic'), url(/static/fonts/NanumGothicBold.woff) format('woff') }
+@font-face { font-family: 'NanumGothic'; font-weight: 900; src: url(/static/fonts/NanumGothicExtraBold.eot); src: local(※), local('나눔고딕 ExtraBold'), local('NanumGothic ExtraBold'), url(/static/fonts/NanumGothicExtraBold.woff) format('woff') }
+@font-face { font-family: 'NanumMyeongjo'; font-weight: 100; src: url(/static/fonts/NanumMyeongjo.eot); src: local(※), local('나눔명조'), local('NanumMyeongjo'), url(/static/fonts/NanumMyeongjo.woff) format('woff') }
+@font-face { font-family: 'NanumMyeongjo'; font-weight: 700; src: url(/static/fonts/NanumMyeongjo.eot); src: local(※), local('나눔명조'), local('NanumMyeongjo'), url(/static/fonts/NanumMyeongjo.woff) format('woff') }
+@font-face { font-family: 'NanumMyeongjo'; font-weight: 900; src: url(/static/fonts/NanumMyeongjoExtraBold.eot); src: local(※), local('나눔명조 ExtraBold'), local('NanumMyeongjo ExtraBold'), url(/static/fonts/NanumMyeongjoExtraBold.woff) format('woff') }
+
+* { margin: 0; padding: 0; outline: 0; -webkit-text-size-adjust: none; -webkit-user-select: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; font-smooth: always }
+html, body { position: relative }
+body { font: normal normal normal 9pt/normal 'Segoe UI', 'Malgun Gothic', 'AppleGothic', sans-serif }
+ul, ol, dl { margin: 10px 0 10px 40px }
+table { border: 0; border-spacing: 0; border-collapse: collapse }
+a img { border: 0 }
+
+/* Specific condition */
+a.p.no-line { text-decoration: none }
+ul.p.no-list { list-style: none }
+ul.p.row-align li { display: inline-block }
+
+/* Font */
+$std-font-stack: 'Titillium', 'NanumGothic', 'Segoe UI', 'Malgun Gothic', 'AppleGothic', sans-serif;
+
+.p.text-align-center { text-align: center }
+
+.p.font { font: normal normal normal 9pt/normal $std-font-stack }
+.p.font.serif { font-family: 'NanumMyeongjo', serif }
+
+.p.font.pt8 { font-size: 8pt }
+.p.font.pt9 { font-size: 9pt }
+.p.font.pt10 { font-size: 10pt }
+.p.font.pt11 { font-size: 11pt }
+.p.font.pt12 { font-size: 12pt }
+.p.font.pt13 { font-size: 13pt }
+.p.font.pt14 { font-size: 14pt }
+.p.font.pt16 { font-size: 16pt }
+.p.font.pt18 { font-size: 18pt }
+.p.font.pt20 { font-size: 20pt }
+.p.font.pt22 { font-size: 22pt }
+.p.font.pt24 { font-size: 24pt }
+.p.font.pt32 { font-size: 32pt }
+.p.font.pt36 { font-size: 36pt }
+.p.font.pt48 { font-size: 48pt }
+.p.font.pt64 { font-size: 64pt }
+
+.p.font.weight-thin { font-weight: 100 }
+.p.font.weight-light { font-weight: 200 }
+.p.font.weight-regular { font-weight: 400 }
+.p.font.weight-semibold { font-weight: 500 }
+.p.font.weight-bold { font-weight: 700 }
+.p.font.weight-black { font-weight: 900 }
+
+.p.font.spacing-small { letter-spacing: -1pt }
+
+.p.color-white { color: rgb(255, 255, 255) }
+.p.color-midnight-blue { color: $midnight-blue }
+
+.p.text-shadow { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) }
+
+/* Sizing */
+.p.w900 { width: 900px }
+.p.w100p { width: 100% }
+
+.p.h45 { height: 45px }
+.p.h100 { header: 100px }
+.p.h540 { height: 540px }
+
+.p.box25 { width: 25px; height: 25px }
+
+/* Background */
+.p.turquoise { background: $turquoise }
+.p.green-sea { background: $green-sea }
+.p.emerald { background: $emerald }
+.p.nephritis { background: $nephritis }
+.p.peter-river { background: $peter-river }
+.p.belize-hole { background: $belize-hole }
+.p.amethyst { background: $amethyst }
+.p.wisteria { background: $wisteria }
+.p.wet-asphalt { background: $wet-asphalt }
+.p.midnight-blue { background: $midnight-blue }
+.p.sunflower { background: $sunflower }
+.p.orange { background: $orange }
+.p.carrot { background: $carrot }
+.p.pumpkin { background: $pumpkin }
+.p.alizarin { background: $alizarin }
+.p.pomegranate { background: $pomegranate }
+.p.clouds { background: $clouds }
+.p.silver { background: $silver }
+.p.concrete { background: $concrete }
+.p.asbestos { background: $asbestos }
+
+.p.turquoise-half { @extend .p.turquoise; background: rgba(26, 188, 156, 0.5) }
+.p.green-sea-half { @extend .p.green-sea; background: rgba(22, 160, 133, 0.5) }
+.p.emerald-half { @extend .p.emerald; background: rgba(46, 204, 113, 0.5) }
+.p.nephritis-half { @extend .p.nephritis; background: rgba(39, 174, 96, 0.5) }
+.p.peter-river-half { @extend .p.peter-river; background: rgba(52, 152, 219, 0.5) }
+.p.belize-hole-half { @extend .p.belize-hole; background: rgba(41, 128, 185, 0.5) }
+.p.amethyst-half { @extend .p.amethyst; background: rgba(155, 89, 182, 0.5) }
+.p.wisteria-half { @extend .p.wisteria; background: rgba(142, 68, 173, 0.5) }
+.p.wet-asphalt-half { @extend .p.wet-asphalt; background: rgba(52, 73, 94, 0.5) }
+.p.midnight-blue-half { @extend .p.midnight-blue; background: rgba(44, 62, 80, 0.5) }
+.p.sunflower-half { @extend .p.sunflower; background: rgba(241, 196, 15, 0.5) }
+.p.orange-half { @extend .p.orange; background: rgba(243, 156, 18, 0.5) }
+.p.carrot-half { @extend .p.carrot; background: rgba(230, 126, 34, 0.5) }
+.p.pumpkin-half { @extend .p.pumpkin; background: rgba(211, 84, 0, 0.5) }
+.p.alizarin-half { @extend .p.alizarin; background: rgba(231, 76, 60, 0.5) }
+.p.pomegranate-half { @extend .p.pomegranate; background: rgba(192, 57, 43, 0.5) }
+.p.clouds-half { @extend .p.clouds; background: rgba(236, 240, 241, 0.5) }
+.p.silver-half { @extend .p.silver; background: rgba(189, 195, 199, 0.5) }
+.p.concrete-half { @extend .p.concrete; background: rgba(149, 165, 166, 0.5) }
+.p.asbestos-half { @extend .p.asbestos; background: rgba(127, 140, 141, 0.5) }
+
+.p.turquoise-semi { @extend .p.turquoise; background: rgba(26, 188, 156, 0.75) }
+.p.green-sea-semi { @extend .p.green-sea; background: rgba(22, 160, 133, 0.75) }
+.p.emerald-semi { @extend .p.emerald; background: rgba(46, 204, 113, 0.75) }
+.p.nephritis-semi { @extend .p.nephritis; background: rgba(39, 174, 96, 0.75) }
+.p.peter-river-semi { @extend .p.peter-river; background: rgba(52, 152, 219, 0.75) }
+.p.belize-hole-semi { @extend .p.belize-hole; background: rgba(41, 128, 185, 0.75) }
+.p.amethyst-semi { @extend .p.amethyst; background: rgba(155, 89, 182, 0.75) }
+.p.wisteria-semi { @extend .p.wisteria; background: rgba(142, 68, 173, 0.75) }
+.p.wet-asphalt-semi { @extend .p.wet-asphalt; background: rgba(52, 73, 94, 0.75) }
+.p.midnight-blue-semi { @extend .p.midnight-blue; background: rgba(44, 62, 80, 0.75) }
+.p.sunflower-semi { @extend .p.sunflower; background: rgba(241, 196, 15, 0.75) }
+.p.orange-semi { @extend .p.orange; background: rgba(243, 156, 18, 0.75) }
+.p.carrot-semi { @extend .p.carrot; background: rgba(230, 126, 34, 0.75) }
+.p.pumpkin-semi { @extend .p.pumpkin; background: rgba(211, 84, 0, 0.75) }
+.p.alizarin-semi { @extend .p.alizarin; background: rgba(231, 76, 60, 0.75) }
+.p.pomegranate-semi { @extend .p.pomegranate; background: rgba(192, 57, 43, 0.75) }
+.p.clouds-semi { @extend .p.clouds; background: rgba(236, 240, 241, 0.75) }
+.p.silver-semi { @extend .p.silver; background: rgba(189, 195, 199, 0.75) }
+.p.concrete-semi { @extend .p.concrete; background: rgba(149, 165, 166, 0.75) }
+.p.asbestos-semi { @extend .p.asbestos; background: rgba(127, 140, 141, 0.75) }
+
+/* Margin & Padding */
+.p.no-margin { margin: 0 }
+
+/* Edge */
+.p.edge-bottom-nephritis { border-bottom: solid 1px $nephritis }
+.p.edge-left-nephritis { border-left: solid 1px $nephritis }
+.p.edge-bottom-belize-hole { border-bottom: solid 1px $belize-hole }
+.p.edge-left-belize-hole { border-left: solid 1px $belize-hole }
+.p.edge-top-silver { border-top: solid 1px $silver }
+
+/* Float */
+.p.left { float: left }
+.p.right { float: right }
+
+/* Layer */
+.p.layer { position: absolute }
+.p.layer-relative { position: relative }
+.p.layer-fixed { position: fixed }
+
+.p.order-super { z-index: 1000 }
+.p.order-v { z-index: 500 }
+.p.order-iv { z-index: 400 }
+.p.order-iii { z-index: 300 }
+.p.order-ii { z-index: 200 }
+.p.order-i { z-index: 100 }
+
+/* Box alignment */
+.p.box-align-center { margin-right: auto; margin-left: auto }
+
+/* Extended */
+::-webkit-scrollbar { width: 10px; height: 12px }
+::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment { display: black }
+::-webkit-scrollbar-track { background-color: rgb(245, 245, 245); box-shadow: inset 0 0 0 rgb(210, 210, 210), inset -1px 0 0 rgb(227, 227, 227) }
+::-webkit-scrollbar-track:hover { box-shadow: inset 1px 0 0 rgb(211, 211, 211), inset -1px 0 0 rgb(227, 227, 227) }
+::-webkit-scrollbar-thumb { background-color: rgb(203, 203, 203); box-shadow: inset 1px 0 0 rgb(182, 182, 182), inset -1px 0 0 rgb(180, 180, 180), inset 0 1px 0 rgb(175, 175, 175), inset 0 -1px 0 rgb(181, 181, 181) }
+::-webkit-scrollbar-thumb:hover { background-color: rgb(147, 147, 147); box-shadow: inset 1px 0 0 rgb(100, 100, 100), inset -1px 0 0 rgb(135, 135, 135), inset 0 1px 0 rgb(116, 116, 116), inset 0 -1px 0 rgb(116, 116, 116) }
+::-webkit-scrollbar-thumb:active { background-color: rgb(122, 122, 122); box-shadow: inset 1px 0 0 rgb(82, 82, 82), inset -1px 0 0 rgb(109, 109, 109), inset 0 1px 0 rgb(95, 95, 95), inset 0 -1px 0 rgb(95, 95, 95) }

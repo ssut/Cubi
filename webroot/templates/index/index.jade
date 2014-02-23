@@ -1,0 +1,50 @@
+- var gnb = ('.h45.no-list.no-margin.row-align').split('.')
+- var gnb_item = ('.no-line.font.pt10.color-white').split('.')
+
+doctype html
+html(lang='ko')
+	head
+		meta(charset='utf-8')
+		title tinicube second edition
+		link(rel='stylesheet', href='rsrc/css/pentagon.css')
+		link(rel='stylesheet', href='rsrc/css/tinicube.css')
+	body
+		header
+			section.p.w100p.h45.edge-bottom-belize-hole.peter-river-half.layer-fixed.order-v
+				section.p.w900.h45.box-align-center
+					h4.p.left.h45.font.pt18.color-white
+						a(href='./').p.no-line.color-white tinicube
+					//- GLOBAL NAVIGATION
+					ul(class=gnb).p.left
+						each item in [['#', '작품 목록'], ['#', '작가 공간'], ['#', '공지사항']]
+							li
+								a(class=gnb_item, href=item[0]).p= item[1]
+					//- SEARCH INTERFACE
+					section.p.right.edge-left-belize-hole
+						a
+							img(src='rsrc/img/icon.search.png', alt='Search')
+					//- USER LOGGED INFORMATION
+					ul(class=gnb).p.right
+						each item in [['#', '로그인'], ['#', '회원가입']]
+							li
+								a(class=gnb_item, href=item[0]).p= item[1]
+			section.p.h585.peter-river
+				section.p.w900.h540.box-align-center.layer-relative
+					h1.p.font.weight-thin.pt36.spacing-small.color-white.text-shadow 티니큐브와 함께하세요
+					article.p.font.pt10.color-white 그냥 함께해라 ㅡㅡ 확씨 팍씨 막씨
+					nav.p.layer
+						ul.p.no-list.no-margin.row-align
+							each item in [1, 2, 3]
+								li
+									a(href='#').p.box25.belize-hole.no-line.text-align-center.font.weight-bold.pt12.color-white= item
+		section
+			h1.p.font.pt22.weight-thin.text-align-center Start with
+				span &nbsp;tinicube
+		footer.p.h100.edge-top-silver
+			section.p.w900.box-align-center
+				h3.p.left.h100.font.pt24.spacing-small.color-midnight-blue tinicube
+				ul.p.right.h100.no-list.no-margin.row-align
+					each item in [['facebook', '#'], ['twitter', '#']]
+						li
+							a(href=item[1])
+								img(src='rsrc/img/icon.' + item[0] + '.png')

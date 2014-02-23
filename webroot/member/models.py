@@ -2,6 +2,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
+from cubi.functions import day_to_string, minute_to_string
+from cubi.functions import imageinfo, imageinfo2
+
 TYPE_GENDER_CHOICES = (
     ('M', '남자'),
     ('F', '여자'),
@@ -13,6 +16,10 @@ TYPE_MEMBER_CHOICES = (
 )
 
 class CubiUserManager(BaseUserManager):
+    def create_default_user(self, username, nickname, password, type='2', first_name='Admin', last_name='Cubi', email='Cubi@Cubi.in', gender='M', tel='000', access_token='000'):
+        user = self.create_user(type=type, username=username, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
+        return user
+
     def create_user(self, type, username, first_name, last_name, email, gender, tel, access_token, password=None):
         user = self.model(
             type=type,
@@ -44,10 +51,10 @@ class CubiUser(AbstractUser):
     # is_staff, is_active, is_superuser,
     # last_login, date_joined
     type = models.CharField("회원 타입", max_length=1, choices=TYPE_MEMBER_CHOICES, db_index=True)
-    nickname = models.CharField("닉네임", max_length=8)
+    nickname = models.CharField("닉네임", max_length=8, blank=True)
     gender = models.CharField("성별", max_length=1, choices=TYPE_GENDER_CHOICES, blank=True)
     tel = models.CharField("연락처", max_length=14, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     access_token = models.CharField("페이스북 엑세스 토큰", max_length=255, blank=True)
 
@@ -59,7 +66,19 @@ class CubiUser(AbstractUser):
     objects = CubiUserManager()
 
     def __unicode__(self):
-        return u'%s%s' % (self.last_name, self.first_name)
+        return u'%s' % (self.nickname)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'name': u'%s%s' % (self.last_name, self.first_name),
+            'type': self.type,
+            'nickname': self.nickname,
+            'gender': self.gender,
+            'tel': self.tel,
+            'created': minute_to_string(self.created),
+        }
 
     def add_favorite(self, work_instance):
         self.favorites.add(work_instance)

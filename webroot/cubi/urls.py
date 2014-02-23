@@ -20,9 +20,12 @@ urlpatterns = patterns('',
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 
-    # 모바일
-    url(r'^mobile/list/(\d+)/$', 'work.api.list', name='mobile_list'),
-    url(r'^mobile/detail/(\d+)/(\d+)/$', 'work.api.detail', name='mobile_detail'),
+    # API
+    url(r'^api/', include('cubi.urls_api')),
+    
+
+
+    url(r'^worklist/$', 'structure.views.work_list', name='work_list'),
 )
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)

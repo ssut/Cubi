@@ -9,8 +9,8 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
-from cubi.functions import day_to_string
-from cubi.functions import imageinfo
+from cubi.functions import day_to_string, minute_to_string, time_to_string
+from cubi.functions import imageinfo, imageinfo2
 
 # Upload path
 path_image = 'image/'
@@ -46,13 +46,24 @@ def get_image_content_path(content_instance, filename):
     path3 = os.path.join(path2, filename)
     return path3
 
+
 # 공통적으로 사용할 댓글 클래스
 class Comment(models.Model):
     author = models.ForeignKey(User)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+
     def __unicode__(self):
         return u'%s%s Comment(%s)' % (self.author.last_name, self.author.first_name, self.created)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'author': self.author.json(),
+            'content': self.content,
+            'created_date': day_to_string(self.created),
+            'created_time': time_to_string(self.created),
+        }
 
 # 공통적으로 사용할 평점 클래스
 CHOICES_RATING = [(i,i+1) for i in range(10)]
@@ -60,8 +71,18 @@ class Rating(models.Model):
     author = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
     score = models.IntegerField(choices=CHOICES_RATING)
+
     def __unicode__(self):
         return u'%s%s Rating(%d)' % (self.author.last_name, self.author.first_name, self.score)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'author': self.author.json(),
+            'created_date': day_to_string(self.created),
+            'created_time': time_to_string(self.created),
+            'score': self.score,
+        }
 
 
 '''
@@ -97,6 +118,7 @@ class Work(models.Model):
 
     def json(self):
         return {
+            'id': self.id,
             'category': self.category.title,
             'author': self.author.nickname,
             'title': self.title,
@@ -105,7 +127,7 @@ class Work(models.Model):
             'market_ios': self.market_ios,
             'created': day_to_string(self.created),
             'thumbnail': imageinfo(self.thumbnail),
-            'cover': imageinfo(self.cover),
+            'cover': imageinfo2(self.cover),
         }
 
 # 작품 댓글
@@ -139,14 +161,32 @@ class Chapter(models.Model):
 # 챕터 댓글
 class ChapterComment(Comment):
     chapter = models.ForeignKey(Chapter)
+
     def __unicode__(self):
         return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.chapter.title)
+
+    def json(self):
+        parent_dict = self.comment_ptr.json()
+        cur_dict = {
+            'chapter': self.chapter.json(),
+        }
+        combine_dict = dict(parent_dict.items() + cur_dict.items())
+        return combine_dict
 
 # 챕터 평점
 class ChapterRating(Rating):
     chapter = models.ForeignKey(Chapter)
+
     def __unicode__(self):
         return u'%s%s - %s Rating(%d)' % (self.author.last_name, self.author.first_name, self.chapter.title, self.score)
+
+    def json(self):
+        parent_dict = self.rating_ptr.json()
+        cur_dict = {
+            'chapter': self.chapter.json(),
+        }
+        combine_dict = dict(parent_dict.items() + cur_dict.items())
+        return combine_dict
 
 '''
 내용(Content)
