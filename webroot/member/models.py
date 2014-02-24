@@ -20,12 +20,13 @@ class CubiUserManager(BaseUserManager):
         user = self.create_user(type=type, username=username, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
         return user
 
-    def create_user(self, type, username, first_name, last_name, email, gender, tel, access_token, password=None):
+    def create_user(self, type, username, first_name, last_name, email, gender, tel, access_token, nickname="없음", password=None):
         user = self.model(
             type=type,
             username=username,
             first_name=first_name,
             last_name=last_name,
+            nickname=nickname,
             email=email,
             gender=gender,
             tel=tel,
