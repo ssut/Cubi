@@ -2,6 +2,7 @@
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
+from django.db.models import Avg
 
 # decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -29,15 +30,12 @@ def chapter_list(request):
         for chapter in chapters:
             chapter_dict = chapter.json()
 
-            # 평점 분석. 너무 비효율적인 것 같음
+            # 평점 분석
             ratings = ChapterRating.objects.filter(chapter=chapter)
-            if ratings:
-                total_rating = 0.0
-                for rating in ratings:
-                    total_rating = total_rating + rating.score
-                avg_rating = total_rating / len(ratings)
+            avg_rating = ratings.aggregate(Avg('score'))['score__avg']
+            if avg_rating:
                 chapter_dict['rating'] = avg_rating
-                chapter_dict['rating_number'] = len(ratings)
+                chapter_dict['rating_number'] = ratings.count()
                 chapter_info_list.append(chapter_dict)
             else:
                 chapter_dict['rating'] = 0.0
@@ -78,6 +76,7 @@ def chapter_view(request):
 '''
 Chapter - 댓글(Comment), 평점(Rating)
 '''
+# 댓글 목록
 @csrf_exempt
 def chapter_comment_list(request):
     if request.method == 'POST':
@@ -95,6 +94,7 @@ def chapter_comment_list(request):
     else:
         return return_failed_json('Must POST Request')
 
+# 댓글 추가
 @csrf_exempt
 def chapter_comment_add(request):
     if request.method == 'POST':
@@ -121,3 +121,36 @@ def chapter_comment_add(request):
 
     else:
         return return_failed_json('Must POST Request')
+
+# 댓글 삭제
+@csrf_exempt
+def chapter_comment_del(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        session_key = query_dict['session_key']
+        username = query_dict['username']
+        work_id = int(query_dict['work_id'])
+        chapter_id = int(query_dict['chapter_id'])
+        comment_id = int(query_dict['comment_id'])
+
+        s = SessionStore(session_key=session_key)
+
+        if username == s['username']:
+            user = User.objects.get(username=s['username'])
+            work = Work.objects.get(id=work_id)
+            chapter = Chapter.objects.get(work=work, id=chapter_id)
+            comment = ChapterComment.objects.get(id=comment_id)
+
+            # 댓글 작성자와 사용자가 같을 경우 댓글 삭제
+            if comment.author == user:
+                comment.delete()
+                return return_success_json()
+            else:
+                return return_failed_json('request user is not comment\'s author')
+            
+        else:
+            return return_failed_json('Not Matching User')
+
+    else:
+        return return_failed_json('Must POST Request')
+
