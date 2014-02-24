@@ -21,7 +21,84 @@ from work.models import *
 
 '''
 Work
+    work_comment_list : 댓글 목록
+    work_comment_add : 댓글 추가
+    work_comment_del : 댓글 삭제
 '''
+# 댓글 목록
+@csrf_exempt
+def work_comment_list(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        work_id = int(query_dict['work_id'])
+
+        comments = WorkComment.objects.filter(work__id=work_id)
+
+        data = {
+            'comments': [comment.json() for comment in comments],
+        }
+
+        return HttpResponse(json.dumps(data), content_type='application/json')
+    else:
+        return return_failed_json('Must POST Request')
+
+# 댓글 추가
+@csrf_exempt
+def work_comment_add(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        session_key = query_dict['session_key']
+        username = query_dict['username']
+        work_id = int(query_dict['work_id'])
+        content = query_dict['content']
+
+        s = SessionStore(session_key=session_key)
+
+        # 유저가 세션값의 유저와 같으면 글 등록
+        if username == s['username']:
+            user = User.objects.get(username=s['username'])
+            work = Work.objects.get(id=work_id)
+
+            comment_instance = WorkComment(work=work, author=user, content=content)
+            comment_instance.save()
+            return return_success_json()
+        else:
+            return return_failed_json('Not Matching User')
+
+    else:
+        return return_failed_json('Must POST Request')
+
+# 댓글 삭제
+@csrf_exempt
+def work_comment_del(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        session_key = query_dict['session_key']
+        username = query_dict['username']
+        work_id = int(query_dict['work_id'])
+        comment_id = int(query_dict['comment_id'])
+
+        s = SessionStore(session_key=session_key)
+
+        if username == s['username']:
+            user = User.objects.get(username=s['username'])
+            work = Work.objects.get(id=work_id)
+            comment = WorkComment.objects.get(id=comment_id)
+
+            # 댓글 작성자와 사용자가 같을 경우 댓글 삭제
+            if comment.author == user:
+                comment.delete()
+                return return_success_json()
+            else:
+                return return_failed_json('request user is not comment\'s author')
+            
+        else:
+            return return_failed_json('Not Matching User')
+
+    else:
+        return return_failed_json('Must POST Request')
+
+
 
 
 '''

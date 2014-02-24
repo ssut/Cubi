@@ -133,8 +133,17 @@ class Work(models.Model):
 # 작품 댓글
 class WorkComment(Comment):
     work = models.ForeignKey(Work)
+    
     def __unicode__(self):
         return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.work.title)
+
+    def json(self):
+        parent_dict = self.comment_ptr.json()
+        cur_dict = {
+            'work': self.work.json(),
+        }
+        combine_dict = dict(parent_dict.items() + cur_dict.items())
+        return combine_dict
 
 # 챕터(각 작품의 1,2,3화....)
 class Chapter(models.Model):
