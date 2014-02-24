@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
@@ -8,6 +9,7 @@ from django.contrib.sessions.models import Session
 
 # decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 # Custom User model
 try:
@@ -50,3 +52,25 @@ def login(request):
         data['session_key'] = session_key
 
         return HttpResponse(json.dumps(data), content_type='application/json')
+
+from .models import CubiUser
+import django.core.exceptions
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def signup(request):
+    try:
+        email = request.POST.get("email",None)
+        password = request.POST.get("password",None)
+        nickname = request.POST.get("nickname","큐비독자")
+        # check absense of password, email
+        if None in [ email, password]:
+            raise exceptions.FieldError
+        new_user = CubiUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
+        return HttpResponse(new_user.json(), content_type='application/json')
+    except:
+        return HttpResponse(json({}), content_type='application/json')
+
+
+
+
