@@ -32,7 +32,7 @@ def chapter_list(request, work_id):
     work = Work.objects.get(id=work_id)
     chapters = Chapter.objects.filter(work=work).order_by('-created')
     last_chapter = chapters.last()
-    
+
     work_dict = work.json()
     work_dict['chapter_count'] = chapters.count()
     work_dict['last_upload'] = day_to_string(last_chapter.created)
@@ -43,3 +43,14 @@ def chapter_list(request, work_id):
     }
 
     return render_to_response('work/chapter_list.html', d)
+
+def chapter_view(request, chapter_id):
+    chapter = Chapter.objects.get(id=chapter_id)
+    images = Image.objects.filter(chapter=chapter)
+
+    d = {
+        'images': images,
+        'media_url': MEDIA_URL,
+    }
+
+    return render_to_response('work/chapter_view.html', d)

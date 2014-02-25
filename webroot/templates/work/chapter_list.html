@@ -11,10 +11,12 @@
 </div>
 <br><br><br><br><br><br><br><br>
 {% for chapter in chapters %}
+<a href="{% url 'chapter_view' chapter.id %}">
 <div>
 	<img src="{{ chapter.thumbnail.url }}">
 	{{ chapter.title }} / {{ chapter.created }}
 </div>
+</a>
 {% endfor %}
 
 

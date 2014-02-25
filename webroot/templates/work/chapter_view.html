@@ -1,3 +1,10 @@
 {% extends 'base2.html' %}
 {% load staticfiles %}
 
+{% block content %}
+
+{% for image in images %}
+<img src="{{ media_url }}{{ image.image }}"><br>
+{% endfor %}
+
+{% endblock %}

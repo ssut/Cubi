@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     url(r'^$', 'structure.views.index', name='index'),
     url(r'^work/list/$', 'work.views.work_list', name='work_list'),
     url(r'^chapter/list/(\d+)/$', 'work.views.chapter_list', name='chapter_list'),
+    url(r'^chapter/view/(\d+)/$', 'work.views.chapter_view', name='chapter_view'),
+
     url(r'^about/$', 'structure.views.about', name='about'),
 
     # 공지사항
