@@ -1,0 +1,11 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+회원가입 실패 : {{ reason }}
+<div id="signup-btn-submit" class="form-group">
+	<div>
+		<a href="{% url 'signup' %}"><button>돌아가기</button></a>
+	</div>
+</div>
+{% endblock %}

@@ -9,13 +9,22 @@ urlpatterns = patterns('',
     url(r'^django_admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
-    # 1단계 메뉴
     url(r'^$', 'structure.views.index', name='index'),
+
+    # 작품 목록
     url(r'^work/list/$', 'work.views.work_list', name='work_list'),
+    # 챕터 목록
     url(r'^chapter/list/(\d+)/$', 'work.views.chapter_list', name='chapter_list'),
+    # 챕터 뷰
     url(r'^chapter/view/(\d+)/$', 'work.views.chapter_view', name='chapter_view'),
 
-    url(r'^about/$', 'structure.views.about', name='about'),
+    # 회원 가입
+    url(r'^signup/$', 'member.views.signup', name='signup'),
+
+
+
+
+
 
     # 공지사항
     url(r'^noticelist/$', 'board.views.noticelist', name='noticelist'),
