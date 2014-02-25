@@ -11,6 +11,8 @@ urlpatterns = patterns('',
 
     # 1단계 메뉴
     url(r'^$', 'structure.views.index', name='index'),
+    url(r'^work/list/$', 'work.views.work_list', name='work_list'),
+    url(r'^chapter/list/(\d+)/$', 'work.views.chapter_list', name='chapter_list'),
     url(r'^about/$', 'structure.views.about', name='about'),
 
     # 공지사항
@@ -25,7 +27,7 @@ urlpatterns = patterns('',
     
 
 
-    url(r'^worklist/$', 'structure.views.work_list', name='work_list'),
+    url(r'^worklist/$', 'structure.views.work_list', name='work_list_api'),
 )
 if settings.DEBUG:
     # static files (images, css, javascript, etc.)

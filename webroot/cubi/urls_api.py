@@ -14,6 +14,7 @@ urlpatterns += patterns('work.api',
     url(r'^work/comment/list/$', 'work_comment_list'),
     url(r'^work/comment/add/$', 'work_comment_add'),
     url(r'^work/comment/del/$', 'work_comment_del'),
+    url(r'^work/rating/$', 'work_rating'),
 
     url(r'^chapter/list/$', 'chapter_list'),
     url(r'^chapter/view/$', 'chapter_view'),

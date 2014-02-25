@@ -24,6 +24,8 @@ Work
     work_comment_list : 댓글 목록
     work_comment_add : 댓글 추가
     work_comment_del : 댓글 삭제
+    work_rating : 평점
+        모든 Chapter의 평점 평균으로 계산
 '''
 # 댓글 목록
 @csrf_exempt
@@ -98,8 +100,28 @@ def work_comment_del(request):
     else:
         return return_failed_json('Must POST Request')
 
+@csrf_exempt
+def work_rating(request):
+    if request.method == 'POST':
+        query_dict = request.POST
+        work_id = int(query_dict['work_id'])
 
+        work = Work.objects.get(id=work_id)
+        dict = {}
 
+        # 평점 분석
+        ratings = ChapterRating.objects.filter(chapter__work=work)
+        avg_rating = ratings.aggregate(Avg('score'))['score__avg']
+        if avg_rating:
+            dict['rating'] = avg_rating
+            dict['rating_number'] = ratings.count()
+        else:
+            dict['rating'] = 0.0
+            dict['rating_number'] = 0
+
+        return HttpResponse(json.dumps(dict), content_type='application/json')
+    else:
+        return return_failed_json('Must POST Request')
 
 '''
 Chapter
