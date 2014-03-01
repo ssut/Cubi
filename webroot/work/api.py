@@ -6,6 +6,7 @@ from django.db.models import Avg
 
 # decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 # Session
 from django.contrib.sessions.backends.db import SessionStore
@@ -28,100 +29,89 @@ Work
         모든 Chapter의 평점 평균으로 계산
 '''
 # 댓글 목록
+@require_http_methods(["POST"])
 @csrf_exempt
 def work_comment_list(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        work_id = int(query_dict['work_id'])
+    query_dict = request.POST
+    work_id = int(query_dict['work_id'])
 
-        comments = WorkComment.objects.filter(work__id=work_id)
+    comments = WorkComment.objects.filter(work__id=work_id)
 
-        data = {
-            'comments': [comment.json() for comment in comments],
-        }
+    data = {
+        'comments': [comment.json() for comment in comments],
+    }
 
-        return HttpResponse(json.dumps(data), content_type='application/json')
-    else:
-        return return_failed_json('Must POST Request')
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 # 댓글 추가
+@require_http_methods(["POST"])
 @csrf_exempt
 def work_comment_add(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        session_key = query_dict['session_key']
-        username = query_dict['username']
-        work_id = int(query_dict['work_id'])
-        content = query_dict['content']
+    query_dict = request.POST
+    session_key = query_dict['session_key']
+    username = query_dict['username']
+    work_id = int(query_dict['work_id'])
+    content = query_dict['content']
 
-        s = SessionStore(session_key=session_key)
+    s = SessionStore(session_key=session_key)
 
-        # 유저가 세션값의 유저와 같으면 글 등록
-        if username == s['username']:
-            user = User.objects.get(username=s['username'])
-            work = Work.objects.get(id=work_id)
+    # 유저가 세션값의 유저와 같으면 글 등록
+    if username == s['username']:
+        user = User.objects.get(username=s['username'])
+        work = Work.objects.get(id=work_id)
 
-            comment_instance = WorkComment(work=work, author=user, content=content)
-            comment_instance.save()
-            return return_success_json()
-        else:
-            return return_failed_json('Not Matching User')
-
+        comment_instance = WorkComment(work=work, author=user, content=content)
+        comment_instance.save()
+        return return_success_json()
     else:
-        return return_failed_json('Must POST Request')
+        return return_failed_json('Not Matching User')
 
 # 댓글 삭제
+@require_http_methods(["POST"])
 @csrf_exempt
 def work_comment_del(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        session_key = query_dict['session_key']
-        username = query_dict['username']
-        work_id = int(query_dict['work_id'])
-        comment_id = int(query_dict['comment_id'])
+    query_dict = request.POST
+    session_key = query_dict['session_key']
+    username = query_dict['username']
+    work_id = int(query_dict['work_id'])
+    comment_id = int(query_dict['comment_id'])
 
-        s = SessionStore(session_key=session_key)
+    s = SessionStore(session_key=session_key)
 
-        if username == s['username']:
-            user = User.objects.get(username=s['username'])
-            work = Work.objects.get(id=work_id)
-            comment = WorkComment.objects.get(id=comment_id)
+    if username == s['username']:
+        user = User.objects.get(username=s['username'])
+        work = Work.objects.get(id=work_id)
+        comment = WorkComment.objects.get(id=comment_id)
 
-            # 댓글 작성자와 사용자가 같을 경우 댓글 삭제
-            if comment.author == user:
-                comment.delete()
-                return return_success_json()
-            else:
-                return return_failed_json('request user is not comment\'s author')
-            
+        # 댓글 작성자와 사용자가 같을 경우 댓글 삭제
+        if comment.author == user:
+            comment.delete()
+            return return_success_json()
         else:
-            return return_failed_json('Not Matching User')
-
+            return return_failed_json('request user is not comment\'s author')
     else:
-        return return_failed_json('Must POST Request')
+        return return_failed_json('Not Matching User')
 
+@require_http_methods(["POST"])
 @csrf_exempt
 def work_rating(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        work_id = int(query_dict['work_id'])
+    query_dict = request.POST
+    work_id = int(query_dict['work_id'])
 
-        work = Work.objects.get(id=work_id)
-        dict = {}
+    work = Work.objects.get(id=work_id)
+    dict = {}
 
-        # 평점 분석
-        ratings = ChapterRating.objects.filter(chapter__work=work)
-        avg_rating = ratings.aggregate(Avg('score'))['score__avg']
-        if avg_rating:
-            dict['rating'] = avg_rating
-            dict['rating_number'] = ratings.count()
-        else:
-            dict['rating'] = 0.0
-            dict['rating_number'] = 0
-
-        return HttpResponse(json.dumps(dict), content_type='application/json')
+    # 평점 분석
+    ratings = ChapterRating.objects.filter(chapter__work=work)
+    avg_rating = ratings.aggregate(Avg('score'))['score__avg']
+    if avg_rating:
+        dict['rating'] = avg_rating
+        dict['rating_number'] = ratings.count()
     else:
-        return return_failed_json('Must POST Request')
+        dict['rating'] = 0.0
+        dict['rating_number'] = 0
+
+    return HttpResponse(json.dumps(dict), content_type='application/json')
 
 '''
 Chapter
@@ -133,189 +123,173 @@ Chapter
     chapter_rating : 평점
     chapter_rating_add : 평점 추가
 '''
+
+@require_http_methods(["POST"])
 @csrf_exempt
 def chapter_list(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        work_id = int(query_dict['work_id'])
-        work = Work.objects.get(id=work_id)
-        chapters = Chapter.objects.filter(work=work).order_by('-created')
+    query_dict = request.POST
+    work_id = int(query_dict['work_id'])
+    work = Work.objects.get(id=work_id)
+    chapters = Chapter.objects.filter(work=work).order_by('-created')
 
-        chapter_info_list = []
-        for chapter in chapters:
-            chapter_dict = chapter.json()
-
-            # 평점 분석
-            ratings = ChapterRating.objects.filter(chapter=chapter)
-            avg_rating = ratings.aggregate(Avg('score'))['score__avg']
-            if avg_rating:
-                chapter_dict['rating'] = avg_rating
-                chapter_dict['rating_number'] = ratings.count()
-                chapter_info_list.append(chapter_dict)
-            else:
-                chapter_dict['rating'] = 0.0
-                chapter_dict['rating_number'] = 0
-                chapter_info_list.append(chapter_dict)
-
-        data = {
-            'work': work.json(),
-            'chapters': chapter_info_list,
-        }
-
-        return HttpResponse(json.dumps(data), content_type="application/json")
-    else:
-        return return_failed_json('Must POST Request')
-
-@csrf_exempt
-def chapter_view(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        work_id = int(query_dict['work_id'])
-        chapter_id = int(query_dict['chapter_id'])
-
-        work = Work.objects.get(id=work_id)
-        chapter = Chapter.objects.get(work=work, id=chapter_id)
-        images = Image.objects.filter(chapter=chapter)
-        contents = Content.objects.filter(chapter=chapter)
-
-        d = {
-            'images': images,
-            'media_url': MEDIA_URL,
-        }
-
-        return render_to_response('mobile/chapter.html', d)
-    else:
-        return return_failed_json('Must POST Request')
-
-# 댓글 목록
-@csrf_exempt
-def chapter_comment_list(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        work_id = int(query_dict['work_id'])
-        chapter_id = int(query_dict['chapter_id'])
-
-        comments = ChapterComment.objects.filter(chapter__id=chapter_id).filter(chapter__work__id=work_id)
-
-        data = {
-            'comments': [comment.json() for comment in comments],
-        }
-
-        return HttpResponse(json.dumps(data), content_type='application/json')
-    else:
-        return return_failed_json('Must POST Request')
-
-# 댓글 추가
-@csrf_exempt
-def chapter_comment_add(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        session_key = query_dict['session_key']
-        username = query_dict['username']
-        work_id = int(query_dict['work_id'])
-        chapter_id = int(query_dict['chapter_id'])
-        content = query_dict['content']
-
-        s = SessionStore(session_key=session_key)
-
-        # 유저가 세션값의 유저와 같으면 글 등록
-        if username == s['username']:
-            user = User.objects.get(username=s['username'])
-            work = Work.objects.get(id=work_id)
-            chapter = Chapter.objects.get(work=work, id=chapter_id)
-
-            comment_instance = ChapterComment(chapter=chapter, author=user, content=content)
-            comment_instance.save()
-            return return_success_json()
-        else:
-            return return_failed_json('Not Matching User')
-
-    else:
-        return return_failed_json('Must POST Request')
-
-# 댓글 삭제
-@csrf_exempt
-def chapter_comment_del(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        session_key = query_dict['session_key']
-        username = query_dict['username']
-        work_id = int(query_dict['work_id'])
-        chapter_id = int(query_dict['chapter_id'])
-        comment_id = int(query_dict['comment_id'])
-
-        s = SessionStore(session_key=session_key)
-
-        if username == s['username']:
-            user = User.objects.get(username=s['username'])
-            work = Work.objects.get(id=work_id)
-            chapter = Chapter.objects.get(work=work, id=chapter_id)
-            comment = ChapterComment.objects.get(id=comment_id)
-
-            # 댓글 작성자와 사용자가 같을 경우 댓글 삭제
-            if comment.author == user:
-                comment.delete()
-                return return_success_json()
-            else:
-                return return_failed_json('request user is not comment\'s author')
-            
-        else:
-            return return_failed_json('Not Matching User')
-
-    else:
-        return return_failed_json('Must POST Request')
-
-@csrf_exempt
-def chapter_rating(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        work_id = int(query_dict['work_id'])
-        chapter_id = int(query_dict['chapter_id'])
-
-        chapter = Chapter.objects.get(id=chapter_id)
-        dict = {}
+    chapter_info_list = []
+    for chapter in chapters:
+        chapter_dict = chapter.json()
 
         # 평점 분석
         ratings = ChapterRating.objects.filter(chapter=chapter)
         avg_rating = ratings.aggregate(Avg('score'))['score__avg']
         if avg_rating:
-            dict['rating'] = avg_rating
-            dict['rating_number'] = ratings.count()
+            chapter_dict['rating'] = avg_rating
+            chapter_dict['rating_number'] = ratings.count()
+            chapter_info_list.append(chapter_dict)
         else:
-            dict['rating'] = 0.0
-            dict['rating_number'] = 0
+            chapter_dict['rating'] = 0.0
+            chapter_dict['rating_number'] = 0
+            chapter_info_list.append(chapter_dict)
 
-        return HttpResponse(json.dumps(dict), content_type='application/json')
-    else:
-        return return_failed_json('Must POST Request')
+    data = {
+        'work': work.json(),
+        'chapters': chapter_info_list,
+    }
 
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+@require_http_methods(["POST"])
 @csrf_exempt
-def chapter_rating_add(request):
-    if request.method == 'POST':
-        query_dict = request.POST
-        session_key = query_dict['session_key']
-        username = query_dict['username']
-        work_id = int(query_dict['work_id'])
-        chapter_id = int(query_dict['chapter_id'])
-        rating = int(query_dict['rating'])
+def chapter_view(request):
+    query_dict = request.POST
+    work_id = int(query_dict['work_id'])
+    chapter_id = int(query_dict['chapter_id'])
 
-        s = SessionStore(session_key=session_key)
+    work = Work.objects.get(id=work_id)
+    chapter = Chapter.objects.get(work=work, id=chapter_id)
+    images = Image.objects.filter(chapter=chapter)
+    contents = Content.objects.filter(chapter=chapter)
 
-        if username == s['username']:
-            user = User.objects.get(username=s['username'])
-            work = Work.objects.get(id=work_id)
-            chapter = Chapter.objects.get(work=work, id=chapter_id)
+    d = {
+        'images': images,
+        'media_url': MEDIA_URL,
+    }
 
-            if ChapterRating.objects.filter(chapter=chapter).filter(author=user).exists():
-                rating_instance = ChapterRating.objects.get(chapter=chapter, author=user)
-                rating_instance.score = rating
-                rating_instance.save()
-            else:
-                rating_instance = ChapterRating.objects.create(chapter=chapter, author=user, score=rating)
-                rating_instance.save()
+    return render_to_response('mobile/chapter.html', d)
+
+# 댓글 목록
+@require_http_methods(["POST"])
+@csrf_exempt
+def chapter_comment_list(request):
+    query_dict = request.POST
+    work_id = int(query_dict['work_id'])
+    chapter_id = int(query_dict['chapter_id'])
+
+    comments = ChapterComment.objects.filter(chapter__id=chapter_id).filter(chapter__work__id=work_id)
+
+    data = {
+        'comments': [comment.json() for comment in comments],
+    }
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+# 댓글 추가
+@require_http_methods(["POST"])
+@csrf_exempt
+def chapter_comment_add(request):
+    query_dict = request.POST
+    session_key = query_dict['session_key']
+    username = query_dict['username']
+    work_id = int(query_dict['work_id'])
+    chapter_id = int(query_dict['chapter_id'])
+    content = query_dict['content']
+
+    s = SessionStore(session_key=session_key)
+
+    # 유저가 세션값의 유저와 같으면 글 등록
+    if username == s['username']:
+        user = User.objects.get(username=s['username'])
+        work = Work.objects.get(id=work_id)
+        chapter = Chapter.objects.get(work=work, id=chapter_id)
+
+        comment_instance = ChapterComment(chapter=chapter, author=user, content=content)
+        comment_instance.save()
+        return return_success_json()
+    else:
+        return return_failed_json('Not Matching User')
+
+# 댓글 삭제
+@require_http_methods(["POST"])
+@csrf_exempt
+def chapter_comment_del(request):
+    query_dict = request.POST
+    session_key = query_dict['session_key']
+    username = query_dict['username']
+    work_id = int(query_dict['work_id'])
+    chapter_id = int(query_dict['chapter_id'])
+    comment_id = int(query_dict['comment_id'])
+
+    s = SessionStore(session_key=session_key)
+
+    if username == s['username']:
+        user = User.objects.get(username=s['username'])
+        work = Work.objects.get(id=work_id)
+        chapter = Chapter.objects.get(work=work, id=chapter_id)
+        comment = ChapterComment.objects.get(id=comment_id)
+
+        # 댓글 작성자와 사용자가 같을 경우 댓글 삭제
+        if comment.author == user:
+            comment.delete()
             return return_success_json()
         else:
-            return return_failed_json('Not Matching User')
-
+            return return_failed_json('request user is not comment\'s author')
+        
     else:
-        return return_failed_json('Must POST Request')
+        return return_failed_json('Not Matching User')
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def chapter_rating(request):
+    query_dict = request.POST
+    work_id = int(query_dict['work_id'])
+    chapter_id = int(query_dict['chapter_id'])
+
+    chapter = Chapter.objects.get(id=chapter_id)
+    dict = {}
+
+    # 평점 분석
+    ratings = ChapterRating.objects.filter(chapter=chapter)
+    avg_rating = ratings.aggregate(Avg('score'))['score__avg']
+    if avg_rating:
+        dict['rating'] = avg_rating
+        dict['rating_number'] = ratings.count()
+    else:
+        dict['rating'] = 0.0
+        dict['rating_number'] = 0
+
+    return HttpResponse(json.dumps(dict), content_type='application/json')
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def chapter_rating_add(request):
+    query_dict = request.POST
+    session_key = query_dict['session_key']
+    username = query_dict['username']
+    work_id = int(query_dict['work_id'])
+    chapter_id = int(query_dict['chapter_id'])
+    rating = int(query_dict['rating'])
+
+    s = SessionStore(session_key=session_key)
+
+    if username == s['username']:
+        user = User.objects.get(username=s['username'])
+        work = Work.objects.get(id=work_id)
+        chapter = Chapter.objects.get(work=work, id=chapter_id)
+
+        if ChapterRating.objects.filter(chapter=chapter).filter(author=user).exists():
+            rating_instance = ChapterRating.objects.get(chapter=chapter, author=user)
+            rating_instance.score = rating
+            rating_instance.save()
+        else:
+            rating_instance = ChapterRating.objects.create(chapter=chapter, author=user, score=rating)
+            rating_instance.save()
+        return return_success_json()
+    else:
+        return return_failed_json('Not Matching User')

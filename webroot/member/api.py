@@ -66,10 +66,22 @@ def signup(request):
         # check absense of password, email
         if None in [ email, password]:
             raise exceptions.FieldError
+
         new_user = CubiUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
-        return HttpResponse(new_user.json(), content_type='application/json')
+        data = {
+            'user_data': new_user.json()
+        }
+        s = SessionStore()
+        s['username'] = email
+        s.save()
+        session_key = s.session_key
+        data['session_key'] = session_key
+        return HttpResponse(json.dumps(data), content_type='application/json')
     except:
-        return HttpResponse(json({}), content_type='application/json')
+        return HttpResponse(json.dumps(
+                    {"return_status":"failed",
+                        "reason":"error in creating user"
+                            }), content_type='application/json')
 
 
 

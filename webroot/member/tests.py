@@ -14,5 +14,6 @@ class MemberAPITestCase(TestCase):
                 "password":"pass1",
                 "nickname":"nick1"
                 })
+        print signup_res
         users = CubiUser.objects.all()[0]
         self.assertEqual(users.nickname,"nick1")
