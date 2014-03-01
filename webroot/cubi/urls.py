@@ -24,6 +24,8 @@ urlpatterns = patterns('',
     url(r'^signup/$', 'member.views.signup', name='signup'),
     # 로그아웃
     url(r'^signout/$', 'member.views.signout', name='signout'),
+    # 작가전환
+    url(r'^convert/$', 'member.views.convert_to_author', name='convert_to_author'),
 
 
 

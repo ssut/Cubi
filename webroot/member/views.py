@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 
 
 from .models import CubiUser
-from member.forms import CubiUserSignupForm, CubiUserSigninForm
+from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm
 
 def signup(request):
     if request.method == 'POST':
@@ -80,3 +80,9 @@ def signout(request):
 def convert_to_author(request):
     if request.method == 'POST':
         pass
+    else:
+        form = CubiUserConvertToAuthorForm()
+        d = {
+            'form': form,
+        }
+        return render_to_response('member/convert_to_author.html', d, RequestContext(request))
