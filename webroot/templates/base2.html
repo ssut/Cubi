@@ -33,6 +33,7 @@
           <section class="p right edge-left-belize-hole"><a><img src="{% static 'img/index/icon.search.png' %}" alt="Search"></a></section>
           <ul class="h45 no-list no-margin row-align p right">
             {% if user.is_authenticated %}
+              <li><a href="{% url 'member_info' %}" class="no-line font pt10 color-white p">내 정보</a></li>
               <li><a href="{% url 'signout' %}" class="no-line font pt10 color-white p">로그아웃</a></li>
             {% else %}
               <li><a href="{% url 'signin' %}" class="no-line font pt10 color-white p">로그인</a></li>

@@ -31,3 +31,7 @@ class CubiUserConvertToAuthorForm(forms.Form):
             ],
         )
     )
+
+class CubiUserEditForm(forms.Form):
+    email = forms.EmailField()
+    nickname = forms.CharField(max_length=20)

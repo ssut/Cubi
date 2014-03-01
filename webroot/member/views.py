@@ -41,11 +41,9 @@ def signup(request):
             return render_to_response('member/signup_failed.html', d, RequestContext(request))
     else:
         form = CubiUserSignupForm()
-
         d = {
             'form': form,
         }
-
         return render_to_response('member/signup.html', d, RequestContext(request))
 
 def signin(request):
@@ -70,7 +68,6 @@ def signin(request):
         d = {
             'form': form,
         }
-
         return render_to_response('member/signin.html', d, RequestContext(request))
 
 def signout(request):
@@ -78,6 +75,9 @@ def signout(request):
     return render_to_response('member/signout.html')
 
 def convert_to_author(request):
+    user = request.user
+    # user.type == '3' (작가전환대기)일 경우, 대기 페이지 표출
+    # 그 외의 경우 Form 보여줌
     if request.method == 'POST':
         pass
     else:
@@ -86,3 +86,10 @@ def convert_to_author(request):
             'form': form,
         }
         return render_to_response('member/convert_to_author.html', d, RequestContext(request))
+
+def member_info(request):
+    user = request.user
+    d = {
+        'user': user,
+    }
+    return render_to_response('member/info.html', d, RequestContext(request))

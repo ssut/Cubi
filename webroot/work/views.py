@@ -21,7 +21,6 @@ def work_list(request):
         work_dict['last_upload'] = day_to_string(last_chapter.created)
         work_dict_list.append(work_dict)
     
-
     d = {
         'media_url': MEDIA_URL,
         'works': work_dict_list,
