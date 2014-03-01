@@ -13,7 +13,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.sessions.models import Session
 
 # exceptions
-from django.core.exceptions import DoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 import json
 
@@ -103,7 +103,7 @@ def work_rating(request):
 
     try:
         work = Work.objects.get(id=work_id)
-    except DoesNotExist:
+    except ObjectDoesNotExist:
         return return_failed_json('Not Existing Work')
     dict = {}
 
