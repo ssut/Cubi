@@ -27,3 +27,12 @@ def notice_list(request):
     }
 
     return render_to_response('board/notice_list.html', d)
+
+def notice_view(request, notice_id):
+    notice = Notice.objects.get(id=notice_id)
+
+    d = {
+        'notice': notice,
+    }
+
+    return render_to_response('board/notice_view.html', d)

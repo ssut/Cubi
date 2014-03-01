@@ -14,7 +14,9 @@ Cubi - 공지사항 목록
 <h1>공지사항</h1>
 {% if notices %}
 	{% for notice in notices %}
+		<a href="{% url 'notice_view' notice.id %}">
 		<div>{{ notice.title }} <small>{{ notice.created }}</small></div>
+		</a>
 	{% endfor %}
 {% else %}
 	<h4>공지사항이 없습니다</h4>

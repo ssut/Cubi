@@ -30,6 +30,7 @@ urlpatterns = patterns('',
 
     # 공지사항
     url(r'^notice/list/$', 'board.views.notice_list', name='notice_list'),
+    url(r'^notice/view/(\d+)/$', 'board.views.notice_view', name='notice_view'),
 
     # 작품등록
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),

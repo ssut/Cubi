@@ -1,0 +1,16 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+
+{% block title %}
+tinicube - 공지사항 내용
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/notice_view.css' %}">
+{% endblock %}
+
+{% block content %}
+	{{ notice.title }}<br>
+	{{ notice.content }}
+{% endblock %}
