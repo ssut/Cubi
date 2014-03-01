@@ -19,13 +19,25 @@
           <h4 class="p left h45 font pt18 color-white"><a href="{% url 'index' %}" class="p no-line color-white">tinicube</a></h4>
           <ul class="h45 no-list no-margin row-align p left">
             <li><a href="{% url 'work_list' %}" class="no-line font pt10 color-white p">작품 목록</a></li>
-            <li><a href="#" class="no-line font pt10 color-white p">작가 공간</a></li>
             <li><a href="{% url 'notice_list' %}" class="no-line font pt10 color-white p">공지사항</a></li>
+            
+            {% if user.is_authenticated %}
+            <li><a href="#" class="no-line font pt10 color-white p">즐겨찾기</a></li>
+            {% endif %}
+
+            {% if user.type == 2 %}
+            <li><a href="#" class="no-line font pt10 color-white p">작가공간</a></li>
+            {% endif %}
+
           </ul>
           <section class="p right edge-left-belize-hole"><a><img src="{% static 'img/index/icon.search.png' %}" alt="Search"></a></section>
           <ul class="h45 no-list no-margin row-align p right">
-            <li><a href="#" class="no-line font pt10 color-white p">로그인</a></li>
-            <li><a href="{% url 'signup' %}" class="no-line font pt10 color-white p">회원가입</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="{% url 'signout' %}" class="no-line font pt10 color-white p">로그아웃</a></li>
+            {% else %}
+              <li><a href="{% url 'signin' %}" class="no-line font pt10 color-white p">로그인</a></li>
+              <li><a href="{% url 'signup' %}" class="no-line font pt10 color-white p">회원가입</a></li>
+            {% endif %}
           </ul>
         </section>
       </section>

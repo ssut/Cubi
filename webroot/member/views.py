@@ -9,11 +9,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 
 # login
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 from .models import CubiUser
-from member.forms import CubiUserSignupForm
+from member.forms import CubiUserSignupForm, CubiUserSigninForm
 
 def signup(request):
     if request.method == 'POST':
@@ -54,9 +54,10 @@ def signin(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user = authenticate(email=email, password=password)
+            user = authenticate(username=email, password=password)
             if user is not None:
                 login(request, user)
+                return redirect('index')
             else:
                 error_msg = u'로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요'
                 d = {'return_status': 'failed', 'reason': error_msg}
@@ -71,3 +72,7 @@ def signin(request):
         }
 
         return render_to_response('member/signin.html', d, RequestContext(request))
+
+def signout(request):
+    logout(request)
+    return render_to_response('member/signout.html')

@@ -22,6 +22,8 @@ urlpatterns = patterns('',
     url(r'^signin/$', 'member.views.signin', name='signin'),
     # 회원 가입
     url(r'^signup/$', 'member.views.signup', name='signup'),
+    # 로그아웃
+    url(r'^signout/$', 'member.views.signout', name='signout'),
 
 
 
