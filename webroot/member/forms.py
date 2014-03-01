@@ -11,3 +11,7 @@ class CubiUserSignupForm(forms.Form):
 class CubiUserSigninForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
+
+class CubiUserConvertToAuthorForm(forms.Form):
+    last_name = forms.CharField(max_length=20)
+    first_name = forms.CharField(max_length=20)

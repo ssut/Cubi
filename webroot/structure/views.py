@@ -25,4 +25,4 @@ def work_list(request):
     d = {
         'works': works,
     }
-    return render_to_response('temp/work_list.html', d)
+    return render_to_response('temp/work_list.html', d, RequestContext(request))

@@ -76,3 +76,7 @@ def signin(request):
 def signout(request):
     logout(request)
     return render_to_response('member/signout.html')
+
+def convert_to_author(request):
+    if request.method == 'POST':
+        pass

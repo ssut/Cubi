@@ -26,7 +26,7 @@ def notice_list(request):
         'notices': notices,
     }
 
-    return render_to_response('board/notice_list.html', d)
+    return render_to_response('board/notice_list.html', d, RequestContext(request))
 
 def notice_view(request, notice_id):
     notice = Notice.objects.get(id=notice_id)
@@ -35,4 +35,4 @@ def notice_view(request, notice_id):
         'notice': notice,
     }
 
-    return render_to_response('board/notice_view.html', d)
+    return render_to_response('board/notice_view.html', d, RequestContext(request))

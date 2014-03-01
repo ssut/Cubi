@@ -1,5 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
+from django.template import RequestContext
 
 from cubi.functions import day_to_string
 from cubi.settings import MEDIA_URL
@@ -26,7 +27,7 @@ def work_list(request):
         'works': work_dict_list,
     }
 
-    return render_to_response('work/work_list.html', d)
+    return render_to_response('work/work_list.html', d, RequestContext(request))
 
 def chapter_list(request, work_id):
     work = Work.objects.get(id=work_id)
@@ -42,7 +43,7 @@ def chapter_list(request, work_id):
         'chapters': chapters,
     }
 
-    return render_to_response('work/chapter_list.html', d)
+    return render_to_response('work/chapter_list.html', d, RequestContext(request))
 
 def chapter_view(request, chapter_id):
     chapter = Chapter.objects.get(id=chapter_id)
@@ -53,4 +54,4 @@ def chapter_view(request, chapter_id):
         'media_url': MEDIA_URL,
     }
 
-    return render_to_response('work/chapter_view.html', d)
+    return render_to_response('work/chapter_view.html', d, RequestContext(request))
