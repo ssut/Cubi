@@ -12,8 +12,8 @@ class MemberAPITestCase(TestCase):
         signup_res = c.post("/api/signup/",{
                 "email":"user1@email.com",
                 "password":"pass1",
-                "nickname":"nick1"
+                "nickname":"testnick1"
                 })
-        print signup_res
-        users = CubiUser.objects.all()[0]
-        self.assertEqual(users.nickname,"nick1")
+        #print signup_res
+        users = CubiUser.objects.filter(nickname="testnick1")[0]
+        self.assertEqual(users.nickname,"testnick1")
