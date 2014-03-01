@@ -1,0 +1,79 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div>작가전환신청</div>
+<div>
+	<form id="signup-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+		<div class="signup-group">
+
+			<div class="form-group">
+				<label for="{{ form.work_name.id_for_label }}" class="control-label">
+					{{ form.work_name.label }}
+				</label>
+				<div class="col-lg-6">
+					{{ form.work_name }}
+				</div>
+				<div class="col-lg-3">
+					{{ form.work_name.errors }}
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="{{ form.work_url.id_for_label }}" class="control-label">
+					{{ form.work_url.label }}
+				</label>
+				<div class="col-lg-6">
+					{{ form.work_url }}
+				</div>
+				<div class="col-lg-3">
+					{{ form.work_url.errors }}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.last_name.id_for_label }}" class="control-label">
+					{{ form.last_name.label }}
+				</label>
+				<div class="col-lg-6">
+					{{ form.last_name }}
+				</div>
+				<div class="col-lg-3">
+					{{ form.last_name.errors }}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.first_name.id_for_label }}" class="control-label">
+					{{ form.first_name.label }}
+				</label>
+				<div class="col-lg-6">
+					{{ form.first_name }}
+				</div>
+				<div class="col-lg-3">
+					{{ form.first_name.errors }}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="{{ form.phone_number.id_for_label }}" class="control-label">
+					{{ form.phone_number.label }}
+				</label>
+				<div class="col-lg-6">
+					{{ form.phone_number }}
+				</div>
+				<div class="col-lg-3">
+					{{ form.phone_number.errors }}
+				</div>
+			</div>
+
+			<div id="signup-btn-submit" class="form-group">
+				<div>
+					<button type="submit" class="btn btn-default">전환 신청 하기</button>
+				</div>
+			</div>
+		</div>		
+	</form>
+</div>
+
+{% endblock %}

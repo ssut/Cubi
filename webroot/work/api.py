@@ -25,12 +25,25 @@ from work.models import *
 
 '''
 Work
+    work_list : Work 목록
     work_comment_list : 댓글 목록
     work_comment_add : 댓글 추가
     work_comment_del : 댓글 삭제
     work_rating : 평점
         모든 Chapter의 평점 평균으로 계산
 '''
+# 작품 목록
+@require_http_methods(["POST"])
+@csrf_exempt
+def work_list(request):
+    works = Work.objects.all().order_by('-created')
+
+    data = {
+        'works': [work.json() for work in works],
+    }
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
 # 댓글 목록
 @require_http_methods(["POST"])
 @csrf_exempt
@@ -121,7 +134,7 @@ def work_rating(request):
 
 '''
 Chapter
-    chapter_list : 댓글 목록
+    chapter_list : Chapter 목록
     chapter_view : 해당 chapter의 webview화면
     chapter_comment_list : 댓글 목록
     chapter_commnet_add : 댓글 추가

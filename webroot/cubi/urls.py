@@ -18,12 +18,17 @@ urlpatterns = patterns('',
     # 챕터 뷰
     url(r'^chapter/view/(\d+)/$', 'work.views.chapter_view', name='chapter_view'),
 
+    ## Member
     # 로그인
     url(r'^signin/$', 'member.views.signin', name='signin'),
     # 회원 가입
     url(r'^signup/$', 'member.views.signup', name='signup'),
     # 로그아웃
     url(r'^signout/$', 'member.views.signout', name='signout'),
+    # 작가전환
+    url(r'^convert/$', 'member.views.convert_to_author', name='convert_to_author'),
+    # 회원 정보
+    url(r'^member/info/$', 'member.views.member_info', name='member_info'),
 
 
 
