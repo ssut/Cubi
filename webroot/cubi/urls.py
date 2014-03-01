@@ -29,7 +29,7 @@ urlpatterns = patterns('',
 
 
     # 공지사항
-    url(r'^noticelist/$', 'board.views.noticelist', name='noticelist'),
+    url(r'^notice/list/$', 'board.views.notice_list', name='notice_list'),
 
     # 작품등록
     url(r'^reg_author/$', 'structure.views.reg_author', name='reg_author'),

@@ -10,6 +10,8 @@
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
   </head>
+  {% block head %}
+  {% endblock %}
   <body>
     <header>
       <section class="p w100p h45 edge-bottom-belize-hole peter-river-half layer-fixed order-v">
@@ -18,7 +20,7 @@
           <ul class="h45 no-list no-margin row-align p left">
             <li><a href="{% url 'work_list' %}" class="no-line font pt10 color-white p">작품 목록</a></li>
             <li><a href="#" class="no-line font pt10 color-white p">작가 공간</a></li>
-            <li><a href="#" class="no-line font pt10 color-white p">공지사항</a></li>
+            <li><a href="{% url 'notice_list' %}" class="no-line font pt10 color-white p">공지사항</a></li>
           </ul>
           <section class="p right edge-left-belize-hole"><a><img src="{% static 'img/index/icon.search.png' %}" alt="Search"></a></section>
           <ul class="h45 no-list no-margin row-align p right">

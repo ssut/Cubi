@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 {% load staticfiles %}
 
 
@@ -19,7 +19,6 @@ Cubi - 공지사항 목록
 {% else %}
 	<h4>공지사항이 없습니다</h4>
 {% endif %}
-
 
 <ul class="pagination">
 	{% if notices.has_previous %}

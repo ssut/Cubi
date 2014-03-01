@@ -8,7 +8,7 @@ from flynsarmy_paginator.paginator import FlynsarmyPaginator as Paginator
 
 from board.models import Notice
 
-def noticelist(request):
+def notice_list(request):
     page = request.GET.get('page')
     notice_list = Notice.objects.all()
     paginator = Paginator(notice_list, 2, adjacent_pages=3)
@@ -26,4 +26,4 @@ def noticelist(request):
         'notices': notices,
     }
 
-    return render_to_response('board/noticelist.html', d)
+    return render_to_response('board/notice_list.html', d)

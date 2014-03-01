@@ -48,7 +48,6 @@ def signup(request):
 
         return render_to_response('member/signup.html', d, RequestContext(request))
 
-
 def signin(request):
     if request.method == 'POST':
         form = CubiUserSigninForm(request.POST)
