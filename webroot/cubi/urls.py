@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     # 챕터 뷰
     url(r'^chapter/view/(\d+)/$', 'work.views.chapter_view', name='chapter_view'),
 
+    # 로그인
+    url(r'^signin/$', 'member.views.signin', name='signin'),
     # 회원 가입
     url(r'^signup/$', 'member.views.signup', name='signup'),
 

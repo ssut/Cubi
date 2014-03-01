@@ -4,6 +4,14 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 
+# decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
+# login
+from django.contrib.auth import authenticate, login
+
+
 from .models import CubiUser
 from member.forms import CubiUserSignupForm
 
@@ -39,3 +47,28 @@ def signup(request):
         }
 
         return render_to_response('member/signup.html', d, RequestContext(request))
+
+
+def signin(request):
+    if request.method == 'POST':
+        form = CubiUserSigninForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(email=email, password=password)
+            if user is not None:
+                login(request, user)
+            else:
+                error_msg = u'로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요'
+                d = {'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/signin_failed.html')
+        else:
+            error_msg = u'로그인 양식의 내용이 올바르지 않습니다'
+            return render_to_response('member/signin_failed.html')
+    else:
+        form = CubiUserSigninForm()
+        d = {
+            'form': form,
+        }
+
+        return render_to_response('member/signin.html', d, RequestContext(request))

@@ -7,3 +7,7 @@ class CubiUserSignupForm(forms.Form):
     email = forms.EmailField()
     nickname = forms.CharField(max_length=20)
     password = forms.CharField(widget=forms.PasswordInput())
+
+class CubiUserSigninForm(forms.Form):
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput())
