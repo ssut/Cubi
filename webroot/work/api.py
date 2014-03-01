@@ -12,6 +12,9 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.sessions.backends.db import SessionStore
 from django.contrib.sessions.models import Session
 
+# exceptions
+from django.core.exceptions import DoesNotExist
+
 import json
 
 from cubi.settings import MEDIA_URL
@@ -98,7 +101,10 @@ def work_rating(request):
     query_dict = request.POST
     work_id = int(query_dict['work_id'])
 
-    work = Work.objects.get(id=work_id)
+    try:
+        work = Work.objects.get(id=work_id)
+    except DoesNotExist:
+        return return_failed_json('Not Existing Work')
     dict = {}
 
     # 평점 분석
