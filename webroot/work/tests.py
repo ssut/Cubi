@@ -10,6 +10,7 @@ except ImportError:
 
 from django.test.client import Client
 import random
+import json
 
 from member.models import *
 from work.models import *
@@ -78,11 +79,14 @@ class WorkTest(TestCase):
         pass
     def test_work_api(self):
         c = Client()
-        #signup_res = c.post("/api/signup/",{
-        #        "email":"user1@email.com",
-        #        "password":"pass1",
-        #        "nickname":"nick1"
-        #        })
+        work_list = c.post("/api/work/list/")
+        print "work mobile api list result", work_list
+        work_data = json.loads(work_list.content)
+        for work in work_data["works"]:
+            # get work comment
+            comment_list = c.post("/api/work/comment/list/",{"work_id": work["id"]})
+            print "work mobile api comment list result", comment_list
+            
         #print signup_res
         #users = CubiUser.objects.all()[0]
         #self.assertEqual(users.nickname,"nick1")
