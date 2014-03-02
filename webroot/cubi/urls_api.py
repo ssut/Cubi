@@ -11,6 +11,7 @@ urlpatterns = patterns('member.api',
 )
 
 urlpatterns += patterns('work.api',
+    url(r'^work/list/$', 'work_list'),
     url(r'^work/comment/list/$', 'work_comment_list'),
     url(r'^work/comment/add/$', 'work_comment_add'),
     url(r'^work/comment/del/$', 'work_comment_del'),
