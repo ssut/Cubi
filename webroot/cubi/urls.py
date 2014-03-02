@@ -31,7 +31,8 @@ urlpatterns = patterns('',
     url(r'^member/info/$', 'member.views.member_info', name='member_info'),
 
 
-
+    ## Adminstrator
+    url(r'^admin/', include('adminstrator.urls', namespace='adminstrator')),
 
 
 
