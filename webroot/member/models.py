@@ -92,3 +92,5 @@ class CubiUser(AbstractUser):
 
     def remove_work(self, work_instance):
         self.own_works.remove(work_instance)
+
+
