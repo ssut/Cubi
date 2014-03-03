@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
@@ -22,7 +23,6 @@ def wait_convert_list(request):
     d = {
         'waiting_list': waiting_list,
     }
-
     return render_to_response('adminstrator/wait_convert_list.html', d, RequestContext(request))
 
 def convert(request, user_id, boolean):
@@ -32,26 +32,16 @@ def convert(request, user_id, boolean):
         try:
             if boolean == 'true':
                 user.type = '2'
+                d = {'reason': u'작가 전환 성공'}
             elif boolean == 'false':
                 user.type == '1'
+                d = {'reason': u'작가 전환 실패'}
             user.save()
             waitconvert.delete()
             return render_to_response('adminstrator/convert_success.html', d, RequestContext(request))
         except:
+            d = {'reason': u'작가 전환 실패'}
             return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
     else:
-        return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
-
-def convert_deny(request, user_id):
-    user = User.objects.get(id=user_id)
-    if WaitConvert.objects.filter(user=user).exists():
-        waitconvert = WaitConvert.objects.filter(user=user)
-        try:
-            user.type = '1'
-            user.save()
-            waitconvert.delete()
-            return render_to_response('adminstrator/convert_success.html', d, RequestContext(request))
-        except:
-            return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
-    else:
+        d = {'reason': u'작가 전환 실패'}
         return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))

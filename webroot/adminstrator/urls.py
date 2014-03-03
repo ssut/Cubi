@@ -11,4 +11,5 @@ urlpatterns = patterns('',
 urlpatterns += patterns('adminstrator.views',
     url(r'^$', 'index', name='index'),
     url(r'^wait_convert_list/', 'wait_convert_list', name='wait_convert_list'),
+    url(r'^convert/(\d+)/(\w+)/$', 'convert', name='convert'),
 )

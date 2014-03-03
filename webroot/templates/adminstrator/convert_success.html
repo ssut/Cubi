@@ -1,0 +1,11 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+작가전환성공 : {{ reason }}
+<div id="signup-btn-submit" class="form-group">
+	<div>
+		<a href="{% url 'adminstrator:wait_convert_list' %}"><button>돌아가기</button></a>
+	</div>
+</div>
+{% endblock %}
