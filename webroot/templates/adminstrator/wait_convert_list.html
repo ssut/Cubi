@@ -3,7 +3,7 @@
 
 {% block content %}
 
-작가 전환 대기 리스트
+작가 전환 대기 리스트<br>
 {% for waiting in waiting_list %}
 	{{ waiting.user.email }} / 	{{ waiting.created }}<br>
 {% endfor %}

@@ -14,7 +14,7 @@ class WaitConvert(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.user.email, minute_to_string(self.created))
+        return u'%s - %s (%s)' % (self.user.nickname, self.user.email, minute_to_string(self.created))
 
     def convert(self):
         self.user.type = '2'

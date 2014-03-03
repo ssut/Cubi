@@ -15,7 +15,7 @@ except ImportError:
 from author.models import WaitConvert
 
 def index(request):
-    return render_to_response('admin/index.html', RequestContext(request))
+    return render_to_response('adminstrator/index.html', RequestContext(request))
 
 def wait_convert_list(request):
     waiting_list = WaitConvert.objects.all().order_by('-created')
@@ -23,7 +23,7 @@ def wait_convert_list(request):
         'waiting_list': waiting_list,
     }
 
-    return render_to_response('admin/wait_convert_list.html', d, RequestContext(request))
+    return render_to_response('adminstrator/wait_convert_list.html', d, RequestContext(request))
 
 def convert(request, user_id, boolean):
     user = User.objects.get(id=user_id)
@@ -36,11 +36,11 @@ def convert(request, user_id, boolean):
                 user.type == '1'
             user.save()
             waitconvert.delete()
-            return render_to_response('admin/convert_success.html', d, RequestContext(request))
+            return render_to_response('adminstrator/convert_success.html', d, RequestContext(request))
         except:
-            return render_to_response('admin/convert_failed.html', d, RequestContext(request))
+            return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
     else:
-        return render_to_response('admin/convert_failed.html', d, RequestContext(request))
+        return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
 
 def convert_deny(request, user_id):
     user = User.objects.get(id=user_id)
@@ -50,8 +50,8 @@ def convert_deny(request, user_id):
             user.type = '1'
             user.save()
             waitconvert.delete()
-            return render_to_response('admin/convert_success.html', d, RequestContext(request))
+            return render_to_response('adminstrator/convert_success.html', d, RequestContext(request))
         except:
-            return render_to_response('admin/convert_failed.html', d, RequestContext(request))
+            return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
     else:
-        return render_to_response('admin/convert_failed.html', d, RequestContext(request))
+        return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
