@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 
 
 from .models import CubiUser
-from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm
+from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm, CubiUserEditForm
 
 def signup(request):
     if request.method == 'POST':
@@ -89,7 +89,42 @@ def convert_to_author(request):
 
 def member_info(request):
     user = request.user
-    d = {
-        'user': user,
-    }
-    return render_to_response('member/info.html', d, RequestContext(request))
+    if request.method == 'POST':
+        form = CubiUserEditForm(request.POST)
+        if form.is_valid():
+            # request한 user와 새로 들어온 form의 Password로 인증
+            print user.email
+            print form.cleaned_data['password']
+            user = authenticate(username=user.email, password=form.cleaned_data['password'])
+            if user is not None:
+                email = form.cleaned_data['email']
+                nickname = form.cleaned_data['nickname']
+                password = form.cleaned_data['password']
+
+                user.email = email
+                user.username = email
+                user.nickname = nickname
+                user.set_password(password)
+                user.save()
+
+                d = {'return_status': 'success', 'user': user}
+
+                return render_to_response('member/info_edit_success.html', d, RequestContext(request))
+                
+            else:
+                # 이 부분은 message띄우면서 입력정보로 form다시 띄워주기
+                error_msg = u'비밀번호를 확인해주세요'
+                d = {'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/info_edit_failed.html', d, RequestContext(request))
+        else:
+            error_msg = u'회원정보 수정 양식의 내용이 올바르지 않습니다'
+            return render_to_response('member/info_edit_failed.html', d, RequestContext(request))
+    else:
+        # print user.email
+        # print user.nickname
+        # print user.password
+        form = CubiUserEditForm(initial={'email': user.email, 'nickname': user.nickname})
+        d = {
+            'form': form,
+        }
+        return render_to_response('member/info.html', d, RequestContext(request))
