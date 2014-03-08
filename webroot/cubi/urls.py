@@ -29,6 +29,8 @@ urlpatterns = patterns('',
     url(r'^convert/$', 'member.views.convert_to_author', name='convert_to_author'),
     # 회원 정보
     url(r'^member/info/$', 'member.views.member_info', name='member_info'),
+    # 비밀번호 변경
+    url(r'^member/passwordchange/$', 'member.views.password_change', name='password_change'),
 
 
     ## Adminstrator

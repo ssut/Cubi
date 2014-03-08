@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 
 
 from .models import CubiUser
-from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm, CubiUserEditForm
+from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm, CubiUserEditForm, CubiUserPasswordChangeForm
 
 def signup(request):
     if request.method == 'POST':
@@ -128,3 +128,39 @@ def member_info(request):
             'form': form,
         }
         return render_to_response('member/info.html', d, RequestContext(request))
+
+def password_change(request):
+    user = request.user
+    if request.method == 'POST':
+        form = CubiUserPasswordChangeForm(request.POST)
+        if form.is_valid():
+            # request한 user와 새로 들어온 form의 Password로 인증
+            print user.email
+            print form.cleaned_data['original_password']
+            user = authenticate(username=user.email, password=form.cleaned_data['original_password'])
+            if user is not None:
+                new_password = form.cleaned_data['new_password']
+                new_password_confirm = form.cleaned_data['new_password_confirm']
+                if new_password == new_password_confirm:
+                    user.set_password(new_password)
+                    user.save()
+                    d = {'return_status': 'success', 'user': user}
+                    return render_to_response('member/passwordchange_success.html', d, RequestContext(request))
+                else:
+                    error_msg = u'새 비밀번호와 비밀번호 확인이 일치하지 않습니다'
+                    d = {'return_status': 'failed', 'reason': error_msg}
+                    return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))    
+            else:
+                # 이 부분은 message띄우면서 입력정보로 form다시 띄워주기
+                error_msg = u'기존 비밀번호를 확인해주세요'
+                d = {'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))
+        else:
+            error_msg = u'비밀번호 변경 양식의 내용이 올바르지 않습니다'
+            return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))
+    else:
+        form = CubiUserPasswordChangeForm()
+        d = {
+            'form': form,
+        }
+        return render_to_response('member/passwordchange.html', d, RequestContext(request))
