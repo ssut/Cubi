@@ -32,6 +32,8 @@ urlpatterns = patterns('',
     # 비밀번호 변경
     url(r'^member/passwordchange/$', 'member.views.password_change', name='password_change'),
 
+    # Author(나의 작품)
+    url(r'^author/', include('author.urls', namespace='author')),
 
     ## Adminstrator
     url(r'^admin/', include('adminstrator.urls', namespace='adminstrator')),

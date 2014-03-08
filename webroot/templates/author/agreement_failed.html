@@ -1,0 +1,11 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+작품 업로드 실패 ({{ reason }})
+<div id="signup-btn-submit" class="form-group">
+	<div>
+		<a href="{% url 'author:agreement' %}"><button>약관화면으로</button></a>
+	</div>
+</div>
+{% endblock %}

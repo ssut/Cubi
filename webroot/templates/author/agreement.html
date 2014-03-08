@@ -1,0 +1,15 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+작품 업로드 약관<br>
+이러저러한 약관이 있습니당
+<div id="signup-btn-submit" class="form-group">
+	<div>
+		<form id="signup-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+			<input type="checkbox" name="agreement" value="true">약관에 동의합니다<br>
+			<button type="submit" class="btn btn-default">다음</button>
+		</form>
+	</div>
+</div>
+{% endblock %}
