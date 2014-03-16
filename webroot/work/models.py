@@ -202,8 +202,8 @@ class ChapterQueue(models.Model):
     NAVER = 'NAVER'
     DAUM = 'DAUM'
     TARGET_CHOICES = (
-        (NAVER, '네이버'),
-        (DAUM, '다음'),
+        (NAVER, u'네이버'),
+        (DAUM, u'다음'),
     )
     work = models.ForeignKey(Work)
     target = models.CharField(max_length=10, choices=TARGET_CHOICES)
