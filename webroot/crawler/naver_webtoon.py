@@ -16,14 +16,29 @@ class NaverWebtoon(object):
                                 cls, *args, **kwargs)
         return cls._instance
 
+    def count_list(self, id):
+        # 마지막 페이지 번호
+        last = 0
+        try:
+            last = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s&page=99999' % ( id )))
+            last = int(last.select('span.current')[0].text)
+        except Exception, e:
+            raise WebtoonDoesNotExist()
+        
+        return last
+
+    def count_comic(self, id):
+        url = urllib.urlopen('http://comic.naver.com/webtoon/detail.nhn?titleId=%s&no=99999' % ( id )).url
+        no = int(self._no.search(url).group(1))
+        return no
+
     def list(self, id):
         # 마지막 페이지 번호
-        last = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s&weekday=tue&page=99999' % ( id )))
-        last = int(last.select('span.current')[0].text)
+        last = self.count_list(id)
 
         items = []
         for i in range(1, last + 1):
-            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s&weekday=tue&page=%s' % ( id, i )))
+            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s&page=%s' % ( id, i )))
             table = str(page.select('table.viewList')[0]).replace('\n', '')
             table = BeautifulSoup(self._thead.sub('', table))
             tr = table.select('tr')
@@ -47,7 +62,9 @@ class NaverWebtoon(object):
         return items
 
     def detail(self, id, no):
-        url = 'http://comic.naver.com/webtoon/detail.nhn?titleId=%s&no=%s&weekday=tue' % ( id, no )
+        if no > self.count_comic(id):
+            raise WebtoonChapterDoesNotExist()
+        url = 'http://comic.naver.com/webtoon/detail.nhn?titleId=%s&no=%s' % ( id, no )
         page = BeautifulSoup(urllib.urlopen(url))
         images = page.select('div.wt_viewer img')
         thumb = StringIO.StringIO()
@@ -62,7 +79,7 @@ class NaverWebtoon(object):
 
         for image in images:
             if image['src'] == '':
-                break
+                raise WebtoonChapterDoesNotExist()
             request = urllib2.Request(image['src'])
             request.add_header('Referer', url)
             request.add_header('User-Agent', 'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.10')
@@ -73,6 +90,12 @@ class NaverWebtoon(object):
 
         return data
 
+class WebtoonChapterDoesNotExist(Exception):
+    pass
+
+class WebtoonDoesNotExist(Exception):
+    pass
+
 # exmaple
-# print NaverWebtoon().list(81482)
-# print NaverWebtoon().detail(81482, 446)
+# print NaverWebtoon().list(123123213213)
+# print NaverWebtoon().detail(81482, 99999)
