@@ -27,4 +27,12 @@ def agreement(request):
 
 # 작품 업로드 메인
 def index(request):
-    return render_to_response('author/index.html', RequestContext(request))
+    user = request.user
+    if user.type != '2':
+        return redirect('author:introduce')
+    else:
+        return render_to_response('author/index.html', RequestContext(request))
+
+# 작품 업로드 1 - 타입 선택 (웹툰, 만화, 소설 등)
+def addwork_select_type()
+    

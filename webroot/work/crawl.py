@@ -14,7 +14,7 @@ import Image as PIL_Image
 from cStringIO import StringIO
 import os
 
-
+path = ''
 media_path = settings.MEDIA_ROOT
 
 # Custom user model
@@ -26,14 +26,173 @@ except ImportError:
 
 from work.models import *
 from member.models import *
+'''
+폴더구조
+    날짜기준으로 생성
+    기본 : yyyymmdd/
+    Work - Webtoon : 기본/work/webtoon/
+'''
+# 디렉토리 생성
+def make_directory():
+    global path
+    today = datetime.today()
+    today_str = today.strftime('%Y%m%d')
+    path = os.path.join(media_path, today_str, 'work', 'webtoon')
+    print path
+    os.makedirs(path)
 
-media_path = media_path + '/'
-work_path_base = 'work/'
-work_path2 = 'work/%04d/'
-thumbnail_path = 'image/thumbnail/'
-cover_path = 'image/cover/'
-content_path = 'image/content/'
-content_ori_path = 'image/content/ori/'
+# Work생성 및 Chapter List 리턴
+def ger_chapter_list_and_create_work(comic_number, user):
+    league_info = daum_league_list(comic_number)
+    comic_title = league_info['comic_title']
+    comic_author_name = league_info['comic_author_name']
+    comic_description = league_info['comic_description']
+    comic_genre = league_info['comic_genre']
+    comic_url_img_title = league_info['comic_url_img_title']
+    chapter_list = league_info['chapter_list']
+
+    ## 임시 유저생성 & 적용 부분
+    # count = User.objects.count()
+    # str_count = str(count)
+    # password = '123'
+    # print comic_author_name
+    # if User.objects.filter(nickname=comic_author_name).exists():
+    #     user = User.objects.filter(nickname=comic_author_name)
+    # else:
+    #     user = User.objects.create_default_user(count, comic_author_name, password)
+    #     user.nickname = comic_author_name
+    #     user.save()
+
+    work_category, work_category_created = WorkCategory.objects.get_or_create(title=u'웹툰')
+    work, work_created = Work.objects.get_or_create(category=work_category, title=comic_title, description=comic_description, author=user)
+
+    if work_created:
+        print '%s is created' % (work.title)
+    else:
+        print '%s is exist' % (work.title)
+
+    work.description = comic_description
+    work.save()
+
+    return chapter_list
+
+# Chapter List 리턴
+def get_chapter_list(comic_number):
+    league_info = daum_league_list(comic_number)
+    chapter_list = league_info['chapter_list']
+    return chapter_list
+
+# make_directory에서 지정된 전역변수 path를 이용, 저장할 파일명의 path를 반환
+def get_save_path(filename):
+    global path
+    return os.path.join(path, filename)
+
+# Chapter List의 구성요소인 chapter_dict의 정보로 Chapter인스턴스 생성 후 저장
+def save_chapter(chapter_dict):
+    chapter_number = chapter_dict['detail_num']
+    chapter_title = chapter_dict['title']
+    chapter_url_thumbnail = chapter_dict['url_thumbnail']
+    chapter_date = chapter_dict['date']
+
+    if Chapter.objects.filter(reg_no=chapter_number).exists():
+        print 'Chapter (reg_no:%s) is Exist!' % (chapter_number)
+        continue
+    else:
+        print 'Chapter (reg_no:%s) start create' % (chapter_number)
+        # 썸네일 저장
+        url = chapter_url_thumbnail
+        ext = '.jpg'
+        save_ext = '.JPG'
+        # ImageField에 저장될 thumbnail이름
+        filename = chapter_number + ext
+        fieldpath = thumbnail_path2 + filename
+        # 다운로드 받을 전체 경로(media_path포함)
+        filepath = media_path + fieldpath
+        # urllib로 지정한 이름으로 이미지 다운로드 및 저장
+        urllib.urlretrieve(url, filepath)
+
+        chapter_instance = Chapter.objects.create(reg_no=chapter_number, work=work, title=chapter_title, created=chapter_date, thumbnail=fieldpath)
+        chapter_instance.save()
+        print 'Chapter (reg_no:%s) end create' % (chapter_number)
+
+    # Chapter의 Content 인스턴스 생성 작업
+    image_list = daum_league_detail(chapter_number)
+
+    # 이미지 저장
+    for i in range(len(image_list)):
+        image = image_list[i]
+        image_name = image['name']
+        image_url = image['url']
+        image_order = image['order']
+
+        # 이부분은 splittext사용
+        con_ext_jpg = re.compile('jpg', re.I)
+        con_ext_gif = re.compile('gif', re.I)
+        con_ext_png = re.compile('png', re.I)
+
+        if con_ext_jpg.findall(image_name):
+            ext = '.jpg'
+            save_ext = 'JPEG'
+            print 'jpg'
+        elif con_ext_gif.findall(image_name):
+            ext = '.gif'
+            save_ext = 'GIF'
+            print 'gif'
+        elif con_ext_png.findall(image_name):
+            ext = '.png'
+            save_ext = 'PNG'
+            print 'png'
+
+        # 저장할 이미지 이름 지정
+        image_num = u'_%02d' % (i+1)    
+        filename = chapter_number + image_num + ext
+        fieldpath = content_ori_path2 + filename
+        filepath = media_path + fieldpath
+        urllib.urlretrieve(image_url, filepath)
+
+        # 이미지 열어 크롭작업 시작
+        try:
+            im = PIL_Image.open(filepath)
+        except:
+            continue
+
+        # P모드에서는 작업 불가
+        if im.mode != 'RGB':
+            im = im.convert('RGB')
+
+        print 'FileName : ' + filename + ' (' + str(im.size[0]) + ', ' + str(im.size[1]) + ')'
+
+        # 세로크기 4000px씩 Crop후 crop_list에 추가
+        print 'Crop Start'
+        crop_list = []
+        while im.size[1] > 0:
+            if im.size[1] > 2000:
+                crop_height = 2000
+            else:
+                crop_height = im.size[1]
+
+            box1 = (0, 0, im.size[0], crop_height)
+            crop_list.append(im.crop(box1))
+
+            box2 = (0, crop_height, im.size[0], im.size[1])
+            im = im.crop(box2)
+
+            print '    ' + str(im.size[1])
+        print 'Crop End'
+        
+        # 크롭파일 저장, Content인스턴스 생성
+        for j in range(len(crop_list)):
+            crop_image = crop_list[j]
+            crop_num = u'_%02d' % (j+1)
+            filename = chapter_number + image_num + crop_num + ext
+            fieldpath = content_path2 + filename
+            filepath = media_path + fieldpath
+
+            crop_image.save(filepath, save_ext, quality=90)
+
+            image_instance = Image(chapter=chapter_instance, sequence=j, image=fieldpath)
+            image_instance.save()
+
 
 
 # 아마추어(웹툰리그)
@@ -64,48 +223,15 @@ def crawl_daumleague(comic_number, user):
     work.save()
 
     work_id = work.id
-    # 디렉토리 생성
-    # work/(work.id)/ 디렉토리 생성
-    work_dir_base = media_path + work_path_base
-    if not os.path.isdir(work_dir_base):
-        os.mkdir(work_dir_base)
+    # 디렉토리 생성 -> makedirs로 한 번에 다 만들기
+    # os.join쓰기
+    # 디렉토리 최대한 줄이기
+    # work기준이 아니라 날짜 기준으로 
+    # for i in range(len(list)) 
+    #   for index,item in enumerate(list):
+    #       print index, item
 
-    # work/(work.id)/ 디렉토리 생성
-    work_path = work_path2 % (work_id)
-    print 'workpath :', work_path
-    work_dir = media_path + work_path
-    if not os.path.isdir(work_dir):
-        os.mkdir(work_dir)
-
-    # work/(work.id)/image/ 디렉토리 생성
-    work_image_dir = work_dir + 'image/'
-    if not os.path.isdir(work_image_dir):
-        os.mkdir(work_image_dir)
-
-    # work/(work.id)/image/cover/ 디렉토리 생성
-    cover_dir = media_path + work_path + cover_path
-    cover_path2 = work_path + cover_path
-    if not os.path.isdir(cover_dir):
-        os.mkdir(cover_dir)
-
-    # work/(work.id)/image/thumbnail/ 디렉토리 생성
-    thumbnail_dir = media_path + work_path + thumbnail_path
-    thumbnail_path2 = work_path + thumbnail_path
-    if not os.path.isdir(thumbnail_dir):
-        os.mkdir(thumbnail_dir)
-
-    # work/(work.id)/image/content/ 디렉토리 생성
-    content_dir = media_path + work_path + content_path
-    content_path2 = work_path + content_path
-    if not os.path.isdir(content_dir):
-        os.mkdir(content_dir)
-
-    # work/(work.id)/image/content/ori/ 디렉토리 생성
-    content_ori_dir = media_path + work_path + content_ori_path
-    content_ori_path2 = work_path + content_ori_path
-    if not os.path.isdir(content_ori_dir):
-        os.mkdir(content_ori_dir)
-
+    
     # 각 챕터 리스트 돌며 챕터 저장
     for chapter in reversed(chapter_list):
         chapter_number = chapter['detail_num']
@@ -144,6 +270,7 @@ def crawl_daumleague(comic_number, user):
             image_url = image['url']
             image_order = image['order']
 
+            # 이부분은 splittext사용
             con_ext_jpg = re.compile('jpg', re.I)
             con_ext_gif = re.compile('gif', re.I)
             con_ext_png = re.compile('png', re.I)
@@ -162,7 +289,7 @@ def crawl_daumleague(comic_number, user):
                 print 'png'
 
             # 저장할 이미지 이름 지정
-            image_num = u'_%02d' % (i+1)
+            image_num = u'_%02d' % (i+1)    
             filename = chapter_number + image_num + ext
             fieldpath = content_ori_path2 + filename
             filepath = media_path + fieldpath
@@ -211,48 +338,48 @@ def crawl_daumleague(comic_number, user):
                 image_instance = Image(chapter=chapter_instance, sequence=j, image=fieldpath)
                 image_instance.save()
 
-# 디렉토리 생성
-def make_directory(work_id):
-    # work/(work.id)/ 디렉토리 생성
-    work_dir_base = media_path + work_path_base
-    if not os.path.isdir(work_dir_base):
-        os.mkdir(work_dir_base)
+# # 디렉토리 생성
+# def make_directory(work_id):
+#     # work/(work.id)/ 디렉토리 생성
+#     work_dir_base = media_path + work_path_base
+#     if not os.path.isdir(work_dir_base):
+#         os.mkdir(work_dir_base)
 
-    # work/(work.id)/ 디렉토리 생성
-    work_path = work_path2 % (work_id)
-    print 'workpath :', work_path
-    work_dir = media_path + work_path
-    if not os.path.isdir(work_dir):
-        os.mkdir(work_dir)
+#     # work/(work.id)/ 디렉토리 생성
+#     work_path = work_path2 % (work_id)
+#     print 'workpath :', work_path
+#     work_dir = media_path + work_path
+#     if not os.path.isdir(work_dir):
+#         os.mkdir(work_dir)
 
-    # work/(work.id)/image/ 디렉토리 생성
-    work_image_dir = work_dir + 'image/'
-    if not os.path.isdir(work_image_dir):
-        os.mkdir(work_image_dir)
+#     # work/(work.id)/image/ 디렉토리 생성
+#     work_image_dir = work_dir + 'image/'
+#     if not os.path.isdir(work_image_dir):
+#         os.mkdir(work_image_dir)
 
-    # work/(work.id)/image/cover/ 디렉토리 생성
-    cover_dir = media_path + work_path + cover_path
-    cover_path2 = work_path + cover_path
-    if not os.path.isdir(cover_dir):
-        os.mkdir(cover_dir)
+#     # work/(work.id)/image/cover/ 디렉토리 생성
+#     cover_dir = media_path + work_path + cover_path
+#     cover_path2 = work_path + cover_path
+#     if not os.path.isdir(cover_dir):
+#         os.mkdir(cover_dir)
 
-    # work/(work.id)/image/thumbnail/ 디렉토리 생성
-    thumbnail_dir = media_path + work_path + thumbnail_path
-    thumbnail_path2 = work_path + thumbnail_path
-    if not os.path.isdir(thumbnail_dir):
-        os.mkdir(thumbnail_dir)
+#     # work/(work.id)/image/thumbnail/ 디렉토리 생성
+#     thumbnail_dir = media_path + work_path + thumbnail_path
+#     thumbnail_path2 = work_path + thumbnail_path
+#     if not os.path.isdir(thumbnail_dir):
+#         os.mkdir(thumbnail_dir)
 
-    # work/(work.id)/image/content/ 디렉토리 생성
-    content_dir = media_path + work_path + content_path
-    content_path2 = work_path + content_path
-    if not os.path.isdir(content_dir):
-        os.mkdir(content_dir)
+#     # work/(work.id)/image/content/ 디렉토리 생성
+#     content_dir = media_path + work_path + content_path
+#     content_path2 = work_path + content_path
+#     if not os.path.isdir(content_dir):
+#         os.mkdir(content_dir)
 
-    # work/(work.id)/image/content/ori/ 디렉토리 생성
-    content_ori_dir = media_path + work_path + content_ori_path
-    content_ori_path2 = work_path + content_ori_path
-    if not os.path.isdir(content_ori_dir):
-        os.mkdir(content_ori_dir)
+#     # work/(work.id)/image/content/ori/ 디렉토리 생성
+#     content_ori_dir = media_path + work_path + content_ori_path
+#     content_ori_path2 = work_path + content_ori_path
+#     if not os.path.isdir(content_ori_dir):
+#         os.mkdir(content_ori_dir)
 
 # 정식웹툰
 def crawl_daum(comic_title, user):
@@ -277,7 +404,6 @@ def crawl_daum(comic_title, user):
     thumbnail_save_path = thumbnail_path + thumbnail_folder_name
     if not os.path.isdir(media_path + '/' + thumbnail_save_path):
         os.mkdir(media_path + '/' + thumbnail_save_path)
-
 
     for chapter in reversed(chapter_list):
         chapter_number = chapter['chapter_number']
