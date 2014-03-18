@@ -147,7 +147,7 @@ class WorkComment(Comment):
 
 # 챕터(각 작품의 1,2,3화....)
 class Chapter(models.Model):
-    reg_no = models.CharField(blank=True, max_length=100)
+    reg_no = models.IntegerField()
     work = models.ForeignKey(Work)
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
@@ -196,6 +196,22 @@ class ChapterRating(Rating):
         }
         combine_dict = dict(parent_dict.items() + cur_dict.items())
         return combine_dict
+
+# 셀러리 큐
+class ChapterQueue(models.Model):
+    NAVER = 'NAVER'
+    DAUM = 'DAUM'
+    TARGET_CHOICES = (
+        (NAVER, u'네이버'),
+        (DAUM, u'다음'),
+    )
+    work = models.ForeignKey(Work)
+    target = models.CharField(max_length=10, choices=TARGET_CHOICES)
+    chapter_no = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_checked = models.BooleanField(default=False)
+    checked_at = models.DateTimeField(blank=True)
+    is_succeeded = models.BooleanField(default=False)
 
 '''
 내용(Content)
