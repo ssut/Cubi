@@ -1,0 +1,16 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+작품 타입 선택<br>
+이거저거한 타입이 있음<br>
+<div id="signup-btn-submit" class="form-group">
+	<div>
+		<form id="signup-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+			<input type="radio" name="type" value="webtoon_naver">네이버 베스트도전, 도전만화가<br>
+			<input type="radio" name="type" value="webtoon_daum">다음 웹툰리그<br>
+			<button type="submit" class="btn btn-default">다음</button>
+		</form>
+	</div>
+</div>
+{% endblock %}
