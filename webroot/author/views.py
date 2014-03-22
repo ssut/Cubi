@@ -63,13 +63,14 @@ def addwork_info(request):
             genre = form.cleaned_data['genre']
             introduce = form.cleaned_data['introduce']
             work_num = form.cleaned_data['work_num']
-            image_title = form.cleaned_data['image_title']
+            image_cover = form.cleaned_data['image_cover']
             image_thumbnail = form.cleaned_data['image_thumbnail']
             image_loading = form.cleaned_data['image_loading']
             image_largeicon = form.cleaned_data['image_largeicon']
             image_smallicon = form.cleaned_data['image_smallicon']
 
             
+
 
         else:
             error_msg = u'업로드 데이터가 잘못되었습니다'

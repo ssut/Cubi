@@ -15,8 +15,6 @@ from cubi.functions import imageinfo, imageinfo2
 # Upload path
 path_image = 'image/'
 path_image_work = os.path.join(path_image, 'work')
-path_image_work_cover = os.path.join(path_image_work, 'cover')
-path_image_work_thumbnail = os.path.join(path_image_work, 'thumbnail')
 
 path_image_chapter = os.path.join(path_image, 'chapter')
 path_image_chapter_cover = os.path.join(path_image_chapter, 'cover')
@@ -110,8 +108,11 @@ class Work(models.Model):
     market_android = models.CharField(max_length=100, blank=True)
     market_ios = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    thumbnail = models.ImageField(upload_to=path_image_work_thumbnail, blank=True)
-    cover = models.ImageField(upload_to=path_image_work_cover, blank=True)
+    thumbnail = models.ImageField(upload_to=path_image_work, blank=True)
+    cover = models.ImageField(upload_to=path_image_work, blank=True)
+    image_loading = models.ImageField(upload_to=path_image_work, blank=True)
+    image_largeicon = models.ImageField(upload_to=path_image_work, blank=True)
+    image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
 
     def __unicode__(self):
         return self.title
@@ -128,6 +129,9 @@ class Work(models.Model):
             'created': day_to_string(self.created),
             'thumbnail': imageinfo(self.thumbnail),
             'cover': imageinfo2(self.cover),
+            'image_loading': imageinfo(self.image_loading),
+            'image_largeicon': imageinfo(self.image_largeicon),
+            'image_smallicon': imageinfo(self.image_smallicon),
         }
 
 # 작품 댓글

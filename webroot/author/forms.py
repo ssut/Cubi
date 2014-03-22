@@ -22,7 +22,7 @@ class AddworkInfoForm(forms.Form):
     genre = forms.CharField(label='장르', max_length=20)
     introduce = forms.CharField(label='작품 소개', max_length=200)
     work_num = forms.IntegerField(label='작품 번호')
-    image_title = forms.ImageField(label='타이틀 이미지')
+    image_cover = forms.ImageField(label='타이틀 이미지')
     image_thumbnail = forms.ImageField(label='썸네일 이미지')
     image_loading = forms.ImageField(label='로딩 이미지', required=False)
     image_largeicon = forms.ImageField(label='큰 아이콘')
