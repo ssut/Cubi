@@ -328,7 +328,7 @@ def crawl_daumleague(comic_number, user):
 # 네이버 웹툰 크롤링
 # crawl_naver(comic_number=i32, user=User): 크롤되지 않은 모든 웹툰을 크롤링함
 # crawl_naver(comic_number=i32, chapter_number=i32, user=User): 한 화만 선택헤서 크롤링함
-def crawl_naver(*args, *kargs):
+def crawl_naver(*args, **kargs):
     # 웹툰 Work 생성
     work = get_naver_work()
 
