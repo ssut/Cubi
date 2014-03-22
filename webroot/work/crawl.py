@@ -243,7 +243,7 @@ def get_croplist(filepath):
     try:
         im = PIL_Image.open(filepath)
     except:
-        continue
+        pass
 
     # P모드에서는 작업 불가
     if im.mode != 'RGB':
@@ -338,9 +338,8 @@ def crawl_naver(*args, **kargs):
         # Chapter List 가져오기
         chapter_list = NaverWebtoon().list(kargs['comic_number'])
         for chapter in chapter_list:
-            if Chapter.filter(reg_no=chapter['no'], work=work).exists():
-                continue
-            crawl_naver(comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
+            if not Chapter.filter(reg_no=chapter['no'], work=work).exists():
+                crawl_naver(comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
     elif len(args) == 3: # 한 화만 선택해서 크롤링
         # 디렉토리 생성
         make_directory()
