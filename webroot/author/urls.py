@@ -10,6 +10,7 @@ urlpatterns = patterns('author.views',
     url(r'^agreement/$', 'agreement', name='agreement'),
     url(r'^index/$', 'index', name='index'),
 
+    url(r'^work/add/$', 'addwork', name='addwork'),
     url(r'^work/add/type/$', 'addwork_select_type', name='addwork_select_type'),
     url(r'^work/add/info/$', 'addwork_info', name='addwork_info'),
 )

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 
-from author.forms import AddworkInfoForm
+from author.forms import AddworkForm
 
 # 작품 업로드 소개
 def introduce(request):
@@ -34,6 +34,38 @@ def index(request):
         return redirect('author:introduce')
     else:
         return render_to_response('author/index.html', RequestContext(request))
+
+'''
+작품 업로드
+    1. 타입 선택
+    2. 정보 입력
+'''
+def addwork(request):
+    if request.method == 'POST':
+        form = AddworkForm(request.POST, request.FILES)
+        print form
+        if form.is_valid():
+            print form.cleaned_data
+            type = form.cleaned_data['type']
+            title = form.cleaned_data['title']
+            genre = form.cleaned_data['genre']
+            introduce = form.cleaned_data['introduce']
+            work_num = form.cleaned_data['work_num']
+            image_cover = form.cleaned_data['image_cover']
+            image_thumbnail = form.cleaned_data['image_thumbnail']
+            image_loading = form.cleaned_data['image_loading']
+            image_largeicon = form.cleaned_data['image_largeicon']
+            image_smallicon = form.cleaned_data['image_smallicon']
+            return HttpResponse('OK')
+
+        else:
+            error_msg = u'업로드 데이터가 잘못되었습니다'
+            d = {'return_status': 'failed', 'reason': error_msg}
+            return render_to_response('author/addwork_failed.html', d, RequestContext(request))
+    else:
+        form = AddworkForm()
+        d = {'form': form}
+        return render_to_response('author/addwork.html', d, RequestContext(request))
 
 # 작품 업로드 1 - 타입 선택 (웹툰, 만화, 소설 등)
 def addwork_select_type(request):
@@ -80,3 +112,5 @@ def addwork_info(request):
         form = AddworkInfoForm()
         d = {'form': form}
         return render_to_response('author/addwork_info.html', d, RequestContext(request))
+
+

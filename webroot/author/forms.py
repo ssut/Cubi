@@ -3,6 +3,11 @@ from django.forms import ModelForm
 from django import forms
 
 from author.models import *
+
+CHOICES_TYPE = (
+    ('webtoon_naver', u'네이버 웹툰'),
+    ('webtoon_daum', u'다음 웹툰'),
+)
 '''
 6-2-1. 웹툰 - 작품 정보 입력
 - 정보
@@ -17,7 +22,8 @@ from author.models import *
 큰 아이콘 이미지 - 1024x1024또는 2048x2048
 작은 아이콘 이미지 - 512x512
 '''
-class AddworkInfoForm(forms.Form):
+class AddworkForm(forms.Form):
+    type = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES_TYPE)
     title = forms.CharField(label='제목', max_length=100)
     genre = forms.CharField(label='장르', max_length=20)
     introduce = forms.CharField(label='작품 소개', max_length=200)
