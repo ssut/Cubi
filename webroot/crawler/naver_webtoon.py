@@ -46,9 +46,10 @@ class NaverWebtoon(object):
 
         info = {
             'title': title,
-            'title_image': title_image,
             'author': author,
             'description': description,
+            'genre': '',
+            'title_image': title_image,
         }
 
         return info
