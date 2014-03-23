@@ -13,9 +13,8 @@ rss_url = 'http://webtoon.daum.net/league/rss/'
 detail_url = 'http://cartoon.media.daum.net/league/viewer/'
 detail_url_json = 'http://cartoon.media.daum.net/data/leaguetoon/viewer_images/'
 
-
-def list(comic_number):
-    ### 작품 정보 ###
+def info(comic_number):
+    # 작품 정보
     br = mechanize.Browser()
     url_open = '%s%s' % (list_url, comic_number)
     # url_rss = '%s%s' % (rss_url, comic_number)
@@ -49,6 +48,20 @@ def list(comic_number):
     comic_description = dl_description.dd['title']
     # print comic_description
 
+    info = {
+        'title': comic_title,
+        'author': comic_author_name,
+        'description': comic_description,
+        'genre': comic_genre,
+        'title_image': comic_url_img_title,
+    }
+
+    return info
+
+def list(comic_number):
+    ### 작품 정보 ###
+    br = mechanize.Browser()
+
     ### 작품 리스트 ###
     url_rss = '%s%s' % (rss_url, comic_number)
 
@@ -79,23 +92,15 @@ def list(comic_number):
         item_date = datetime.strptime(pubdate, '%Y-%m-%d %H:%M:%S')
 
         dict = {
+            'no': item_detail_num,
+            'thumbnail': item_url_thumbnail,
             'title': item_title,
-            'detail_num': item_detail_num,
-            'url_thumbnail': item_url_thumbnail,
+            'rating': '',
             'date': item_date,
         }
         dict_list.append(dict)
 
-    d = {
-        'comic_title': comic_title,
-        'comic_author_name': comic_author_name,
-        'comic_description': comic_description,
-        'comic_genre': comic_genre,
-        'comic_url_img_title': comic_url_img_title,
-        'chapter_list': dict_list,
-    }
-
-    return d
+    return dict_list
 
 
 def detail(detail_num):
@@ -103,8 +108,25 @@ def detail(detail_num):
     url_open = '%s%s' % (detail_url, detail_num)
     url_detail = '%s%s' % (detail_url_json, detail_num)
 
+    page = BeautifulSoup(br.open(url_open).read())
+
     br.open(url_open)
     response = br.open(url_detail)
+
+    title = page.select('span.episode_title')[0].text
+
+    selector = 'div.episode_list ul li a[href$="%s"] img' % ( detail_num )
+    thumb = StringIO.StringIO()
+    thumb.write(urllib.urlopen(page.select(selector)[0]['src']).read())
+    thumb.seek(0)
+
+    data = {
+        'no': detail_num,
+        'title': title,
+        'thumbnail': thumb,
+        'date': datetime.now(), # 다음 detail 페이지에서는 날짜 정보를 보내주지 않음
+        'images': []
+    }
 
     # Sequence 이미지 리스트
     image_list = []
@@ -114,11 +136,9 @@ def detail(detail_num):
         image_url = info['url']
         image_order = info['imageOrder']
 
-        dict = {
-            'name': image_name,
-            'url': image_url,
-            'order': image_order
-        }
-        image_list.append(dict)
+        tmp = StringIO.StringIO()
+        tmp.write(urllib.urlopen(image_url).read())
+        tmp.seek(0)
+        data['images'].append(tmp)
 
-    return image_list
+    return data
