@@ -1,8 +1,6 @@
 #-*- coding: utf-8 -*-
 from django.conf import settings
-from crawler.daum_webtoon import list as daum_list
-from crawler.daum_leaguetoon import list as daum_league_list
-from crawler.daum_leaguetoon import detail as daum_league_detail
+from crawler import daum_leaguetoon as DaumLeaguetoon
 from crawler.naver_webtoon import NaverWebtoon
 
 # 통신 및 정규식, 파서
@@ -28,7 +26,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
-from work.models import *
+from .models import *
 from member.models import *
 '''
 폴더구조
@@ -56,37 +54,28 @@ def make_directory():
         os.makedirs(FIELD_PATH)
         print 'field path created'
 
-# 다음 리그웹툰 Work 생성 또는 리턴(with chapter_list)
-def get_daum_chapter_list_and_create_work(comic_number, user):
-    league_info = daum_league_list(comic_number)
-    comic_title = league_info['comic_title']
-    comic_author_name = league_info['comic_author_name']
-    comic_description = league_info['comic_description']
-    comic_genre = league_info['comic_genre']
-    comic_url_img_title = league_info['comic_url_img_title']
-    chapter_list = league_info['chapter_list']
+# make_directory에서 지정된 전역변수 path를 이용, MEDIA_PATH를 포함한 저장할 파일명의 path를 반환
+def get_save_path(filename):
+    global REAL_PATH
+    return os.path.join(REAL_PATH, filename)
 
-    work_category, work_category_created = WorkCategory.objects.get_or_create(title=u'웹툰')
-    work, work_created = Work.objects.get_or_create(category=work_category, title=comic_title, description=comic_description, author=user)
+# ImageField, FileField에 저장할 path반환
+def get_field_path(filename):
+    global FIELD_PATH
+    return os.path.join(FIELD_PATH, filename)
 
-    if work_created:
-        print '%s is created' % (work.title)
-    else:
-        print '%s is exist' % (work.title)
-
-    work.description = comic_description
-    work.save()
-
-    return work, chapter_list
-
-# 네이버 웹툰 Work 생성 또는 리턴
-def get_naver_work(comic_number, user):
-    comic_info = NaverWebtoon().info(comic_number)
+# 웹툰 Work 생성 또는 리턴
+def get_work(comic_number, user, type):
+    if type == ChapterQueue.NAVER:
+        comic_info = NaverWebtoon().info(comic_number)
+    elif type == ChapterQueue.DAUM:
+        comic_info = DaumLeaguetoon.info(comic_number)
+    
     comic_title = comic_info['title']
     comic_title_image = comic_info['title_image']
     comic_author_name = comic_info['author']
     comic_description = comic_info['description']
-    comic_genre = ''
+    comic_genre = comic_info['genre']
 
     work_category, work_category_created = WorkCategory.objects.get_or_create(title=u'웹툰')
     work, work_created = Work.objects.get_or_create(category=work_category, title=comic_title, description=comic_description, author=user)
@@ -101,64 +90,14 @@ def get_naver_work(comic_number, user):
 
     return work
 
-# Chapter List 리턴
-def get_chapter_list(comic_number):
-    league_info = daum_league_list(comic_number)
-    chapter_list = league_info['chapter_list']
-    return chapter_list
-
-# make_directory에서 지정된 전역변수 path를 이용, MEDIA_PATH를 포함한 저장할 파일명의 path를 반환
-def get_save_path(filename):
-    global REAL_PATH
-    return os.path.join(REAL_PATH, filename)
-
-# ImageField, FileField에 저장할 path반환
-def get_field_path(filename):
-    global FIELD_PATH
-    return os.path.join(FIELD_PATH, filename)
-
 # Chapter List의 구성요소인 chapter_dict의 정보로 Chapter인스턴스 생성 후 저장, 리턴
-def make_chapter(chapter_dict):
-    chapter_number = chapter_dict['detail_num']
-    chapter_title = chapter_dict['title']
-    chapter_url_thumbnail = chapter_dict['url_thumbnail']
-    chapter_date = chapter_dict['date']
-
-    chapter_instance, chapter_created = Chapter.objects.get_or_create(reg_no=chapter_number, work=work)
-    if chapter_created:
-        print 'Chapter (reg_no:%s) is alreday exists!' % ( chapter_number )
-    else:
-        print 'Chapter (reg_no:%s) created' % ( chapter_number )
-        # 썸네일 저장
-        url = chapter_url_thumbnail
-        save_ext = '.jpg'
-        # ImageField에 저장될 thumbnail이름
-        filename = u'%s_%s_thumbnail%s' % ( work.id, chapter_number, ext )
-        fieldpath = get_field_path(filename)
-        # 다운로드 받을 전체 경로(MEDIA_PATH포함)
-        filepath = get_save_path(filename)
-        # urllib로 지정한 이름으로 이미지 다운로드 및 저장
-        urllib.urlretrieve(url, filepath)
-
-        setattr(chapter_instance, 'reg_no', chapter_number)
-        setattr(chapter_instance, 'work', work)
-        setattr(chapter_instance, 'title', chapter_title)
-        setattr(chapter_instance, 'created', chapter_date)
-        setattr(chapter_instance, 'thumbnail', fieldpath)
-        chapter_instance.save()
-
-        print 'Chapter (reg_no:%s) end create' % (chapter_number)
-    return chapter_instance, chapter_created
-
-
-# Chapter List의 구성요소인 chapter_dict의 정보로 Chapter인스턴스 생성 후 저장, 리턴
-def make_naver_chapter(chapter_dict, work):
+def make_chapter(chapter_dict, work, type):
     chapter_number = chapter_dict['no']
     chapter_title = chapter_dict['title']
-    # chapter_url_thumbnail = chapter_dict['url_thumbnail']
     chapter_thumbnail = chapter_dict['thumbnail']
-    print chapter_thumbnail
     chapter_date = chapter_dict['date']
+
+    print chapter_dict
 
     chapter_instance, chapter_created = Chapter.objects.get_or_create(reg_no=chapter_number, work=work)
     if not chapter_created:
@@ -172,6 +111,7 @@ def make_naver_chapter(chapter_dict, work):
         filepath = get_save_path(filename)
         with open(filepath, 'wb') as stream:
             stream.write(chapter_thumbnail.read())
+        cchapter_thumbnail.close()
 
         setattr(chapter_instance, 'reg_no', chapter_number)
         setattr(chapter_instance, 'work', work)
@@ -183,49 +123,9 @@ def make_naver_chapter(chapter_dict, work):
         print 'Chapter (reg_no:%s) end create' % (chapter_number)
     return chapter_instance, chapter_created
 
-
-# Chapter Number를 받아 Content(Image)생성 후 저장
-def save_chapter_contents(chapter_instance, work):
+def save_chapter_contents(chapter_instance, work, images, type):
     chapter_number = chapter_instance.reg_no
-    # Chapter의 Content 인스턴스 생성 작업
-    image_list = daum_league_detail(chapter_number)
-    # 이미지 저장
-    for i, image in enumerate(image_list):
-        image = image_list[i]
-        image_name = image['name']
-        image_url = image['url']
-        image_order = image['order']
-
-        # 이부분은 splittext사용
-        filename, ext = os.path.splittext(image_name)
-        ext = ext.lower()
-
-        # 저장할 이미지 이름 지정
-        filename = u'%s_%s_%02d.%s' % ( work.id, chapter_number, i + 1, ext )
-        filename2 = os.path.join('origin', filename)
-        fieldpath = get_field_path(filename2)
-        filepath = get_save_path(filename2)
-        print fieldpath
-        print filepath
-        urllib.urlretrieve(image_url, filepath)
-
-        # 다운받은 이미지 크롭 후 크롭리스트 리턴 (get_croplist함수 사용)
-        crop_list = get_croplist(filepath)
-        
-        # 크롭파일 저장, Content인스턴스 생성
-        for j, crop_image in enumerate(crop_list):
-            crop_filename = u'%s_%s_%02d_%02d.%s' % ( work.id, chapter_number, i + 1, j + 1, ext )
-            fieldpath = get_field_path(crop_filename)
-            filepath = get_save_path(crop_filename)
-
-            crop_image.save(filepath, ext, quality=90)
-
-            image_instance = Image(chapter=chapter_instance, sequence=j, image=fieldpath)
-            image_instance.save()
-
-def save_naver_chapter_contents(chapter_instance, work, images):
-    chapter_number = chapter_instance.reg_no
-    crop_list = get_naver_croplist(images)
+    crop_list = get_croplist(images)
 
     # 크롭된 이미지 저장 후 Content instance 생성
     for i, image in enumerate(crop_list):
@@ -238,39 +138,7 @@ def save_naver_chapter_contents(chapter_instance, work, images):
         image_instance = Image(chapter=chapter_instance, sequence=i, image=fieldpath)
         image_instance.save()
 
-# 이미지 열어 크롭 후 크롭리스트 리턴
-def get_croplist(filepath):
-    try:
-        im = PIL_Image.open(filepath)
-    except:
-        pass
-
-    # P모드에서는 작업 불가
-    if im.mode != 'RGB':
-        im = im.convert('RGB')
-
-    print 'FileName : ' + filename + ' (' + str(im.size[0]) + ', ' + str(im.size[1]) + ')'
-
-    # 세로크기 4000px씩 Crop후 crop_list에 추가
-    print 'Crop Start'
-    crop_list = []
-    while im.size[1] > 0:
-        if im.size[1] > 2000:
-            crop_height = 2000
-        else:
-            crop_height = im.size[1]
-
-        box1 = (0, 0, im.size[0], crop_height)
-        crop_list.append(im.crop(box1))
-
-        box2 = (0, crop_height, im.size[0], im.size[1])
-        im = im.crop(box2)
-
-        print '    ' + str(im.size[1])
-    print 'Crop End'
-    return crop_list
-
-def get_naver_croplist(images):
+def get_croplist(images):
     combined_image = None
     image_list, crop_list = [], []
     image_width, image_height = 0, []
@@ -310,46 +178,46 @@ def get_naver_croplist(images):
 
     return crop_list
 
-# 다음 리그 크롤링
-def crawl_daumleague(comic_number, user):
+# 웹툰 크롤링
+# TYPE: ChapterQueue.NAVER, ChapterQueue.DAUM
+# crawl(type=ChapterQueue.TYPE, comic_number=i32, user=User): 크롤되지 않은 모든 웹툰을 크롤링함
+# crawl(type=ChapterQueue.TYPE, comic_number=i32, chapter_number=i32, user=User): 한 화만 선택헤서 크롤링함
+def crawl(*args, **kargs):
+    # 웹툰 Work 생성
+    type = kargs['type']
+    comic_number = kargs['comic_number']
+    user = kargs['user']
+
+    # Work instance 가져오기
+    work = get_work(comic_number, user, type)
+
     # 디렉토리 생성
     make_directory()
-    # Work생성, ChapterList 받아오기
-    chapter_list, work = get_daum_chapter_list_and_create_work()
-    # ChapterList의 ChapterDict별로 Chapter생성
-    for chapter_dict in chapter_list:
-        cur_chapter, chapter_created = make_chapter(chapter_dict, work)
-        if chapter_created:
-            # 생성한 ChapterInstance에 Content(Image) Instance 생성 후 저장
-            save_chapter_contents(cur_chapter, work)
-        else:
-            pass
-
-# 네이버 웹툰 크롤링
-# crawl_naver(comic_number=i32, user=User): 크롤되지 않은 모든 웹툰을 크롤링함
-# crawl_naver(comic_number=i32, chapter_number=i32, user=User): 한 화만 선택헤서 크롤링함
-def crawl_naver(*args, **kargs):
-    # 웹툰 Work 생성
-    work = get_naver_work(kargs['comic_number'], kargs['user'])
-
     args_len = len(kargs)
-    if args_len == 2: # 크롤되지 않은 모든 웹툰 크롤링
-        # 디렉토리 생성
-        make_directory()
+    if args_len == 3: # 크롤되지 않은 모든 웹툰 크롤링
         # Chapter List 가져오기
-        chapter_list = NaverWebtoon().list(kargs['comic_number'])
+        if type == ChapterQueue.NAVER:
+            chapter_list = NaverWebtoon().list(comic_number)
+        elif type == ChapterQueue.DAUM:
+            chapter_list = DaumLeaguetoon.list(comic_number)
+
         for chapter in chapter_list:
             if not Chapter.filter(reg_no=chapter['no'], work=work).exists():
-                crawl_naver(comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
-    elif args_len == 3: # 한 화만 선택해서 크롤링
-        # 디렉토리 생성
-        make_directory()
+                crawl(type=type, comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
+    elif args_len == 4: # 한 화만 선택해서 크롤링
+        chapter_number = kargs['chapter_number']
         # Chapter Dictionary(detail) 가져오기
-        chapter_dict = NaverWebtoon().detail(kargs['comic_number'], kargs['chapter_number'])
+        if type == ChapterQueue.NAVER:
+            chapter_dict = NaverWebtoon().detail(comic_number, chapter_number)
+        elif type == ChapterQueue.DAUM:
+            chapter_dict = DaumLeaguetoon.detail(chapter_number)
+
+        print chapter_dict
+
         # Chapter 생성
-        cur_chapter, chapter_created = make_naver_chapter(chapter_dict, work)
+        cur_chapter, chapter_created = make_chapter(chapter_dict, work, type)
         if chapter_created:
             print 'success'
-            save_naver_chapter_contents(cur_chapter, work, chapter_dict['images'])
+            save_chapter_contents(cur_chapter, work, chapter_dict['images'], type)
         else:
             print 'Chapter not created.'
