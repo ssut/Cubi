@@ -202,6 +202,13 @@ class ChapterRating(Rating):
         return combine_dict
 
 # 셀러리 큐
+# --------
+# target = ChapterQueue.NAVER or ChapterQueue.DAUM
+# comic_number = 웹툰 사이트에서의 웹툰 고유번호
+# chapter_number = 웹툰 사이트에서의 각 챕터 고유번호, -1 로 입력하면 모두 크롤링함
+# is_checked = celery task 가 실행됐는지 여부
+# checked_at = celery task 가 실행된 시간
+# is_succeeded = 크롤링에 성공했는지에 대한 여부
 class ChapterQueue(models.Model):
     NAVER = 'NAVER'
     DAUM = 'DAUM'
@@ -209,10 +216,10 @@ class ChapterQueue(models.Model):
         (NAVER, u'네이버'),
         (DAUM, u'다음'),
     )
-    work = models.ForeignKey(Work)
     target = models.CharField(max_length=10, choices=TARGET_CHOICES)
-    chapter_no = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    comic_number = models.IntegerField()
+    chapter_number = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     is_checked = models.BooleanField(default=False)
     checked_at = models.DateTimeField(blank=True)
     is_succeeded = models.BooleanField(default=False)
