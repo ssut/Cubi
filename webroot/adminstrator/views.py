@@ -45,3 +45,4 @@ def convert(request, user_id, boolean):
     else:
         d = {'reason': u'작가 전환 실패'}
         return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
+
