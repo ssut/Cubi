@@ -14,16 +14,12 @@ import json
 
 from member.models import *
 from work.models import *
-from work.crawl import crawl_daumleague
+from work import crawl as crawler
 import sys, os
 
-class Crawl(TestCase):
-    def daumleague(self):
-        user = CubiUser.objects.get(id=1)
-        comic_number = '1549'
-
-        crawl_daumleague(comic_number, user)
-
+class CrawlTestCase(TestCase):
+    def naver(self):
+        pass
 
 class WorkTest(TestCase):
     def setUp(self):

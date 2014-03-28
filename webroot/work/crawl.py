@@ -201,9 +201,12 @@ def crawl(*args, **kargs):
         elif type == ChapterQueue.DAUM:
             chapter_list = DaumLeaguetoon.list(comic_number)
 
+        last_result = False
         for chapter in chapter_list:
             if not Chapter.filter(reg_no=chapter['no'], work=work).exists():
-                crawl(type=type, comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
+                last_result = crawl(type=type, comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
+        
+        return last_result
     elif args_len == 4: # 한 화만 선택해서 크롤링
         chapter_number = kargs['chapter_number']
         # Chapter Dictionary(detail) 가져오기
@@ -212,12 +215,12 @@ def crawl(*args, **kargs):
         elif type == ChapterQueue.DAUM:
             chapter_dict = DaumLeaguetoon.detail(chapter_number)
 
-        print chapter_dict
-
         # Chapter 생성
         cur_chapter, chapter_created = make_chapter(chapter_dict, work, type)
         if chapter_created:
             print 'success'
             save_chapter_contents(cur_chapter, work, chapter_dict['images'], type)
+            return True
         else:
             print 'Chapter not created.'
+            return False
