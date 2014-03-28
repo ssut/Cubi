@@ -44,6 +44,14 @@ def get_image_content_path(content_instance, filename):
     path3 = os.path.join(path2, filename)
     return path3
 
+class IntegerRangeField(models.IntegerField):
+    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
+        self.min_value, self.max_value = min_value, max_value
+        models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+    def formfield(self, **kwargs):
+        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
+        defaults.update(kwargs)
+        return super(IntegerRangeField, self).formfield(**defaults)
 
 # 공통적으로 사용할 댓글 클래스
 class Comment(models.Model):
@@ -217,12 +225,30 @@ class ChapterQueue(models.Model):
         (DAUM, u'다음'),
     )
     target = models.CharField(max_length=10, choices=TARGET_CHOICES)
+    user = models.ForeignKey(User)
     comic_number = models.IntegerField()
     chapter_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     is_checked = models.BooleanField(default=False)
     checked_at = models.DateTimeField(blank=True)
     is_succeeded = models.BooleanField(default=False)
+
+# 주기적으로 실행될 셀러리 큐
+# --------
+# target = ChapterQueue.NAVER or ChapterQueue.DAUM
+# comic_number = 웹툰 사이트에서의 웹툰 고유번호
+# every_hour = 매일 몇시에 크롤링할지에 대한 시간정보
+# last_run_at = 마지막으로 크롤링이 실행된 시간
+# last_run_result = 마지막 크롤링 성공 여부
+class ChapterPeriodicQueue(models.Model):
+    target = models.CharField(max_length=10, choices=ChapterQueue.TARGET_CHOICES)
+    user = models.ForeignKey(User)
+    comic_number = models.IntegerField()
+    every_hour = IntegerRangeField(min_value=0, max_value=23, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_run_at = models.DateTimeField(blank=True)
+    last_run_result = models.BooleanField(default=False)
+
 
 '''
 내용(Content)
