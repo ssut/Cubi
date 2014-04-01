@@ -55,7 +55,6 @@ INSTALLED_APPS = (
     'kombu.transport.django',
     'djcelery',
     'registration',
-    'flynsarmy_paginator',
 
     'member',
     'board',

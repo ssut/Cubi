@@ -4,7 +4,7 @@ from django.template import RequestContext
 
 # Paginator
 from django.core.paginator import EmptyPage, PageNotAnInteger
-from flynsarmy_paginator.paginator import FlynsarmyPaginator as Paginator
+from cubi.paginator import FlynsarmyPaginator as Paginator
 
 from board.models import Notice
 

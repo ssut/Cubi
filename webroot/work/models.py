@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 import os
 from django.db import models
+from datetime import datetime
 
 # Custom user model
 try:
@@ -13,14 +14,27 @@ from cubi.functions import day_to_string, minute_to_string, time_to_string
 from cubi.functions import imageinfo, imageinfo2
 
 # Upload path
+path_work = 'work/'
+def get_path(work_instance, filename):
+    today = datetime.today()
+    today_str = today.strftime('%Y%m%d')
+    if work_instance.category == WorkCategory.objects.get(title=u'웹툰'):
+        extra_path = 'webtoon/'
+    else:
+        extra_path = ''
+
+    print type
+    path = os.path.join(today_str, path_work, extra_path, filename)
+    return path
+
+
+# 사용하지 않음
 path_image = 'image/'
-path_image_work = os.path.join(path_image, 'work')
-
-path_image_chapter = os.path.join(path_image, 'chapter')
-path_image_chapter_cover = os.path.join(path_image_chapter, 'cover')
-path_image_chapter_thumbnail = os.path.join(path_image_chapter, 'thumbnail')
-
-path_image_content = os.path.join(path_image, 'content')
+path_image_work = os.path.join(path_image)
+# path_image_chapter = os.path.join(path_image, 'chapter')
+# path_image_chapter_cover = os.path.join(path_image_chapter, 'cover')
+# path_image_chapter_thumbnail = os.path.join(path_image_chapter, 'thumbnail')
+# path_image_content = os.path.join(path_image, 'content')
 
 # Dynamic upload path
 def get_work_cover_path(work_instance, filename):
@@ -109,6 +123,7 @@ class WorkCategory(models.Model):
 
 # 작품
 class Work(models.Model):
+    work_num = models.IntegerField(blank=True)
     category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
     title = models.CharField(max_length=200)
@@ -117,7 +132,7 @@ class Work(models.Model):
     market_ios = models.CharField(max_length=100, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to=path_image_work, blank=True)
-    cover = models.ImageField(upload_to=path_image_work, blank=True)
+    cover = models.ImageField(upload_to=get_path, blank=True)
     image_loading = models.ImageField(upload_to=path_image_work, blank=True)
     image_largeicon = models.ImageField(upload_to=path_image_work, blank=True)
     image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
