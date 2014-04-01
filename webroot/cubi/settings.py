@@ -5,7 +5,7 @@ import djcelery
 HOST = 'localhost:8000'
 
 BROKER_URL = "django://"
-CELERY_IMPORTS = ()
+CELERY_IMPORTS = ('work.tasks', )
 djcelery.setup_loader()
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -93,6 +93,16 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+import sys
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(os.path.dirname(__file__), 'test.sqlite3'),
+            'TEST_NAME': os.path.join(os.path.dirname(__file__), 'test.sqlite3'),
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
