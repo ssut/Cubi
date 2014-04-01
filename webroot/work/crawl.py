@@ -42,7 +42,7 @@ def make_directory():
     today = datetime.today()
     today_str = today.strftime('%Y%m%d')
     REAL_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
-    FIELD_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
+    FIELD_PATH = os.path.join(today_str, 'work', 'webtoon')
     
     print 'REAL_PATH :', REAL_PATH
     if not os.path.exists(REAL_PATH):
@@ -78,7 +78,7 @@ def get_work(comic_number, user, type):
     comic_genre = comic_info['genre']
 
     work_category, work_category_created = WorkCategory.objects.get_or_create(title=u'웹툰')
-    work, work_created = Work.objects.get_or_create(category=work_category, title=comic_title, description=comic_description, author=user)
+    work, work_created = Work.objects.get_or_create(work_num=comic_number, category=work_category, title=comic_title, description=comic_description, author=user)
 
     if work_created:
         print '%s is created' % ( work.title )
@@ -111,7 +111,7 @@ def make_chapter(chapter_dict, work, type):
         filepath = get_save_path(filename)
         with open(filepath, 'wb') as stream:
             stream.write(chapter_thumbnail.read())
-        cchapter_thumbnail.close()
+        chapter_thumbnail.close()
 
         setattr(chapter_instance, 'reg_no', chapter_number)
         setattr(chapter_instance, 'work', work)

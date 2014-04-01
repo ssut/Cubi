@@ -53,7 +53,6 @@ def addwork(request):
         form = AddworkForm(request.POST, request.FILES)
         print form
         if form.is_valid():
-            
             type = form.cleaned_data['type']
             title = form.cleaned_data['title']
             genre = form.cleaned_data['genre']
