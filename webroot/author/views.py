@@ -115,7 +115,11 @@ def addwork(request):
             work_instance.image_smallicon = image_smallicon
             work_instance.save()
 
-            return HttpResponse('OK')
+            d = {
+                'title': title,
+            }
+
+            return render_to_response('author/addwork_success.html', d, RequestContext(request))
 
         else:
             error_msg = u'업로드 데이터가 잘못되었습니다'

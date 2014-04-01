@@ -1,0 +1,11 @@
+{% extends 'base2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+작품 업로드 성공 ({{ title }})
+<div id="signup-btn-submit" class="form-group">
+	<div>
+		<a href="{% url 'author:index' %}"><button>나의 작품 목록페이지로</button></a>
+	</div>
+</div>
+{% endblock %}
