@@ -15,6 +15,7 @@ MEDIA_PATH = settings.MEDIA_ROOT
 
 # 작품 업로드 소개
 def introduce(request):
+    
     return render_to_response('author/introduce.html', RequestContext(request))
 
 # 작품 업로드 약관 동의
