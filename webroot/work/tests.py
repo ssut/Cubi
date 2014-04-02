@@ -17,12 +17,31 @@ from work.models import *
 from work import crawl as crawler
 import sys, os
 
-class CrawlTestCase(TestCase):
-    def naver(self):
+class CrawlTests(TestCase):
+    def setUp(self):
+        # 임시 유저 생성
+        user = User.objects.create(type='1', username='test', nickname='test',
+            gender='M', tel='000', access_token='000', last_name='a', first_name='b')
+        user.save()
+        # 네이버 웹툰 크롤링
+        crawler.crawl(type=ChapterQueue.NAVER, comic_number=81482,
+            chapter_number=1, user=user)
+        # 다음 웹툰 크롤링
+        crawler.crawl(type=ChapterQueue.DAUM, comic_number=8504,
+            chapter_number=50136, user=user)
+        pass
+
+    def test_naver_webtoon_match(self):
+        print user
+        print 1
+        self.assertEqual(True, False)
+
+    def test_daum_webtoon_match(self):
         pass
 
 class WorkTest(TestCase):
     def setUp(self):
+        return
         # setup commenter ( 100 user )
         commenters = []
         for x in range(1,30):
@@ -74,6 +93,7 @@ class WorkTest(TestCase):
         # create comment
         pass
     def test_work_api(self):
+        return
         c = Client()
         work_list = c.post("/api/work/list/")
         print "work mobile api list result", work_list
