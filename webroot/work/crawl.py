@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 import re
 
 from datetime import datetime
+from django.utils.timezone import now
 
 # 이미지 처리
 from PIL import Image as PIL_Image
@@ -39,20 +40,16 @@ from member.models import *
 # 디렉토리 생성
 def make_directory():
     global REAL_PATH, FIELD_PATH
-    today = datetime.today()
+    today = now().today()
     today_str = today.strftime('%Y%m%d')
     REAL_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
-    FIELD_PATH = os.path.join(today_str, 'work', 'webtoon')
+    FIELD_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
     
-    print 'REAL_PATH :', REAL_PATH
     if not os.path.exists(REAL_PATH):
         os.makedirs(REAL_PATH)
-        print 'real path created'
 
-    print 'FIELD_PATH :', FIELD_PATH
     if not os.path.exists(FIELD_PATH):
         os.makedirs(FIELD_PATH)
-        print 'field path created'
 
 # make_directory에서 지정된 전역변수 path를 이용, MEDIA_PATH를 포함한 저장할 파일명의 path를 반환
 def get_save_path(filename):
@@ -80,11 +77,6 @@ def get_work(comic_number, user, type):
     work_category, work_category_created = WorkCategory.objects.get_or_create(title=u'웹툰')
     work, work_created = Work.objects.get_or_create(work_num=comic_number, category=work_category, title=comic_title, description=comic_description, author=user)
 
-    if work_created:
-        print '%s is created' % ( work.title )
-    else:
-        print '%s is exists' % ( work.title )
-
     work.description = comic_description
     work.save()
 
@@ -97,13 +89,10 @@ def make_chapter(chapter_dict, work, type):
     chapter_thumbnail = chapter_dict['thumbnail']
     chapter_date = chapter_dict['date']
 
-    print chapter_dict
-
     chapter_instance, chapter_created = Chapter.objects.get_or_create(reg_no=chapter_number, work=work)
     if not chapter_created:
-        print 'Chapter (reg_no:%s) is already exists!' % ( chapter_number )
+        pass
     else:
-        print 'Chapter (reg_no:%s) created' % ( chapter_number )
         # ImageField에 저장될 thumbnail이름
         filename = u'%s_%s_thumbnail.jpg' % ( work.id, chapter_number )
         fieldpath = get_field_path(filename)
@@ -120,7 +109,6 @@ def make_chapter(chapter_dict, work, type):
         setattr(chapter_instance, 'thumbnail', fieldpath)
         chapter_instance.save()
 
-        print 'Chapter (reg_no:%s) end create' % (chapter_number)
     return chapter_instance, chapter_created
 
 def save_chapter_contents(chapter_instance, work, images, type):
@@ -218,9 +206,7 @@ def crawl(*args, **kargs):
         # Chapter 생성
         cur_chapter, chapter_created = make_chapter(chapter_dict, work, type)
         if chapter_created:
-            print 'success'
             save_chapter_contents(cur_chapter, work, chapter_dict['images'], type)
             return True
         else:
-            print 'Chapter not created.'
             return False
