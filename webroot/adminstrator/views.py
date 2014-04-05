@@ -14,6 +14,7 @@ except ImportError:
     from django.contrib.auth.models import User
 
 from author.models import WaitConvert
+from work.models import *
 
 def index(request):
     return render_to_response('adminstrator/index.html', RequestContext(request))
@@ -46,3 +47,29 @@ def convert(request, user_id, boolean):
         d = {'reason': u'작가 전환 실패'}
         return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
 
+
+def member_list(request, type='1'):
+    if type == 'author':
+        members = User.objects.filter(type='2')
+        template = 'adminstrator/author_list.html'
+    else:
+        members = User.objects.filter(type='1')
+        template = 'adminstrator/member_list.html'
+
+    d = {
+        'members': members,
+        'media_url': MEDIA_URL,
+    }
+    
+    return render_to_response(template, d, RequestContext(request))
+
+def work_list(request):
+    # if request.method == 'POST':
+    #     query_dict = request.POST
+    works = Work.objects.all().order_by('-created')
+    d = {
+        'works': works,
+        'media_url': MEDIA_URL,
+    }
+
+    return render_to_response('adminstrator/work_list.html', d, RequestContext(request))
