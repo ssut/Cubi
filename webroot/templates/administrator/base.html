@@ -16,22 +16,23 @@
     <header>
       <section class="p w100p h45 edge-bottom-belize-hole peter-river-half layer-fixed order-v">
         <section class="p w900 h45 box-align-center">
-          <h4 class="p left h45 font pt18 color-white"><a href="{% url 'index' %}" class="p no-line color-white">Tinicube CP</a></h4>
+          <h4 class="p left h45 font pt18 color-white"><a href="{% url 'administrator:index' %}" class="p no-line color-white">Tinicube CP</a></h4>
           <ul class="h45 no-list no-margin row-align p left">
-            <li><a href="{% url 'work_list' %}" class="no-line font pt10 color-white p">작품 목록</a></li>
-            <li><a href="{% url 'notice_list' %}" class="no-line font pt10 color-white p">공지사항</a></li>
+            <li><a href="#" class="no-line font pt10 color-white p">회원</a></li>
+            <li><a href="{% url 'administrator:work_list' %}" class="no-line font pt10 color-white p">작품</a></li>
+            <li><a href="{% url 'administrator:crawl_list' %}" class="no-line font pt10 color-white p">크롤링</a></li>
 
           </ul>
         </section>
       </section>
       <section class="p h585 peter-river">
-        <section class="p w900 h540 box-align-center layer-relative">
+        <section class="p w900 box-align-center layer-relative" style="background-position: 100% 58%">
           {% block header %}
           {% endblock %}
         </section>
       </section>
     </header>
-    <section>
+    <section class="p w900">
       {% block content %}
       {% endblock %}
     </section>
@@ -39,8 +40,6 @@
       <section class="p w900 box-align-center">
         <h3 class="p left h100 font pt24 spacing-small color-midnight-blue">tinicube</h3>
         <ul class="p right h100 no-list no-margin row-align">
-          <li><a href="#"><img src="{% static 'img/index/icon.facebook.png' %}"></a></li>
-          <li><a href="#"><img src="{% static 'img/index/icon.twitter.png' %}"></a></li>
         </ul>
       </section>
     </footer>

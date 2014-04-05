@@ -14,4 +14,6 @@ urlpatterns += patterns('administrator.views',
     url(r'^convert/(\d+)/(\w+)/$', 'convert', name='convert'),
 
     url(r'^work/list/$', 'work_list', name='work_list'),
+
+    url(r'^crawl/list/$', 'crawl_list', name='crawl_list'),
 )
