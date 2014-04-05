@@ -20,7 +20,7 @@ class NaverWebtoon(object):
         # 마지막 페이지 번호
         last = 0
         try:
-            last = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s&page=99999' % ( id )))
+            last = BeautifulSoup(urllib.urlopen('http://comic.naver.com/challenge/list.nhn?titleId=%s&page=99999' % ( id )))
             last = int(last.select('span.current')[0].text)
         except Exception, e:
             raise WebtoonDoesNotExist()
@@ -28,13 +28,13 @@ class NaverWebtoon(object):
         return last
 
     def count_comic(self, id):
-        url = urllib.urlopen('http://comic.naver.com/webtoon/detail.nhn?titleId=%s&no=99999' % ( id )).url
+        url = urllib.urlopen('http://comic.naver.com/challenge/detail.nhn?titleId=%s&no=99999' % ( id )).url
         no = int(self._no.search(url).group(1))
         return no
 
     def info(self, id):
         try:
-            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s' % ( id )))
+            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/challenge/list.nhn?titleId=%s' % ( id )))
         except Exception, e:
             raise WebtoonDoesNotExist()
 
@@ -61,7 +61,7 @@ class NaverWebtoon(object):
 
         items = []
         for i in range(1, last + 1):
-            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/webtoon/list.nhn?titleId=%s&page=%s' % ( id, i )))
+            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/challenge/list.nhn?titleId=%s&page=%s' % ( id, i )))
             table = str(page.select('table.viewList')[0]).replace('\n', '')
             table = BeautifulSoup(self._thead.sub('', table))
             tr = table.select('tr')
@@ -87,7 +87,7 @@ class NaverWebtoon(object):
     def detail(self, id, no):
         if no > self.count_comic(id):
             raise WebtoonChapterDoesNotExist()
-        url = 'http://comic.naver.com/webtoon/detail.nhn?titleId=%s&no=%s' % ( id, no )
+        url = 'http://comic.naver.com/challenge/detail.nhn?titleId=%s&no=%s' % ( id, no )
         page = BeautifulSoup(urllib.urlopen(url))
         images = page.select('div.wt_viewer img[onload]')
         thumb = StringIO.StringIO()

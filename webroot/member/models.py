@@ -5,6 +5,10 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from cubi.functions import day_to_string, minute_to_string
 from cubi.functions import imageinfo, imageinfo2
 
+from django.utils.timezone import utc
+
+import datetime
+
 TYPE_GENDER_CHOICES = (
     ('M', '남자'),
     ('F', '여자'),
