@@ -60,7 +60,7 @@ INSTALLED_APPS = (
     'board',
     'work',
     'author',
-    'adminstrator',
+    'administrator',
 )
 
 MIDDLEWARE_CLASSES = (

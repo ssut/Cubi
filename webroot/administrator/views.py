@@ -17,14 +17,14 @@ from author.models import WaitConvert
 from work.models import *
 
 def index(request):
-    return render_to_response('adminstrator/index.html', RequestContext(request))
+    return render_to_response('administrator/index.html', RequestContext(request))
 
 def wait_convert_list(request):
     waiting_list = WaitConvert.objects.all().order_by('-created')
     d = {
         'waiting_list': waiting_list,
     }
-    return render_to_response('adminstrator/wait_convert_list.html', d, RequestContext(request))
+    return render_to_response('administrator/wait_convert_list.html', d, RequestContext(request))
 
 def convert(request, user_id, boolean):
     user = User.objects.get(id=user_id)
@@ -39,22 +39,22 @@ def convert(request, user_id, boolean):
                 d = {'reason': u'작가 전환 실패'}
             user.save()
             waitconvert.delete()
-            return render_to_response('adminstrator/convert_success.html', d, RequestContext(request))
+            return render_to_response('administrator/convert_success.html', d, RequestContext(request))
         except:
             d = {'reason': u'작가 전환 실패'}
-            return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
+            return render_to_response('administrator/convert_failed.html', d, RequestContext(request))
     else:
         d = {'reason': u'작가 전환 실패'}
-        return render_to_response('adminstrator/convert_failed.html', d, RequestContext(request))
+        return render_to_response('administrator/convert_failed.html', d, RequestContext(request))
 
 
 def member_list(request, type='1'):
     if type == 'author':
         members = User.objects.filter(type='2')
-        template = 'adminstrator/author_list.html'
+        template = 'administrator/author_list.html'
     else:
         members = User.objects.filter(type='1')
-        template = 'adminstrator/member_list.html'
+        template = 'administrator/member_list.html'
 
     d = {
         'members': members,
@@ -72,4 +72,4 @@ def work_list(request):
         'media_url': MEDIA_URL,
     }
 
-    return render_to_response('adminstrator/work_list.html', d, RequestContext(request))
+    return render_to_response('administrator/work_list.html', d, RequestContext(request))

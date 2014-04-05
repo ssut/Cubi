@@ -1,0 +1,11 @@
+{% extends 'administrator/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+관리자 페이지<br>
+<a href="{% url 'administrator:index' %}">인덱스</a><br>
+<a href="{% url 'administrator:wait_convert_list' %}">작가 승인 대기자 목록</a><br>
+<a href="{% url 'administrator:work_list' %}">작품 목록</a><br>
+
+{% endblock %}
