@@ -7,7 +7,9 @@ from django.db.models import Q
 from cubi.functions import day_to_string
 from cubi.settings import MEDIA_URL
 
-from django.core.paginator import Paginator
+from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Custom user model
 try:
@@ -90,6 +92,38 @@ def crawl_list(request):
 
     return render_to_response('administrator/crawl_list.html', d, RequestContext(request))
 
+def get_crawl_list(request):
+    num = int(request.GET.get('no', '0'))
+    if num is 0 or not request.is_ajax():
+        return HttpResponse('{}', content_type="application/json")
+
+    crawl_list = ChapterPeriodicQueue.objects.all()
+    paginator = Paginator(crawl_list, 25)
+
+    try:
+        items = paginator.page(num)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
+
+    # import pdb; pdb.set_trace()
+    d = {
+        'items': [{
+            'id': x.id,
+            'target': x.target,
+            'user': str(x.user),
+            'comic_number': x.comic_number,
+            'every_hour': x.every_hour,
+            'last_run_at': str(x.last_run_at),
+            'last_run_result': x.last_run_result,
+            'enabled': x.enabled,
+        } for x in items.object_list],
+        'current_page': num,
+        'num_pages': paginator.num_pages,
+    }
+    return HttpResponse(json.dumps(d, cls=DjangoJSONEncoder), content_type="application/json")
+
 def add_crawl_list(request):
     if not request.method == 'POST' or not request.is_ajax():
         return HttpResponse('{}', content_type="application/json")
@@ -133,7 +167,6 @@ def add_crawl_list(request):
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
-
 def search_user(request):
     keyword = request.GET.get('query', None).replace('@', '')
     if keyword is None or not request.is_ajax():
@@ -156,5 +189,3 @@ def search_user(request):
             })
 
     return HttpResponse(json.dumps(d), content_type="application/json")
-
-

@@ -83,3 +83,11 @@ th {
 .table-hover > tbody > tr:hover > th {
 	background-color: #f5f5f5;
 }
+
+tr.h30 {
+	height: 30px;
+}
+
+tr.h30 td {
+	vertical-align: middle !important;
+}

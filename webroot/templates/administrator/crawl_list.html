@@ -7,6 +7,8 @@
 .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
 .autocomplete-selected { background: #F0F0F0; }
 .autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+
+div.switch-toggle { zoom: 0.8; }
 </style>
 {% endblock %}
 
@@ -30,7 +32,7 @@
 <div>&nbsp;</div>
 
 <h1>AUTO CRAWLING LIST</h1>
-<table class="table">
+<table id="list" class="table">
 	<thead>
 		<tr>
 			<th>Target</th>
@@ -52,6 +54,32 @@
 <script src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
 <script>
 	$(function() {
+		var table = $('#list tbody'),
+			toggle_list = [];
+
+		var _toggle = function(id, value) {
+			var toggle = '<div class="switch-toggle switch-candy"> \
+			<input id="toggle_' + id + '_off" name="toggle_' + id + '" value="off" type="radio"' + 
+			(!value ? ' checked' : '') + ' data-id="' + id + '"> \
+			<label for="toggle_' + id + '_off" onclick="">X</label> \
+			<input id="toggle_' + id + '_on" name="toggle_' + id + '" value="on" type="radio"' + 
+			(value ? ' checked' : '') + ' data-id="' + id + '"> \
+			<label for="toggle_' + id + '_on" onclick="">O</label> \
+			<a></a> \
+			</div>';
+			toggle_list.push(id);
+
+			return toggle;
+		},
+		_toggle_set_event = function() {
+			var len = toggle_list.length;
+			for(var i = 0; i < len; i++) {
+				$('input[name="toggle_' + toggle_list[i] + '"]').change(function() {
+					console.log($(this).data('id'), $(this).val());
+				});
+			}
+		};
+
 		// Hashbang
 		$(window).hashchange(function() {
 			var hash = location.hash.replace(/^#!\//, '');
@@ -62,7 +90,29 @@
 			} else {
 				hash = parseInt(hash);
 
-				
+				$.ajax({
+					type: 'GET',
+					url: '{% url 'administrator:get_crawl_list' %}?no=' + hash,
+					beforeSend: function() {
+					},
+					success: function(data) {
+						table.html('');
+						$(data.items).each(function(index, item) {
+							table.append(
+								'<tr class="h30">' +
+								'<td>' + item.target + '</td>' +
+								'<td>' + item.comic_number + '</td>' +
+								'<td>' + item.every_hour + '</td>' +
+								'<td>' + item.user + '</td>' +
+								'<td>' + item.last_run_at + '</td>' +
+								'<td>' + item.last_run_result + '</td>' +
+								'<td>' + _toggle(item.id, item.enabled) + '</td>' +
+								'</tr>');
+						});
+
+						_toggle_set_event();
+					}
+				});
 			}
 		})
 		$(window).hashchange();
@@ -79,6 +129,7 @@
 		$('#add_form').submit(function() {
 			var url = $(this).attr('action'),
 				data = $(this).serialize();
+
 			$.ajax({
 				type: 'POST',
 				url: url,
@@ -97,6 +148,9 @@
 
 					$('#add_form').trigger('reset')
 						.children('input').removeAttr('disabled');
+				},
+				error: function(jqXhr, textStatus) {
+					alert(textStatus);
 				}
 			});
 
