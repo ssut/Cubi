@@ -16,4 +16,7 @@ urlpatterns += patterns('administrator.views',
     url(r'^work/list/$', 'work_list', name='work_list'),
 
     url(r'^crawl/list/$', 'crawl_list', name='crawl_list'),
+    url(r'^crawl/list/new$', 'add_crawl_list', name='add_crawl_list'),
+    
+    url(r'^user/search$', 'search_user', name='search_user'),
 )

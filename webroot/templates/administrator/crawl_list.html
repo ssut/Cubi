@@ -1,39 +1,86 @@
 {% extends 'administrator/base.html' %}
 {% load staticfiles %}
 
+{% block head %}
+<style>
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+</style>
+{% endblock %}
+
 {% block content %}
-<h1>AUTO COLLECT LIST</h1>
+<h1>ADD AUTO CRAWLING WEBTOON</h1>
+<form id="add_form" method="post" action="{% url 'administrator:add_crawl_list' %}">
+	{% csrf_token %}
+	Target <select name="target">
+		{% for target in targets %}
+		<option value="{{ target.0 }}">{{ target.1 }}</option>
+		{% endfor %}
+	</select>
+	Comic number <input type="number" name="comic_number">
+	Time <input type="number" name="time" min="0" max="23">
+	<input type="hidden" name="user" readonly>
+	User <input type="text" id="user_autocomplete">
+	<input type="submit" value="add">
+</form>
+<div>&nbsp;</div>
+<hr>
+<div>&nbsp;</div>
+
+<h1>AUTO CRAWLING LIST</h1>
 <table class="table">
 	<thead>
 		<tr>
 			<th>Target</th>
-			<th></th>
-			<th></th>
+			<th>Comic number</th>
+			<th>Time(Hour)</th>
 			<th>User</th>
+			<th>Last executed at</th>
+			<th>Last executed result</th>
 			<th>Enabled</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-		</tr>
 	</tbody>
 </table>
 
 {% endblock %}
 
 {% block script %}
+<script src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
 <script>
-	// Hashbang
-	$(function(){
-		$(window).hashchange(function(){
+	$(function() {
+		// Hashbang
+		$(window).hashchange(function() {
 			var hash = location.hash.replace(/^#!\//, '');
 			
+
 		})
 		$(window).hashchange();
+
+		// User Autocomplete
+		$('#user_autocomplete').autocomplete({
+			serviceUrl: '{% url 'administrator:search_user' %}',
+			onSelect: function(suggestion) {
+				$('input[name="user"]').val(suggestion.data);
+			}
+		});
+
+		// Add
+		$('#add_form').submit(function() {
+			var url = $(this).attr('action'),
+				data = $(this).serialize();
+			$.ajax(function() {
+				type: 'POST',
+				url: url,
+				data: data,
+				success: function(data) {
+					
+				}
+			});
+		});
 	});
 </script>
 {% endblock %}
