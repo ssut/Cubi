@@ -167,6 +167,24 @@ def add_crawl_list(request):
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
+def toggle_crawl_enabled(request):
+    _id = request.POST.get('id', None)
+    _enabled = True if request.POST.get('enabled', 'off') == 'on' else False
+    if _id is None or not request.is_ajax():
+        return HttpResponse('{}', content_type="application/json")
+
+    d = {
+        'success': False
+    }
+
+    obj = ChapterPeriodicQueue.objects.get(id=_id)
+    if obj is not None:
+        d['success'] = True
+        obj.enabled = _enabled
+        obj.save()
+
+    return HttpResponse(json.dumps(d), content_type="application/json")
+
 def search_user(request):
     keyword = request.GET.get('query', None).replace('@', '')
     if keyword is None or not request.is_ajax():

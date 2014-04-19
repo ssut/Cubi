@@ -55,7 +55,8 @@ div.switch-toggle { zoom: 0.8; }
 <script>
 	$(function() {
 		var table = $('#list tbody'),
-			toggle_list = [];
+			toggle_list = [],
+			csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
 
 		var _toggle = function(id, value) {
 			var toggle = '<div class="switch-toggle switch-candy"> \
@@ -75,7 +76,24 @@ div.switch-toggle { zoom: 0.8; }
 			var len = toggle_list.length;
 			for(var i = 0; i < len; i++) {
 				$('input[name="toggle_' + toggle_list[i] + '"]').change(function() {
-					console.log($(this).data('id'), $(this).val());
+					var id = $(this).data('id'),
+						val = $(this).val();
+					$.ajax({
+						type: 'POST',
+						url: '{% url 'administrator:toggle_crawl_enabled' %}',
+						data: {
+							csrfmiddlewaretoken: csrf_token,
+							id: id,
+							enabled: val
+						},
+						context: this,
+						beforeSend: function() {
+							$('input[data-id="' + id + '"]').attr('disabled', 'disabled');
+						},
+						success: function(data) {
+							$('input[data-id="' + id + '"]').removeAttr('disabled');
+						}
+					});
 				});
 			}
 		};
