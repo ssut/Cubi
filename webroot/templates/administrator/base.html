@@ -6,6 +6,7 @@
     <title>tinicube administrator control panel</title>
     <link rel="stylesheet" href="{% static 'css/index/pentagon.css' %}">
     <link rel="stylesheet" href="{% static 'css/index/tinicube.css' %}">
+    <link rel="stylesheet" href="{% static 'css/object/table.css' %}">
     <!--[if lt IE 9]>
       <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -46,5 +47,7 @@
 
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery.steps.js' %}"></script>
+    <script src="{% static 'js/jquery.hashchange.min.js' %}"></script>
+    {% block script %}{% endblock %}
   </body>
 </html>

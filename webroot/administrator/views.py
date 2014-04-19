@@ -75,5 +75,7 @@ def work_list(request):
     return render_to_response('administrator/work_list.html', d, RequestContext(request))
 
 def crawl_list(request):
-    pass
+    d = {}
+
+    return render_to_response('administrator/crawl_list.html', d)
 

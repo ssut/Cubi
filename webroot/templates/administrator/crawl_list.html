@@ -1,0 +1,39 @@
+{% extends 'administrator/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<h1>AUTO COLLECT LIST</h1>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Target</th>
+			<th></th>
+			<th></th>
+			<th>User</th>
+			<th>Enabled</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+
+{% endblock %}
+
+{% block script %}
+<script>
+	// Hashbang
+	$(function(){
+		$(window).hashchange(function(){
+			var hash = location.hash.replace(/^#!\//, '');
+			
+		})
+		$(window).hashchange();
+	});
+</script>
+{% endblock %}
