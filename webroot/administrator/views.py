@@ -19,6 +19,10 @@ except ImportError:
 from author.models import WaitConvert
 from work.models import *
 
+from crawler import daum_leaguetoon as DaumLeaguetoon
+from crawler.naver_webtoon import NaverWebtoon
+
+from datetime import datetime
 import json
 
 def index(request):
@@ -110,14 +114,22 @@ def add_crawl_list(request):
     elif not User.objects.filter(id=user).exists():
         d['message'] = 'user not exists'
     else:
-        queue = ChapterPeriodicQueue.objects.create(
-                target=target,
-                user=User.objects.get(id=user),
-                comic_number=comic_number,
-                every_hour=time
-            )
-        queue.save()
-        d['success'] = True
+        method = NaverWebtoon().list if target == ChapterQueue.NAVER else DaumLeaguetoon.list
+        try:
+            method(comic_number)
+        except Exception, e:
+            d['message'] = 'webtoon not exists'
+        else:
+            queue = ChapterPeriodicQueue.objects.create(
+                   target=target,
+                   user=User.objects.get(id=user),
+                   comic_number=comic_number,
+                   every_hour=time,
+                   last_run_at=datetime.now(),
+                   last_run_result=False
+               )
+            queue.save()
+            d['success'] = True
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
@@ -128,6 +140,7 @@ def search_user(request):
         return HttpResponse('{}', content_type="application/json")
 
     user_list = User.objects.filter(Q(username__contains=keyword) |
+                                    Q(first_name__contains=keyword) |
                                     Q(nickname__contains=keyword) |
                                     Q(email__contains=keyword))
 
@@ -137,7 +150,8 @@ def search_user(request):
     }
     for user in user_list:
         d['suggestions'].append({
-                'value': '{0} ({1})'.format(user.username, user.email),
+                'value': u'{0} ({2}, {1})'.format(user.username, user.email,
+                    user.last_name + user.first_name),
                 'data': user.id,
             })
 

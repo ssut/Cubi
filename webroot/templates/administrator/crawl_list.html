@@ -56,7 +56,14 @@
 		$(window).hashchange(function() {
 			var hash = location.hash.replace(/^#!\//, '');
 			
+			if(hash == '') {
+				location.hash = '#!/1';
+				$(window).hashchange();
+			} else {
+				hash = parseInt(hash);
 
+				
+			}
 		})
 		$(window).hashchange();
 
@@ -72,14 +79,28 @@
 		$('#add_form').submit(function() {
 			var url = $(this).attr('action'),
 				data = $(this).serialize();
-			$.ajax(function() {
+			$.ajax({
 				type: 'POST',
 				url: url,
 				data: data,
+				beforeSend: function() {
+					$('#add_form input').attr('disabled', 'disabled');
+				},
 				success: function(data) {
-					
+					if(data.success) {
+						alert('success');
+						location.hash = '#!/1';
+						$(window).hashchange();
+					} else {
+						alert(data.message);
+					}
+
+					$('#add_form').trigger('reset')
+						.children('input').removeAttr('disabled');
 				}
 			});
+
+			return false;
 		});
 	});
 </script>
