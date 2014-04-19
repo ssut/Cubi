@@ -101,10 +101,25 @@ def add_crawl_list(request):
     user = int(request.POST.get('user', '0'))
 
     l = [item[0] for item in ChapterQueue.TARGET_CHOICES]
-    # if not target in l:
-        
+    if not target in l:
+        d['message'] = 'target error'
+    elif ChapterPeriodicQueue.objects.filter(comic_number=comic_number).count() > 0:
+        d['message'] = 'comic number already exists'
+    elif time > 23 or time < 0:
+        d['message'] = 'time error'
+    elif not User.objects.filter(id=user).exists():
+        d['message'] = 'user not exists'
+    else:
+        queue = ChapterPeriodicQueue.objects.create(
+                target=target,
+                user=User.objects.get(id=user),
+                comic_number=comic_number,
+                every_hour=time
+            )
+        queue.save()
+        d['success'] = True
 
-
+    return HttpResponse(json.dumps(d), content_type="application/json")
 
 
 def search_user(request):
