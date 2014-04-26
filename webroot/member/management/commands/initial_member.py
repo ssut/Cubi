@@ -52,8 +52,18 @@ user_list = [
 def create_member():
     print '\n== Member모델 초기 데이터 설정 시작 ==\n'
     for user_dict in user_list:
-        user_instance, created = CubiUser.objects.get_or_create(type=user_dict['type'], username=user_dict['username'], nickname=user_dict['nickname'], gender=user_dict['gender'], tel=user_dict['tel'], access_token=user_dict['access_token'], last_name=user_dict['last_name'], first_name=user_dict['first_name'])
+        user_instance, created = CubiUser.objects.get_or_create(
+            type=user_dict['type'],
+            username=user_dict['username'],
+            nickname=user_dict['nickname'],
+            email=user_dict['email'],
+            gender=user_dict['gender'],
+            tel=user_dict['tel'],
+            access_token=user_dict['access_token'],
+            last_name=user_dict['last_name'],
+            first_name=user_dict['first_name'])
         if created:
+            user_instance.set_password(user_dict['username'])
             user_instance.save()
             print u'\tUser [%s%s]\t\t생성' % (user_instance.last_name, user_instance.first_name)
         else:
