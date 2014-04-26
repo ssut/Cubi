@@ -1,0 +1,222 @@
+{% extends 'administrator/base.html' %}
+{% load staticfiles %}
+
+{% block head %}
+<style>
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+
+div.switch-toggle { zoom: 0.8; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>ADD AUTO CRAWLING WEBTOON</h1>
+<form id="add_form" method="post" action="{% url 'administrator:add_crawl_list' %}">
+	{% csrf_token %}
+	Target <select name="target">
+		{% for target in targets %}
+		<option value="{{ target.0 }}">{{ target.1 }}</option>
+		{% endfor %}
+	</select>
+	Comic number <input type="number" name="comic_number">
+	Time <input type="number" name="time" min="0" max="23">
+	<input type="hidden" name="user" readonly>
+	User <input type="text" class="user_autocomplete">
+	<input type="submit" value="add">
+</form>
+<div>&nbsp;</div>
+<hr>
+<div>&nbsp;</div>
+
+<h1>AUTO CRAWLING LIST</h1>
+<table id="list" class="table">
+	<thead>
+		<tr>
+			<th>Target</th>
+			<th>Comic number</th>
+			<th>Time(Hour)</th>
+			<th>User</th>
+			<th>Last executed at</th>
+			<th>Last executed result</th>
+			<th>Enabled</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<div>&nbsp;</div>
+<hr>
+<div>&nbsp;</div>
+
+<h1>CRAWL INSTANTLY</h1>
+<form id="crawl_form" method="post" action="{% url 'administrator:crawl_instantly' %}">
+	{% csrf_token %}
+	Target <select name="target">
+		{% for target in targets %}
+		<option value="{{ target.0 }}">{{ target.1 }}</option>
+		{% endfor %}
+	</select>
+	Comic number <input type="number" name="comic_number">
+	Chapter number <input type="number" name="chapter_number">
+	<input type="hidden" name="user" readonly>
+	User <input type="text" class="user_autocomplete">
+	<input type="submit" value="crawl now">
+</form>
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/jquery.autocomplete.min.js' %}"></script>
+<script>
+	$(function() {
+		var table = $('#list tbody'),
+			toggle_list = [],
+			csrf_token = $('input[name="csrfmiddlewaretoken"]').val();
+
+		var _toggle = function(id, value) {
+			var toggle = '<div class="switch-toggle switch-candy"> \
+			<input id="toggle_' + id + '_off" name="toggle_' + id + '" value="off" type="radio"' + 
+			(!value ? ' checked' : '') + ' data-id="' + id + '"> \
+			<label for="toggle_' + id + '_off" onclick="">X</label> \
+			<input id="toggle_' + id + '_on" name="toggle_' + id + '" value="on" type="radio"' + 
+			(value ? ' checked' : '') + ' data-id="' + id + '"> \
+			<label for="toggle_' + id + '_on" onclick="">O</label> \
+			<a></a> \
+			</div>';
+			toggle_list.push(id);
+
+			return toggle;
+		},
+		_toggle_set_event = function() {
+			var len = toggle_list.length;
+			for(var i = 0; i < len; i++) {
+				$('input[name="toggle_' + toggle_list[i] + '"]').change(function() {
+					var id = $(this).data('id'),
+						val = $(this).val();
+					$.ajax({
+						type: 'POST',
+						url: '{% url 'administrator:toggle_crawl_enabled' %}',
+						data: {
+							csrfmiddlewaretoken: csrf_token,
+							id: id,
+							enabled: val
+						},
+						context: this,
+						beforeSend: function() {
+							$('input[data-id="' + id + '"]').attr('disabled', 'disabled');
+						},
+						success: function(data) {
+							$('input[data-id="' + id + '"]').removeAttr('disabled');
+						}
+					});
+				});
+			}
+		};
+
+		// Hashbang
+		$(window).hashchange(function() {
+			var hash = location.hash.replace(/^#!\//, '');
+			
+			if(hash == '') {
+				location.hash = '#!/1';
+				$(window).hashchange();
+			} else {
+				hash = parseInt(hash);
+
+				$.ajax({
+					type: 'GET',
+					url: '{% url 'administrator:get_crawl_list' %}?no=' + hash,
+					beforeSend: function() {
+					},
+					success: function(data) {
+						table.html('');
+						$(data.items).each(function(index, item) {
+							table.append(
+								'<tr class="h30">' +
+								'<td>' + item.target + '</td>' +
+								'<td>' + item.comic_number + '</td>' +
+								'<td>' + item.every_hour + '</td>' +
+								'<td>' + item.user + '</td>' +
+								'<td>' + item.last_run_at + '</td>' +
+								'<td>' + item.last_run_result + '</td>' +
+								'<td>' + _toggle(item.id, item.enabled) + '</td>' +
+								'</tr>');
+						});
+
+						_toggle_set_event();
+					}
+				});
+			}
+		})
+		$(window).hashchange();
+
+		// User Autocomplete
+		$('input.user_autocomplete').autocomplete({
+			serviceUrl: '{% url 'administrator:search_user' %}',
+			onSelect: function(suggestion) {
+				$(this).prev().val(suggestion.data);
+			}
+		});
+
+		// Add
+		$('#add_form').submit(function() {
+			var url = $(this).attr('action'),
+				data = $(this).serialize();
+
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: data,
+				beforeSend: function() {
+					$('#add_form input').attr('disabled', 'disabled');
+				},
+				success: function(data) {
+					if(data.success) {
+						alert('success');
+						location.hash = '#!/1';
+						$(window).hashchange();
+					} else {
+						alert(data.message);
+					}
+
+					$('#add_form').trigger('reset')
+						.children('input').removeAttr('disabled');
+				},
+				error: function(jqXhr, textStatus) {
+					alert(textStatus);
+				}
+			});
+
+			return false;
+		});
+
+		$('#crawl_form').submit(function() {
+			var url = $(this).attr('action'),
+				data = $(this).serialize();
+
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: data,
+				beforeSend: function() {
+					$('#crawl_form').children('input').attr('disabled', 'disabled');
+				},
+				success: function(data) {
+					if(data.success) {
+						alert('success');
+					} else {
+						alert(data.message);
+					}
+
+					$('#crawl_form').trigger('reset')
+						.children('input').removeAttr('disabled');
+				}
+			});
+
+			return false;
+		});
+	});
+</script>
+{% endblock %}

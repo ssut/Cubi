@@ -1,0 +1,55 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <title>tinicube administrator control panel</title>
+    <link rel="stylesheet" href="{% static 'css/index/pentagon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index/tinicube.css' %}">
+    <link rel="stylesheet" href="{% static 'css/object/table.css' %}">
+    <link rel="stylesheet" href="{% static 'css/object/toggle.css' %}">
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  {% block head %}
+  {% endblock %}
+  <body>
+    <header>
+      <section class="p w100p h45 edge-bottom-belize-hole peter-river-half layer-fixed order-v">
+        <section class="p w900 h45 box-align-center">
+          <h4 class="p left h45 font pt18 color-white"><a href="{% url 'administrator:index' %}" class="p no-line color-white">Tinicube CP</a></h4>
+          <ul class="h45 no-list no-margin row-align p left">
+            <li><a href="#" class="no-line font pt10 color-white p">회원</a></li>
+            <li><a href="{% url 'administrator:work_list' %}" class="no-line font pt10 color-white p">작품</a></li>
+            <li><a href="{% url 'administrator:crawl_list' %}" class="no-line font pt10 color-white p">크롤링</a></li>
+
+          </ul>
+        </section>
+      </section>
+      <section class="p h585 peter-river">
+        <section class="p w900 box-align-center layer-relative" style="background-position: 100% 58%">
+          {% block header %}
+          {% endblock %}
+        </section>
+      </section>
+    </header>
+    <section class="p w900">
+      {% block content %}
+      {% endblock %}
+    </section>
+    <footer class="p h100 edge-top-silver">
+      <section class="p w900 box-align-center">
+        <h3 class="p left h100 font pt24 spacing-small color-midnight-blue">tinicube</h3>
+        <ul class="p right h100 no-list no-margin row-align">
+        </ul>
+      </section>
+    </footer>
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/jquery.browser.min.js' %}"></script>
+    <script src="{% static 'js/jquery.steps.js' %}"></script>
+    <script src="{% static 'js/jquery.hashchange.min.js' %}"></script>
+    {% block script %}{% endblock %}
+  </body>
+</html>

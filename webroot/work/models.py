@@ -255,6 +255,7 @@ class ChapterQueue(models.Model):
 # every_hour = 매일 몇시에 크롤링할지에 대한 시간정보
 # last_run_at = 마지막으로 크롤링이 실행된 시간
 # last_run_result = 마지막 크롤링 성공 여부
+# enabled = 켤지 끌지
 class ChapterPeriodicQueue(models.Model):
     target = models.CharField(max_length=10, choices=ChapterQueue.TARGET_CHOICES)
     user = models.ForeignKey(User)
@@ -263,7 +264,7 @@ class ChapterPeriodicQueue(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_run_at = models.DateTimeField(blank=True)
     last_run_result = models.BooleanField(default=False)
-
+    enabled = models.BooleanField(default=True)
 
 '''
 내용(Content)

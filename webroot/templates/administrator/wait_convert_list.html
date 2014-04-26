@@ -1,0 +1,11 @@
+{% extends 'administrator/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+작가 전환 대기 리스트<br>
+{% for waiting in waiting_list %}
+	{{ wating.user.last_name }}{{ waiting.user.first_name }} {{ waiting.user.nickname }} {{ waiting.user.email }} / 	{{ waiting.created }} | <a href="{% url 'administrator:convert' waiting.user.id 'true' %}">승인</a> <a href="{% url 'administrator:convert' waiting.user.id 'false' %}">거부</a><br>
+{% endfor %}
+
+{% endblock %}

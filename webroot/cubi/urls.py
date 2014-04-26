@@ -35,8 +35,8 @@ urlpatterns = patterns('',
     # Author(나의 작품)
     url(r'^author/', include('author.urls', namespace='author')),
 
-    ## Adminstrator
-    url(r'^admin/', include('adminstrator.urls', namespace='adminstrator')),
+    ## Administrator
+    url(r'^admin/', include('administrator.urls', namespace='administrator')),
 
 
 

@@ -5,10 +5,12 @@ import StringIO
 from bs4 import BeautifulSoup
 from datetime import datetime, date
 
+from .exceptions import WebtoonDoesNotExist, WebtoonChapterDoesNotExist
+
 class NaverWebtoon(object):
     _instance = None
     _thead = re.compile(r'\<thead>(.*?)\<\/thead>', re.MULTILINE)
-    _no = re.compile(r'&no=([0-9]+)')
+    _no = re.compile(r'<span class="total">(\d+)<\/span>', re.MULTILINE)
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -28,13 +30,22 @@ class NaverWebtoon(object):
         return last
 
     def count_comic(self, id):
-        url = urllib.urlopen('http://comic.naver.com/challenge/detail.nhn?titleId=%s&no=99999' % ( id )).url
+        url = urllib.urlopen('http://comic.naver.com/challenge/detail.nhn?titleId=%s&no=1' % ( id )).read()
+        # try:
+        print self._no.search(url)
         no = int(self._no.search(url).group(1))
+        # except Exception, e:
+            # raise WebtoonDoesNotExist()
+
         return no
 
     def info(self, id):
         try:
-            page = BeautifulSoup(urllib.urlopen('http://comic.naver.com/challenge/list.nhn?titleId=%s' % ( id )))
+            p = urllib.urlopen('http://comic.naver.com/challenge/list.nhn?titleId=%s' % ( id ))
+            if 'main.nhn' in p.url:
+                raise WebtoonDoesNotExist()
+
+            page = BeautifulSoup(p)
         except Exception, e:
             raise WebtoonDoesNotExist()
 
@@ -113,10 +124,3 @@ class NaverWebtoon(object):
             data['images'].append(tmp)
 
         return data
-
-class WebtoonChapterDoesNotExist(Exception):
-    pass
-
-class WebtoonDoesNotExist(Exception):
-    pass
-

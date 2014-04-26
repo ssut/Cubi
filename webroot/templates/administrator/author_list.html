@@ -1,18 +1,19 @@
-{% extends 'base2.html' %}
+{% extends 'administrator/base.html' %}
 {% load staticfiles %}
 
 {% block content %}
 <div id="signup-btn-submit" class="form-group">
 	<div>
-		<a href="{% url 'adminstrator:index' %}"><button>관리자 메인화면으로</button></a>
+		<a href="{% url 'administrator:index' %}"><button>관리자 메인화면으로</button></a>
 	</div>
 </div>
-회원 목록<br>
+작가 목록<br>
 <hr>
 {% for member in members %}
 이름 : {{ member.last_name }}{{ member.first_name }}<br>
 닉네임 : {{ member.nickname }}<br>
 타입 : {{ member.type }}<br>
+작품 : [해당 작가의 작품목록 표시]<br>
 <hr>
 {% endfor %}
 

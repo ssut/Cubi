@@ -23,7 +23,7 @@ def crawl_webtoon():
 def crawl_periodic():
     date = datetime.now()
     date.replace(minute=0, second=0, microsecond=0)
-    list = ChapterPeriodicQueue.filter(last_run_at__lte=date)
+    list = ChapterPeriodicQueue.filter(last_run_at__lte=date, enabled=True)
     for item in list:
         result = crawler.crawl(type=item.target, comic_number=item.comic_number, user=item.user)
         item.last_run_at = datetime.now()
