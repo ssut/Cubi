@@ -6,7 +6,12 @@ from cubi.functions import day_to_string
 from cubi.settings import MEDIA_URL
 from work.models import *
 
-
+'''
+작품목록
+    /work/list/
+    모든 작품(work) 목록 표시
+    각 작품에 chapter_count와 last_upload를 넣어서 반환
+'''
 def work_list(request):
     query_dict = request.GET
 
