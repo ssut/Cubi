@@ -14,7 +14,7 @@ from work.models import *
     각 작품에 chapter_count와 last_upload를 넣어서 반환
 '''
 def work_list(request):
-    works = Work.objects.all().order_by('-created')    
+    works = Work.objects.all().order_by('-created')
     d = {
         'media_url': MEDIA_URL,
         'works': works,

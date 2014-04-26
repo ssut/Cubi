@@ -13,6 +13,8 @@ except ImportError:
 from cubi.functions import day_to_string, minute_to_string, time_to_string
 from cubi.functions import imageinfo, imageinfo2
 
+from cubi.settings import MEDIA_URL
+
 # Upload path
 path_work = 'work/'
 def get_path(work_instance, filename):
@@ -138,6 +140,11 @@ class Work(models.Model):
     image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
     last_upload = models.DateField(blank=True, null=True)
     chapter_count = models.IntegerField(blank=True, null=True)
+
+    @property
+    def thumbnail_url(self):
+        chapter = Chapter.objects.filter(work=self).order_by('-reg_no')[0]
+        return chapter.thumbnail.url
 
     def __unicode__(self):
         return self.title
