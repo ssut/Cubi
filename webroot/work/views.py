@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
@@ -13,37 +14,18 @@ from work.models import *
     각 작품에 chapter_count와 last_upload를 넣어서 반환
 '''
 def work_list(request):
-    query_dict = request.GET
-
     works = Work.objects.all().order_by('-created')
-    work_dict_list = []
-    for work in works:
-        work_dict = work.json()
-        chapters = Chapter.objects.filter(work=work).order_by('-created')
-        chapter_count = chapters.count()
-        last_chapter = chapters.last()
-        work_dict['chapter_count'] = chapter_count
-        work_dict['last_upload'] = day_to_string(last_chapter.created)
-        work_dict_list.append(work_dict)
-    
     d = {
         'media_url': MEDIA_URL,
-        'works': work_dict_list,
+        'works': works,
     }
 
     return render_to_response('work/work_list.html', d, RequestContext(request))
 
 def chapter_list(request, work_id):
     work = Work.objects.get(id=work_id)
-    chapters = Chapter.objects.filter(work=work).order_by('-created')
-    last_chapter = chapters.last()
-
-    work_dict = work.json()
-    work_dict['chapter_count'] = chapters.count()
-    work_dict['last_upload'] = day_to_string(last_chapter.created)
-
     d = {
-        'work': work_dict,
+        'work': work,
         'chapters': chapters,
     }
 

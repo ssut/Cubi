@@ -136,6 +136,8 @@ class Work(models.Model):
     image_loading = models.ImageField(upload_to=path_image_work, blank=True)
     image_largeicon = models.ImageField(upload_to=path_image_work, blank=True)
     image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
+    last_upload = models.DateField(blank=True, null=True)
+    chapter_count = models.IntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return self.title
@@ -175,7 +177,7 @@ class WorkComment(Comment):
 # 챕터(각 작품의 1,2,3화....)
 class Chapter(models.Model):
     reg_no = models.IntegerField()
-    work = models.ForeignKey(Work)
+    work = models.ForeignKey(Work, related_name='chapter_by_work')
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
@@ -194,6 +196,12 @@ class Chapter(models.Model):
             'cover': imageinfo(self.cover),
         }
 
+    def save(self, *args, **kwargs):
+        super(Chapter, self).save(*args, **kwargs)
+        self.work.chapter_count = self.work.chapter_by_work.count()
+        self.work.last_upload = self.work.chapter_by_work.order_by('-created').first().created
+        self.work.save()
+        
 # 챕터 댓글
 class ChapterComment(Comment):
     chapter = models.ForeignKey(Chapter)
