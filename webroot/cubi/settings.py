@@ -83,6 +83,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'member.backends.EmailAuthBackend',
+)
+AUTH_USER_MODEL = 'member.CubiUser'
+
 ROOT_URLCONF = 'cubi.urls'
 WSGI_APPLICATION = 'cubi.wsgi.application'
 
