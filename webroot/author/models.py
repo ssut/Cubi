@@ -8,6 +8,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
+from cubi.settings import DEFAULT_PROFILE_IMAGE
 from cubi.functions import minute_to_string
 
 class WaitConvert(models.Model):
@@ -23,7 +24,7 @@ class WaitConvert(models.Model):
 
 class AuthorInfo(models.Model):
     user = models.ForeignKey(User, related_name='authorinfo_by_user')
-    profile_image = models.ImageField('작가 프로필 이미지', upload_to='author/', blank=True)
+    profile_image = models.ImageField('작가 프로필 이미지', upload_to='author/', default=DEFAULT_PROFILE_IMAGE, blank=True)
     nickname = models.CharField('작가 닉네임', max_length=30)
     introduce_simple = models.CharField('작가 한줄소개', max_length=200, blank=True)
     introduce_full = models.TextField('작가 소개', blank=True)

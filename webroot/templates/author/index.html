@@ -4,7 +4,7 @@
 {% block content %}
 <h2>작가 페이지</h2><br><br>
 <h3>작가 정보</h3><hr>
-작가 썸네일 : {{ author_info.profile_image }}<br>
+작가 썸네일 : <img width="100" src="{{ author_info.profile_image.url }}"><br>
 작가 닉네임 : {{ author_info.nickname }}<br>
 작가 한줄소개 : {{ author_info.introduce_simple }}<br>
 작가 소개 : {{ author_info.introduce_full }}<br>
@@ -14,7 +14,7 @@
 {% for work in works %}
 <a href="{% url 'chapter_list' work.id %}">
 <div>
-	<img src="{{ media_url }}{{ work.thumbnail.url }}">
+	<img src="{{ work.thumbnail.url }}">
 	{{ work.title }} / {{ work.author }}<br>
 	연재 시작일 : {{ work.created }}<br>
 	최근 업로드 일자 : {{ work.last_upload }}<br>
