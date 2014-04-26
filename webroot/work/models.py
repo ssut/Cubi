@@ -201,7 +201,8 @@ class Chapter(models.Model):
         self.work.chapter_count = self.work.chapter_by_work.count()
         self.work.last_upload = self.work.chapter_by_work.order_by('-created').first().created
         self.work.save()
-        
+
+
 # 챕터 댓글
 class ChapterComment(Comment):
     chapter = models.ForeignKey(Chapter)

@@ -43,13 +43,10 @@ def make_directory():
     today = now().today()
     today_str = today.strftime('%Y%m%d')
     REAL_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
-    FIELD_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
+    FIELD_PATH = os.path.join(today_str, 'work', 'webtoon')
     
     if not os.path.exists(REAL_PATH):
         os.makedirs(REAL_PATH)
-
-    if not os.path.exists(FIELD_PATH):
-        os.makedirs(FIELD_PATH)
 
 # make_directory에서 지정된 전역변수 path를 이용, MEDIA_PATH를 포함한 저장할 파일명의 path를 반환
 def get_save_path(filename):
