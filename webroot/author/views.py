@@ -7,6 +7,7 @@ from django.template import RequestContext
 from datetime import datetime
 
 from author.forms import AddworkForm
+from author.models import AuthorInfo
 from work.models import *
 
 REAL_PATH = ''
@@ -15,7 +16,6 @@ MEDIA_PATH = settings.MEDIA_ROOT
 
 # 작품 업로드 소개
 def introduce(request):
-
     return render_to_response('author/introduce.html', RequestContext(request))
 
 # 작품 업로드 약관 동의
@@ -25,9 +25,15 @@ def agreement(request):
         print query_dict
         agreement_value = query_dict.get('agreement', 'false')
         if agreement_value == 'true':
+            # 업로드 동의 시, 유저 타입을 2(작가)로 변경함
             user = request.user
             user.type = '2'
             user.save()
+
+            # 동시에 AuthorInfo인스턴스 만들어 배정
+            authorinfo_instance = AuthorInfo(user=user, nickname=user.nickname)
+            authorinfo_instance.save()
+
             return redirect('author:index')
         else:
             error_msg = u'약관에 동의하셔야 합니다'
@@ -42,8 +48,13 @@ def index(request):
     if user.type != '2':
         return redirect('author:introduce')
     else:
-        
-        return render_to_response('author/index.html', RequestContext(request))
+        author_info = AuthorInfo.objects.get(user=user)
+        works = Work.objects.filter(author=user)
+        d = {
+            'author_info': author_info,
+            'works': works,
+        }
+        return render_to_response('author/index.html', d, RequestContext(request))
 
 '''
 작품 업로드
