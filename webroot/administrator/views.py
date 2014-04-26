@@ -20,9 +20,11 @@ except ImportError:
 
 from author.models import WaitConvert
 from work.models import *
+from work import crawl as crawler
 
 from crawler import daum_leaguetoon as DaumLeaguetoon
 from crawler.naver_webtoon import NaverWebtoon
+from crawler.exceptions import WebtoonDoesNotExist, WebtoonChapterDoesNotExist
 
 from datetime import datetime
 import json
@@ -166,6 +168,44 @@ def add_crawl_list(request):
             d['success'] = True
 
     return HttpResponse(json.dumps(d), content_type="application/json")
+
+def crawl_instantly(request):
+    if not request.method == 'POST' or not request.is_ajax():
+        return HttpResponse('{}', content_type="application/json")
+
+    d = {
+        'success': False,
+        'message': ''
+    }
+
+    target = request.POST.get('target', None)
+    comic_number = int(request.POST.get('comic_number', '0'))
+    chapter_number = int(request.POST.get('chapter_number', '0'))
+    user = int(request.POST.get('user', '0'))
+
+    l = [item[0] for item in ChapterQueue.TARGET_CHOICES]
+    if not target in l:
+        d['message'] = 'target error'
+    elif not User.objects.filter(id=user).exists():
+        d['message'] = 'user not exists'
+    else:
+        method = NaverWebtoon().detail if target == ChapterQueue.NAVER else DaumLeaguetoon.detail
+        try:
+            method(comic_number, chapter_number)
+        except WebtoonDoesNotExist, e:
+            d['message'] = 'webtoon not exists'
+        except WebtoonChapterDoesNotExist, e:
+            d['message'] = 'webtoon chapter not exists'
+        else:
+            result = crawler.crawl(type=target, comic_number= comic_number,
+                chapter_number=chapter_number, user=User.objects.get(id=user))
+            if result is True:
+                d['success'] = True
+            else:
+                d['message'] = 'webtoon crawling failed'
+
+    return HttpResponse(json.dumps(d), content_type="applcation/json")
+
 
 def toggle_crawl_enabled(request):
     _id = request.POST.get('id', None)

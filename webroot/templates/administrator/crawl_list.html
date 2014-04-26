@@ -24,7 +24,7 @@ div.switch-toggle { zoom: 0.8; }
 	Comic number <input type="number" name="comic_number">
 	Time <input type="number" name="time" min="0" max="23">
 	<input type="hidden" name="user" readonly>
-	User <input type="text" id="user_autocomplete">
+	User <input type="text" class="user_autocomplete">
 	<input type="submit" value="add">
 </form>
 <div>&nbsp;</div>
@@ -47,7 +47,24 @@ div.switch-toggle { zoom: 0.8; }
 	<tbody>
 	</tbody>
 </table>
+<div>&nbsp;</div>
+<hr>
+<div>&nbsp;</div>
 
+<h1>CRAWL INSTANTLY</h1>
+<form id="crawl_form" method="post" action="{% url 'administrator:crawl_instantly' %}">
+	{% csrf_token %}
+	Target <select name="target">
+		{% for target in targets %}
+		<option value="{{ target.0 }}">{{ target.1 }}</option>
+		{% endfor %}
+	</select>
+	Comic number <input type="number" name="comic_number">
+	Chapter number <input type="number" name="chapter_number">
+	<input type="hidden" name="user" readonly>
+	User <input type="text" class="user_autocomplete">
+	<input type="submit" value="crawl now">
+</form>
 {% endblock %}
 
 {% block script %}
@@ -136,10 +153,10 @@ div.switch-toggle { zoom: 0.8; }
 		$(window).hashchange();
 
 		// User Autocomplete
-		$('#user_autocomplete').autocomplete({
+		$('input.user_autocomplete').autocomplete({
 			serviceUrl: '{% url 'administrator:search_user' %}',
 			onSelect: function(suggestion) {
-				$('input[name="user"]').val(suggestion.data);
+				$(this).prev().val(suggestion.data);
 			}
 		});
 
@@ -169,6 +186,32 @@ div.switch-toggle { zoom: 0.8; }
 				},
 				error: function(jqXhr, textStatus) {
 					alert(textStatus);
+				}
+			});
+
+			return false;
+		});
+
+		$('#crawl_form').submit(function() {
+			var url = $(this).attr('action'),
+				data = $(this).serialize();
+
+			$.ajax({
+				type: 'POST',
+				url: url,
+				data: data,
+				beforeSend: function() {
+					$('#crawl_form').children('input').attr('disabled', 'disabled');
+				},
+				success: function(data) {
+					if(data.success) {
+						alert('success');
+					} else {
+						alert(data.message);
+					}
+
+					$('#crawl_form').trigger('reset')
+						.children('input').removeAttr('disabled');
 				}
 			});
 
