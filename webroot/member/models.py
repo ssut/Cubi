@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
 
-from work.models import Work
 from cubi.functions import day_to_string, minute_to_string
 from cubi.functions import imageinfo, imageinfo2
 
@@ -106,6 +105,16 @@ class CubiUser(AbstractUser):
         favorites = UserAuthorFavorites.objects.filter(user=self)
         return favorites
 
+    def check_favorites_exist(self, inst):
+        from work.models import Work
+        if isinstance(inst, Work):
+            print self, inst
+            return UserWorkFavorites.objects.filter(user=self, work=inst).exists()
+        elif isinstance(inst, CubiUser):
+            return UserAuthorFavorites.objects.create(user=self, author=inst).exists()
+
+        return True
+
     '''
     Add favorites example
 
@@ -116,6 +125,7 @@ class CubiUser(AbstractUser):
     user.add_favorites(author)
     '''
     def add_favorites(self, inst):
+        from work.models import Work
         if isinstance(inst, Work):
             favorite = UserWorkFavorites.objects.create(user=self, work=inst)
         elif isinstance(inst, CubiUser):
@@ -154,17 +164,17 @@ class CubiUser(AbstractUser):
 
 
 class UserWorkFavorites(models.Model):
-    user = models.ForeignKey(CubiUser)
-    work = models.OneToOneField(Work)
+    from work.models import Work
+    user = models.ForeignKey(CubiUser, related_name='work_favorites_by_user')
+    work = models.OneToOneField(Work, related_name='work_favorites_by_work')
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.work)
 
 class UserAuthorFavorites(models.Model):
-    user = models.ForeignKey(CubiUser)
-    author = models.ForeignKey(CubiUser)
+    user = models.ForeignKey(CubiUser, related_name='author_favorites_by_user')
+    author = models.ForeignKey(CubiUser, related_name='author_favorites_by_author')
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.author)
-
 

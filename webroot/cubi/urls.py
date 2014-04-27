@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include('administrator.urls', namespace='administrator')),
 
     # Users
-    url(r'^user/', include('member.urls'), namespace='member'),
+    url(r'^user/', include('member.urls', namespace='member')),
 
 
     # 공지사항
