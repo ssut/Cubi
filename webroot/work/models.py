@@ -4,11 +4,12 @@ from django.db import models
 from datetime import datetime
 
 # Custom user model
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+# try:
+#     from django.contrib.auth import get_user_model
+#     User = get_user_model()
+# except ImportError:
+#     from django.contrib.auth.models import User
+from member.models import CubiUser as User
 
 from cubi.functions import day_to_string, minute_to_string, time_to_string
 from cubi.functions import imageinfo, imageinfo2

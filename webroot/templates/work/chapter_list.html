@@ -23,6 +23,7 @@
 {% endblock %}
 
 {% block script %}
+{% csrf_token %}
 <script>
 $(function() {
 	$('#add_to_favorites').click(function() {
@@ -33,10 +34,13 @@ $(function() {
 			type: 'POST',
 			url: '{% url 'member:add_to_favorites' %}',
 			data: {
-				id: $(this).data('id')
+				type: 'work',
+				id: $(this).data('id'),
+				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
 			},
 			success: function(data) {
-
+				alert(data.success ? '즐겨찾기에 등록되었습니다.' : data.message);
+				l.ladda('stop');
 			}
 		});
 	});
