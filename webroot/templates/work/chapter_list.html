@@ -8,6 +8,7 @@
 	{{ work.title }} / {{ work.author }}<br>
 	연재 시작일 : {{ work.created }}<br>
 	최근 업로드 일자 : {{ work.last_upload }}<br>
+	<button id="add_to_favorites" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="mint" data-style="zoom-in" data-size="xs"><span class="ladda-label">Add Favorites</span></button>
 </div>
 <br><br><br><br><br><br><br><br>
 {% for chapter in chapters %}
@@ -19,5 +20,26 @@
 </a>
 {% endfor %}
 
+{% endblock %}
 
+{% block script %}
+<script>
+$(function() {
+	$('#add_to_favorites').click(function() {
+		var l = $(this).ladda();
+		l.ladda('start');
+
+		$.ajax({
+			type: 'POST',
+			url: '{% url 'member:add_to_favorites' %}',
+			data: {
+				id: $(this).data('id')
+			},
+			success: function(data) {
+
+			}
+		});
+	});
+});
+</script>
 {% endblock %}

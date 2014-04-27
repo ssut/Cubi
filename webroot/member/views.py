@@ -163,3 +163,17 @@ def password_change(request):
             'form': form,
         }
         return render_to_response('member/passwordchange.html', d, RequestContext(request))
+
+@csrf_exempt
+def add_to_favorites(request):
+    _id = request.POST.get('id', None)
+    if _id is None or not request.is_ajax():
+        return HttpResponse('{}', content_type="application/json")
+
+    d = {
+        'success': False,
+        'message': '',
+    }
+
+    
+
