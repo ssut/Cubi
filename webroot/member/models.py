@@ -89,6 +89,13 @@ class CubiUser(AbstractUser):
             'created': minute_to_string(self.created),
         }
 
+    '''
+    Get favorites
+
+    user = User.objects.get(id=id)
+    works = user.work_favorites
+    authors = user.author_favorites
+    '''
     @property
     def work_favorites(self):
         favorites = UserWorkFavorites.objects.filter(user=self)
@@ -99,6 +106,15 @@ class CubiUser(AbstractUser):
         favorites = UserAuthorFavorites.objects.filter(user=self)
         return favorites
 
+    '''
+    Add favorites example
+
+    user = User.objects.get(id=id)
+    work = Work.objects.get(id=work_id)
+    author = User.objects.get(id=author_id)
+    user.add_favorites(work)
+    user.add_favorites(author)
+    '''
     def add_favorites(self, inst):
         if isinstance(inst, Work):
             favorite = UserWorkFavorites.objects.create(user=self, work=inst)
@@ -107,12 +123,24 @@ class CubiUser(AbstractUser):
 
         return favorite
 
+    '''
+    Delete favorites example
+
+    user = User.objects.get(id)
+    work = Work.objects.get(id=work_id)
+    author = User.objects.get(id=author_id)
+    try:
+        user.delete_favorites(work)
+        user.delete_favorites(author)
+    except ObjectDoesNotExist, e:
+        print 'favorite object does not exist'
+    '''
     def delete_favorites(self, inst):
         if isinstance(inst, UserWorkFavorites):
             instance = UserWorkFavorites.objects.filter(user=self, work=inst)
         elif isinstance(inst, UserAuthorFavorites):
             instance = UserWorkFavorites.objects.filter(user=self, author=inst)
-        
+
         if instance.exists():
             instance.delete()
         else:
