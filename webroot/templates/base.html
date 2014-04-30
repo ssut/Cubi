@@ -1,143 +1,172 @@
 {% load staticfiles %}
-{% load compressed %}
 <!DOCTYPE html>
 <html lang="ko">
-	<head>
-		<meta charset="utf-8">
-		<title>{% block title %}Cubi{% endblock %}</title>
-		<link rel="stylesheet" href="static/css/common.css">
-		<link rel="stylesheet" href="static/css/header.css">
-		<link rel="stylesheet" href="static/css/footer.css">
-		<script src="static/js/jquery.js"></script>
-		<script src="static/js/cubi.js"></script>
-		<script src="http://www.google.com/jsapi"></script>
-		<script>
-			google.load('webfont', '1');
-			google.setOnLoadCallback(function() {
-				WebFont.load({
-					custom: {
-						families: ['NanumGothic', 'NanumGothicBold'],
-						urls: ['http://fontface.kr/NanumGothic/css', 'http://fontface.kr/NanumGothicBold/css']
-					}
-				});
-			});
-		</script>
-		<!--[if lt IE 9]>
-			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-
-		{% block head %}
-		{% endblock %}
+<head>
+	<meta charset="utf-8">
+	<title>tinicube second edition</title>
+	<link rel="stylesheet" href="{% static 'css/pentagon.css' %}">
+	<link rel="stylesheet" href="{% static 'css/tinicube.css' %}">
+	<link rel="stylesheet" href="{% static 'css/object/ladda.css' %}">
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+	<script src="{% static 'js/jquery.color.min.js' %}"></script>
+	<script src="{% static 'js/jquery.steps.min.js' %}"></script>
+	<script src="{% static 'js/hexagon.js' %}"></script>
+	<script src="{% static 'js/ladda.min.js' %}"></script>
+	<script src="{% static 'js/tinicube.js' %}"></script>
+	<!--[if lt IE 9]>
+	  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	  <![endif]-->
+	  {% block head %}
+	  {% endblock %}
 	</head>
 	<body>
 		<header>
-			<section>
-				<section>
-					<a href="./">
-						<img src="static/img/logo.png" alt="Cubi">
-					</a>
-					<section>
-						<form action="#" method="post">
-							<input type="text">
-							<a href="javascript:(function(){})()" onclick="">
-								<img src="static/img/btn.search.png" alt="Search button">
-							</a>
-						</form>
+			<section class="p w100p h45 edge-bottom-belize-hole peter-river-half layer-fixed order-v">
+				<section class="p w900 h45 box-align-center">
+					<h4 class="p left h45 font pt18 color-white"><a href="/" class="p no-line color-white">tinicube</a></h4>
+					<ul class="h45 no-list no-margin row-align p left">
+						<li class="p layer-relative"><a href="{% url 'notice_list' %}" class="no-line font pt10 color-white p">공지사항</a>
+						</li>
+						<li class="p layer-relative"><a href="{% url 'work_list' %}" class="no-line font pt10 color-white p">작품 목록</a>
+						</li>
+						{% if user.is_authenticated %}
+						<li class="p layer-relative"><a href="javascript:hex.favoriteViewToggle()" class="no-line font pt10 color-white p">즐겨찾기</a>
+							<section class="p hide layer belize-hole edge-radius">
+								<nav class="p clouds">
+									<ul class="p no-list no-margin">
+										<li class="selected"><a href="javascript:hex.favoriteToggle(0)" class="p font no-line"><b>작품</b></a></li>
+										<li><a href="javascript:hex.favoriteToggle(1)" class="p font no-line"><b>작가</b></a></li>
+									</ul>
+								</nav>
+								<section class="p clouds layer-relative">
+									<article id="work-favorites" class="artworks p layer"></article>
+									<article id="author-favorites" class="author p layer"></article>
+								</section>
+							</section>
+						</li>
+						<li class="p layer-relative"><a href="{% url 'author:index' %}" class="no-line font pt10 color-white p">나의 작품</a>
+						</li>
+						{% endif %}
+						</li>
+					</ul>
+					<section class="p right edge-left-belize-hole">
+						<input type="text" class="p hide font segoe"><a href="javascript:hex.searchToggle()"><img src="{% static 'img/icon.search.png' %}" alt="Search"></a>
 					</section>
+					<ul class="h45 no-list no-margin row-align p right">
+						{% if user.is_authenticated %}
+						<li><a href="{% url 'member_info' %}" class="no-line font pt10 color-white p">내 정보</a></li>
+						<li><a href="{% url 'signout' %}" class="no-line font pt10 color-white p">로그아웃</a></li>
+						{% else %}
+						<li><a href="{% url 'signin' %}" class="no-line font pt10 color-white p">로그인</a></li>
+						<li><a href="{% url 'signup' %}" class="no-line font pt10 color-white p">회원가입</a></li>
+						{% endif %}
+					</ul>
 				</section>
 			</section>
-			<section>
-				<section>
-					<ul>
-						<li>
-							<a href="./">
-								<span>홈</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span>공지사항</span>
-							</a>
-						</li>
-						<li>
-							<a href="artworks.html">
-								<span>작품 목록</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span>작가 목록</span>
-							</a>
-						</li>
-
-						<li>
-							<a href="#">
-								<span>|</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span>FAQ</span>
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								<span>Q&amp;A</span>
-							</a>
-						</li>
-					</ul>
-					<ul>
-						<li>
-							<a href="javascript:Cubi.invokeEvent('userSignIn')">
-								<span>로그인</span>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:Cubi.invokeEvent('userRegister')">
-								<span>회원 가입</span>
-							</a>
-						</li>
-					</ul>
+			<section class="p h585 peter-river abs">
+				<section class="p w900 h540 box-align-center layer-relative">
+					{% block header %}
+					{% endblock %}
+					<nav class="p layer">
+						<ul class="p no-list no-margin row-align">
+							<li><a href="javascript:hex.promoteToggle(0)" class="selected p box25 belize-hole no-line text-align-center font weight-bold pt12 color-white">1</a></li>
+							<li><a href="javascript:hex.promoteToggle(1)" class="p box25 belize-hole no-line text-align-center font weight-bold pt12 color-white">2</a></li>
+							<li><a href="javascript:hex.promoteToggle(2)" class="p box25 belize-hole no-line text-align-center font weight-bold pt12 color-white">3</a></li>
+						</ul>
+					</nav>
 				</section>
 			</section>
 		</header>
 		<section>
 			{% block content %}
+			<h1 class="p font pt22 weight-thin text-align-center color-wet-asphalt">Start with<span>&nbsp;tinicube</span></h1>
+			<section class="p w900 box-align-center m-top15 p-top15 edge-top-silver">
+				<section class="p left w445 font pt11 line-h180p">
+					<h3 class="p m-bottom15 font pt12 weight-semibold">tinicube &amp; artworks</h3>
+					<p>설명 솰롸솰롸</p>
+					<p class="p box w425 font pt10">중요한거</p>
+					<p>함께하면 조흔점</p>
+					<ul class="p red-bullet">
+						<li>조흔점1</li>
+						<li>조흔점2</li>
+						<li>조흔점3</li>
+					</ul>
+				</section>
+				<section class="p right w440">
+					<ul class="p no-list no-margin w440">
+						<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
+						<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
+						<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
+						<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
+					</ul>
+				</section>
+			</section>
 			{% endblock %}
+			<section class="p clear"></section>
 		</section>
-		<footer>
-			<section>
-				<ul>
-					<li>
-						<a href="#">
-							<span>홈</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span>블로그</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span>이용 약관</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<span>개인정보취급방침</span>
-						</a>
-					</li>
-				</ul>
-				<ul>
-					<li>
-						<a href="javascript:Cubi.invokeEvent('goTop')">
-							<span>맨 위로</span>
-						</a>
-					</li>
+		<footer class="p h100 edge-top-silver">
+			<section class="p w900 box-align-center">
+				<h3 class="p left h100 font pt24 spacing-small color-midnight-blue">tinicube</h3>
+				<ul class="p right h100 no-list no-margin row-align">
+					<li><a href="#"><img src="{% static 'img/icon.facebook.png' %}"></a></li>
+					<li><a href="#"><img src="{% static 'img/icon.twitter.png' %}"></a></li>
 				</ul>
 			</section>
 		</footer>
-	</body>
-</html>
+		<script>/*<![CDATA[*/
+			$(function() {
+				var favoriteLoaded = false,
+					favoriteViewToggle = hex.favoriteViewToggle,
+					workList = $('#work-favorites'),
+					authorList = $('#author-favorites');
 
+				hex.favoriteViewToggle = function() {
+					if(!favoriteLoaded) {
+						$.ajax({
+							type: 'GET',
+							url: '{% url 'member:get_favorites' %}',
+							success: function(data) {
+								if(data.success) {
+									$(data.data.works).each(function() {
+										var html = 
+											'<a href="/chapter/list/' + 
+											this.id +
+											'" class="p show no-line color-wet-asphalt font">' + 
+											'<b class="p show">' + 
+											this.title + 
+											'<span class="p color-asbestos"> / ' +
+											this.author +
+											'</span></b><span>' + 
+											this.last_upload +
+											'</span></a>';
+										workList.append(html);
+									});
+
+									$(data.data.authors).each(function() {
+										var html =
+										'<a href="#" class="p show no-line color-wet-asphalt font">' + 
+										'<b class="p show">' + 
+										this.author + 
+										'</b></a>';
+										authorList.append(html);
+									});
+								}
+							},
+							error: function() {
+								alert('즐겨찾기 목록을 가져오는데 실패하였습니다.');
+							},
+							complete: function() {
+								favoriteLoaded = true;
+								favoriteViewToggle();
+							}
+						});
+					} else {
+						favoriteViewToggle();
+					}
+				};
+			});
+		/*]]>*/</script>
+		{% block script %}
+		{% endblock %}
+	</body>
+	</html>
