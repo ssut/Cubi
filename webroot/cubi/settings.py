@@ -100,6 +100,8 @@ AUTHENTICATION_BACKENDS = (
     'member.backends.EmailAuthBackend',
 )
 AUTH_USER_MODEL = 'member.CubiUser'
+FACEBOOK_APP_ID = '232589236930454'
+FACEBOOK_API_SECRET = 'ba79942815fda6f882c626762cf964ed'
 
 ROOT_URLCONF = 'cubi.urls'
 WSGI_APPLICATION = 'cubi.wsgi.application'

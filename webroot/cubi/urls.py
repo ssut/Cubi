@@ -43,6 +43,7 @@ urlpatterns = patterns('',
 
     # Users
     url(r'^user/', include('member.urls', namespace='member')),
+    url(r'auth/', include('social_auth.urls')),
 
 
     # 공지사항
@@ -55,7 +56,6 @@ urlpatterns = patterns('',
 
     # API
     url(r'^api/', include('cubi.urls_api')),
-    
 
 
     url(r'^worklist/$', 'structure.views.work_list', name='work_list_api'),
