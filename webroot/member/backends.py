@@ -17,14 +17,19 @@ class EmailAuthBackend(object):
     a email/password pair.
     """
     
-    def authenticate(self, email=None, password=None):
+    def authenticate(self, username=None, email=None, password=None):
         """ Authenticate a user based on email address as the user name. """
         try:
             user = User.objects.get(email=email)
             if user.check_password(password):
                 return user
         except User.DoesNotExist:
-            return None 
+            try:
+                user = User.objects.get(email=username)
+                if user.check_password(password):
+                    return user
+            except User.DoesNotExist:
+                return None 
 
     def get_user(self, user_id):
         """ Get a User object from the user_id. """

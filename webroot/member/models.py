@@ -41,8 +41,8 @@ class CubiUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password, type='2', first_name='Admin', last_name='Cubi', email='Cubi@Cubi.in', gender='M', tel='000', access_token='000', ):
-        user = self.create_user(type=type, username=username, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
+    def create_superuser(self, password, email, username, type='2', first_name='Admin', last_name='Cubi', gender='M', tel='000', access_token='000', ):
+        user = self.create_user(type=type, username=email, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
         user.is_staff = True
         user.is_active = True
         user.is_superuser = True
