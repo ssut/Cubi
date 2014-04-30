@@ -204,5 +204,31 @@ def add_to_favorites(request):
 
 
 def get_favorites(request):
-    pass
+    user = request.user
+    if user is None or not request.is_ajax():
+        return HttpResponse('{ "success": false }', content_type="application/json")
 
+    d = {
+        'success': False,
+        'data': {
+            'works': [],
+            'authors': [],
+        },
+    }
+
+    try:
+        d['data']['works'] = [{
+            'id': i.work.id,
+            'title': i.work.title,
+            'last_upload': i.work.last_upload.strftime('%Y-%m-%d'),
+            'author': i.work.author.nickname
+        } for i in user.work_favorites]
+        d['data']['authors'] = [{
+            'id': i.author.id,
+            'name': i.author.nickname
+        } for i in user.author_favorites]
+        d['success'] = True
+    except Exception, e:
+        print e
+
+    return HttpResponse(json.dumps(d), content_type="application/json")
