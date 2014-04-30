@@ -13,5 +13,10 @@
 </div>
 
 <a href="{% url 'password_change' %}">비밀번호 변경하기</a>
+{% if user.fb_connected %}
+<a href="{% url 'member:disconnect_facebook' %}">Disconnect from facebook</a>
+{% else %}
+<a href="{% url 'member:connect_facebook' %}">Connect to facebook</a>
+{% endif %}
 </form>
 {% endblock %}

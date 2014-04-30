@@ -1,7 +1,8 @@
 #-*- encoding: utf-8 -*-
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
 # decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -9,12 +10,26 @@ from django.views.decorators.http import require_http_methods
 
 # login
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 from work.models import Work
 from .models import CubiUser
+from .backends import FacebookAuthBackend
 from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm, CubiUserEditForm, CubiUserPasswordChangeForm
 
+from cubi import settings
+
+from rauth import OAuth2Service
+
 import json
+
+facebook = OAuth2Service(
+    client_id=settings.FACEBOOK_APP_ID,
+    client_secret=settings.FACEBOOK_API_SECRET,
+    name='tinicube',
+    authorize_url='https://graph.facebook.com/oauth/authorize',
+    access_token_url='https://graph.facebook.com/oauth/access_token',
+    base_url='https://graph.facebook.com/')
 
 def signup(request):
     if request.method == 'POST':
@@ -71,9 +86,83 @@ def signin(request):
         }
         return render_to_response('member/signin.html', d, RequestContext(request))
 
+def signin_with_facebook(request):
+    redirect_uri = request.build_absolute_uri(reverse('member:signin_with_facebook_callback'))
+    params = {
+        'scope': 'read_stream',
+        'response_type': 'code',
+        'redirect_uri': redirect_uri
+    }
+
+    url = facebook.get_authorize_url(**params)
+    return redirect(url)
+
+
+def signin_with_facebook_callback(request):
+    redirect_uri = request.build_absolute_uri(reverse('member:signin_with_facebook_callback'))
+    code = request.GET.get('code', '')
+
+    try:
+        session = facebook.get_auth_session(data={
+            'code': code,
+            'redirect_uri': redirect_uri
+            })
+    except Exception, e:
+        return HttpResponse('<script> alert("페이스북 연결 실패"); location.replace("' + reverse('signin') + '") </script>')
+
+    fbid = session.get('me').json()['id']
+    user = CubiUser.objects.filter(access_token=fbid)
+    if user.exists():
+        user = authenticate(user_id=user[0].id)
+        print user
+        login(request, user)
+        return redirect('index')
+    else:
+        return HttpResponse('<script> alert("일치하는 계정 없음"); location.replace("' + reverse('signin') + '") </script>')
+
+@login_required
 def signout(request):
     logout(request)
     return render_to_response('member/signout.html')
+
+@login_required
+def connect_facebook(request):
+    redirect_uri = request.build_absolute_uri(reverse('member:connect_facebook_callback'))
+    params = {
+        'scope': 'read_stream',
+        'response_type': 'code',
+        'redirect_uri': redirect_uri
+    }
+
+    url = facebook.get_authorize_url(**params)
+    return redirect(url)
+
+@login_required
+def connect_facebook_callback(request):
+    user = request.user
+    redirect_uri = request.build_absolute_uri(reverse('member:connect_facebook_callback'))
+    code = request.GET.get('code', '')
+
+    try:
+        session = facebook.get_auth_session(data={
+            'code': code,
+            'redirect_uri': redirect_uri
+        })
+    except Exception, e:
+        return HttpResponse('<script> alert("페이스북 연결 안됨"); location.replace("' + reverse('member_info') + '") </script>')
+
+    fbid = session.get('me').json()['id']
+    user.access_token = fbid
+    user.save()
+    return HttpResponse('<script> alert("페이스북 연결됨"); location.replace("' + reverse('member_info') + '") </script>')
+
+@login_required
+def disconnect_facebook(request):
+    user = request.user
+    user.access_token = ''
+    user.save()
+
+    return HttpResponse('<script> alert("페이스북 끊김"); location.replace("' + reverse('member_info') + '") </script>')
 
 def convert_to_author(request):
     user = request.user
@@ -88,6 +177,7 @@ def convert_to_author(request):
         }
         return render_to_response('member/convert_to_author.html', d, RequestContext(request))
 
+@login_required
 def member_info(request):
     user = request.user
     if request.method == 'POST':
@@ -130,6 +220,7 @@ def member_info(request):
         }
         return render_to_response('member/info.html', d, RequestContext(request))
 
+@login_required
 def password_change(request):
     user = request.user
     if request.method == 'POST':
@@ -167,6 +258,7 @@ def password_change(request):
         return render_to_response('member/passwordchange.html', d, RequestContext(request))
 
 @csrf_exempt
+@login_required
 def add_to_favorites(request):
     user = request.user
     _type = request.POST.get('type', None)
@@ -202,7 +294,7 @@ def add_to_favorites(request):
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
-
+@login_required
 def get_favorites(request):
     user = request.user
     if user is None or not request.is_ajax():

@@ -89,6 +89,16 @@ class CubiUser(AbstractUser):
         }
 
     '''
+    Check facebook account is connected
+    '''
+    @property
+    def fb_connected(self):
+        if self.access_token is '' or self.access_token is '000':
+            return False
+        elif len(self.access_token) > 10:
+            return True
+
+    '''
     Get favorites
 
     user = User.objects.get(id=id)

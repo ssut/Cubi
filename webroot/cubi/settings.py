@@ -30,8 +30,6 @@ AUTH_USER_MODEL = 'member.CubiUser'
 ACCOUNT_ACTIVATION_DAYS = 7
 
 SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
-FACEBOOK_APP_ID = '442841165838586'
-FACEBOOK_APP_SECRET = '31a520eaf17fe3224f3c2b3151ebfae7'
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
@@ -98,6 +96,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 AUTHENTICATION_BACKENDS = (
     'member.backends.EmailAuthBackend',
+    'member.backends.FacebookAuthBackend',
 )
 AUTH_USER_MODEL = 'member.CubiUser'
 FACEBOOK_APP_ID = '232589236930454'
