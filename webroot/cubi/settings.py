@@ -52,6 +52,11 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
+# Raven (sentry)
+RAVEN_CONFIG = {
+    'dsn': 'http://072c38e9bf5747cd883eef67d08d9dda:49dd7d63b03143ea96e4c8fcc558bb8f@sentry.ssut.me/3',
+}
+
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,6 +64,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'raven.contrib.django.raven_compat',
     'site',
 
     'south',
