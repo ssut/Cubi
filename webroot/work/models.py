@@ -4,14 +4,17 @@ from django.db import models
 from datetime import datetime
 
 # Custom user model
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+# try:
+#     from django.contrib.auth import get_user_model
+#     User = get_user_model()
+# except ImportError:
+#     from django.contrib.auth.models import User
+from member.models import CubiUser as User
 
 from cubi.functions import day_to_string, minute_to_string, time_to_string
 from cubi.functions import imageinfo, imageinfo2
+
+from cubi.settings import MEDIA_URL
 
 # Upload path
 path_work = 'work/'
@@ -138,6 +141,11 @@ class Work(models.Model):
     image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
     last_upload = models.DateField('마지막 챕터 업데이트 날짜', blank=True, null=True)
     chapter_count = models.IntegerField('챕터 수', blank=True, null=True)
+
+    @property
+    def thumbnail_url(self):
+        chapter = Chapter.objects.filter(work=self).order_by('-reg_no')[0]
+        return chapter.thumbnail.url
 
     def __unicode__(self):
         return self.title

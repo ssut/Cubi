@@ -1,0 +1,330 @@
+@charset "UTF-8";
+/* Pentagon stylesheet framework (Version Alpha) * Lesser GNU Public License v3 * Written by Heaven (heaven@isdev.kr) */
+/* Common */
+@font-face { font-family: 'Titillium'; font-weight: 100; src: url(font/TitilliumThin.eot); src: local(※), url(font/TitilliumThin.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: lighter; src: url(font/TitilliumThinItalic.eot); src: local(※), url(font/TitilliumThinItalic.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-weight: 200; src: url(font/TitilliumLight.eot); src: local(※), url(font/TitilliumLight.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: 200; src: url(font/TitilliumLightItalic.eot); src: local(※), url(font/TitilliumLightItalic.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-weight: 400; src: url(font/TitilliumRegular.eot); src: local(※), url(font/TitilliumRegular.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: normal; src: url(font/TitilliumRegularItalic.eot); src: local(※), url(font/TitilliumRegularItalic.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-weight: 500; src: url(font/TitilliumSemiBold.eot); src: local(※), url(font/TitilliumSemiBold.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: 500; src: url(font/TitilliumSemiBoldItalic.eot); src: local(※), url(font/TitilliumSemiBoldItalic.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-weight: 700; src: url(font/TitilliumBold.eot); src: local(※), url(font/TitilliumBold.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-style: italic; font-weight: 700; src: url(font/TitilliumBoldItalic.eot); src: local(※), url(font/TitilliumBoldItalic.woff) format("woff"); }
+@font-face { font-family: 'Titillium'; font-weight: 900; src: url(font/TitilliumBlack.eot); src: local(※), url(font/TitilliumBlack.woff) format("woff"); }
+@font-face { font-family: 'NanumGothic'; font-weight: 100; src: url(font/NanumGothicLight.eot); src: local(※), local("나눔고딕 Light"), local("NanumGothic Light"), url(font/NanumGothicLight.woff) format("woff"); }
+@font-face { font-family: 'NanumGothic'; font-weight: 400; src: url(font/NanumGothic.eot); src: local(※), local("나눔고딕"), local("NanumGothic"), url(font/NanumGothic.woff) format("woff"); }
+@font-face { font-family: 'NanumGothic'; font-weight: 700; src: url(font/NanumGothicBold.eot); src: local(※), local("나눔고딕"), local("NanumGothic"), url(font/NanumGothicBold.woff) format("woff"); }
+@font-face { font-family: 'NanumGothic'; font-weight: 900; src: url(font/NanumGothicExtraBold.eot); src: local(※), local("나눔고딕 ExtraBold"), local("NanumGothic ExtraBold"), url(font/NanumGothicExtraBold.woff) format("woff"); }
+@font-face { font-family: 'NanumMyeongjo'; font-weight: 100; src: url(font/NanumMyeongjo.eot); src: local(※), local("나눔명조"), local("NanumMyeongjo"), url(font/NanumMyeongjo.woff) format("woff"); }
+@font-face { font-family: 'NanumMyeongjo'; font-weight: 700; src: url(font/NanumMyeongjo.eot); src: local(※), local("나눔명조"), local("NanumMyeongjo"), url(font/NanumMyeongjo.woff) format("woff"); }
+@font-face { font-family: 'NanumMyeongjo'; font-weight: 900; src: url(font/NanumMyeongjoExtraBold.eot); src: local(※), local("나눔명조 ExtraBold"), local("NanumMyeongjo ExtraBold"), url(font/NanumMyeongjoExtraBold.woff) format("woff"); }
+* { margin: 0; padding: 0; outline: 0; -webkit-text-size-adjust: none; -webkit-user-select: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; font-smooth: always; }
+
+html, body { position: relative; }
+
+body { font: normal normal normal 9pt/normal "Segoe UI", "Malgun Gothic", "AppleGothic", sans-serif; }
+
+ul, ol, dl { margin: 10px 0 10px 40px; }
+
+table { border: 0; border-spacing: 0; border-collapse: collapse; }
+
+a img { border: 0; }
+
+/* Specific condition */
+a.p.no-line { text-decoration: none; }
+
+ul.p.no-list { list-style: none; }
+
+ul.p.red-bullet { margin: 5px 0; list-style: none; }
+
+ul.p.red-bullet li { padding-left: 20px; background: transparent url(../img/icon.bullet.png) no-repeat 5px 50%; }
+
+ul.p.row-align li { display: inline-block; }
+
+/* Showing */
+.p.show { display: block; }
+
+.p.hide { display: none; }
+
+/* Font */
+.p.text-align-center { text-align: center; }
+
+.p.font { font: normal normal normal 9pt/normal "Titillium", "NanumGothic", "Segoe UI", "Malgun Gothic", "AppleGothic", sans-serif; }
+
+.p.font.serif { font-family: "NanumMyeongjo", serif; }
+
+.p.font.segoe { font-family: "Segoe UI", "Malgun Gothic", "Titillium", "NanumGothic", "AppleGothic", sans-serif; }
+
+.p.font.pt8 { font-size: 8pt; }
+
+.p.font.pt9 { font-size: 9pt; }
+
+.p.font.pt10 { font-size: 10pt; }
+
+.p.font.pt11 { font-size: 11pt; }
+
+.p.font.pt12 { font-size: 12pt; }
+
+.p.font.pt13 { font-size: 13pt; }
+
+.p.font.pt14 { font-size: 14pt; }
+
+.p.font.pt16 { font-size: 16pt; }
+
+.p.font.pt18 { font-size: 18pt; }
+
+.p.font.pt20 { font-size: 20pt; }
+
+.p.font.pt22 { font-size: 22pt; }
+
+.p.font.pt24 { font-size: 24pt; }
+
+.p.font.pt32 { font-size: 32pt; }
+
+.p.font.pt36 { font-size: 36pt; }
+
+.p.font.pt48 { font-size: 48pt; }
+
+.p.font.pt64 { font-size: 64pt; }
+
+.p.line-h160p { line-height: 160%; }
+
+.p.line-h180p { line-height: 180%; }
+
+.p.font.weight-thin { font-weight: 100; }
+
+.p.font.weight-light { font-weight: 200; }
+
+.p.font.weight-regular { font-weight: 400; }
+
+.p.font.weight-semibold { font-weight: 500; }
+
+.p.font.weight-bold { font-weight: 700; }
+
+.p.font.weight-black { font-weight: 900; }
+
+.p.font.spacing-small { letter-spacing: -1pt; }
+
+.p.color-white { color: white; }
+
+.p.color-midnight-blue { color: #2c3e50; }
+
+.p.color-wet-asphalt { color: #34495e; }
+
+.p.color-asbestos { color: #7f8c8d; }
+
+.p.text-shadow { text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15); }
+
+/* Sizing */
+.p.w900 { width: 900px; }
+
+.p.w425 { width: 425px; }
+
+.p.w440 { width: 440px; }
+
+.p.w445 { width: 445px; }
+
+.p.w100p { width: 100%; }
+
+.p.h45 { height: 45px; }
+
+.p.h100 { height: 100px; }
+
+.p.h120 { height: 120px; }
+
+.p.h540 { height: 540px; }
+
+.p.box25 { width: 25px; height: 25px; }
+
+/* Background */
+.p.turquoise, .p.turquoise-half, .p.turquoise-semi { background: #1abc9c; }
+
+.p.green-sea, .p.green-sea-half, .p.green-sea-semi { background: #16a085; }
+
+.p.emerald, .p.emerald-half, .p.emerald-semi { background: #2ecc71; }
+
+.p.nephritis, .p.nephritis-half, .p.nephritis-semi { background: #27ae60; }
+
+.p.peter-river, .p.peter-river-half, .p.peter-river-semi { background: #3498db; }
+
+.p.belize-hole, .p.belize-hole-half, .p.belize-hole-semi { background: #2980b9; }
+
+.p.amethyst, .p.amethyst-half, .p.amethyst-semi { background: #9b59b6; }
+
+.p.wisteria, .p.wisteria-half, .p.wisteria-semi { background: #8e44ad; }
+
+.p.wet-asphalt, .p.wet-asphalt-half, .p.wet-asphalt-semi { background: #34495e; }
+
+.p.midnight-blue, .p.midnight-blue-half, .p.midnight-blue-semi { background: #2c3e50; }
+
+.p.sunflower, .p.sunflower-half, .p.sunflower-semi { background: #f1c40f; }
+
+.p.orange, .p.orange-half, .p.orange-semi { background: #f39c12; }
+
+.p.carrot, .p.carrot-half, .p.carrot-semi { background: #e67e22; }
+
+.p.pumpkin, .p.pumpkin-half, .p.pumpkin-semi { background: #d35400; }
+
+.p.alizarin, .p.alizarin-half, .p.alizarin-semi { background: #e74c3c; }
+
+.p.pomegranate, .p.pomegranate-half, .p.pomegranate-semi { background: #c0392b; }
+
+.p.clouds, .p.clouds-half, .p.clouds-semi { background: #ecf0f1; }
+
+.p.silver, .p.silver-half, .p.silver-semi { background: #bdc3c7; }
+
+.p.concrete, .p.concrete-half, .p.concrete-semi { background: #95a5a6; }
+
+.p.asbestos, .p.asbestos-half, .p.asbestos-semi { background: #7f8c8d; }
+
+.p.turquoise-half { background: rgba(26, 188, 156, 0.5); }
+
+.p.green-sea-half { background: rgba(22, 160, 133, 0.5); }
+
+.p.emerald-half { background: rgba(46, 204, 113, 0.5); }
+
+.p.nephritis-half { background: rgba(39, 174, 96, 0.5); }
+
+.p.peter-river-half { background: rgba(52, 152, 219, 0.5); }
+
+.p.belize-hole-half { background: rgba(41, 128, 185, 0.5); }
+
+.p.amethyst-half { background: rgba(155, 89, 182, 0.5); }
+
+.p.wisteria-half { background: rgba(142, 68, 173, 0.5); }
+
+.p.wet-asphalt-half { background: rgba(52, 73, 94, 0.5); }
+
+.p.midnight-blue-half { background: rgba(44, 62, 80, 0.5); }
+
+.p.sunflower-half { background: rgba(241, 196, 15, 0.5); }
+
+.p.orange-half { background: rgba(243, 156, 18, 0.5); }
+
+.p.carrot-half { background: rgba(230, 126, 34, 0.5); }
+
+.p.pumpkin-half { background: rgba(211, 84, 0, 0.5); }
+
+.p.alizarin-half { background: rgba(231, 76, 60, 0.5); }
+
+.p.pomegranate-half { background: rgba(192, 57, 43, 0.5); }
+
+.p.clouds-half { background: rgba(236, 240, 241, 0.5); }
+
+.p.silver-half { background: rgba(189, 195, 199, 0.5); }
+
+.p.concrete-half { background: rgba(149, 165, 166, 0.5); }
+
+.p.asbestos-half { background: rgba(127, 140, 141, 0.5); }
+
+.p.turquoise-semi { background: rgba(26, 188, 156, 0.75); }
+
+.p.green-sea-semi { background: rgba(22, 160, 133, 0.75); }
+
+.p.emerald-semi { background: rgba(46, 204, 113, 0.75); }
+
+.p.nephritis-semi { background: rgba(39, 174, 96, 0.75); }
+
+.p.peter-river-semi { background: rgba(52, 152, 219, 0.75); }
+
+.p.belize-hole-semi { background: rgba(41, 128, 185, 0.75); }
+
+.p.amethyst-semi { background: rgba(155, 89, 182, 0.75); }
+
+.p.wisteria-semi { background: rgba(142, 68, 173, 0.75); }
+
+.p.wet-asphalt-semi { background: rgba(52, 73, 94, 0.75); }
+
+.p.midnight-blue-semi { background: rgba(44, 62, 80, 0.75); }
+
+.p.sunflower-semi { background: rgba(241, 196, 15, 0.75); }
+
+.p.orange-semi { background: rgba(243, 156, 18, 0.75); }
+
+.p.carrot-semi { background: rgba(230, 126, 34, 0.75); }
+
+.p.pumpkin-semi { background: rgba(211, 84, 0, 0.75); }
+
+.p.alizarin-semi { background: rgba(231, 76, 60, 0.75); }
+
+.p.pomegranate-semi { background: rgba(192, 57, 43, 0.75); }
+
+.p.clouds-semi { background: rgba(236, 240, 241, 0.75); }
+
+.p.silver-semi { background: rgba(189, 195, 199, 0.75); }
+
+.p.concrete-semi { background: rgba(149, 165, 166, 0.75); }
+
+.p.asbestos-semi { background: rgba(127, 140, 141, 0.75); }
+
+/* Margin & Padding */
+.p.no-margin { margin: 0; }
+
+.p.m-top15 { margin-top: 15px; }
+
+.p.m-bottom15 { margin-bottom: 15px; }
+
+.p.p-top15 { padding-top: 15px; }
+
+/* Edge */
+.p.edge-bottom-nephritis { border-bottom: solid 1px #27ae60; }
+
+.p.edge-left-nephritis { border-left: solid 1px #27ae60; }
+
+.p.edge-bottom-belize-hole { border-bottom: solid 1px #2980b9; }
+
+.p.edge-left-belize-hole { border-left: solid 1px #2980b9; }
+
+.p.edge-top-silver { border-top: solid 1px #bdc3c7; }
+
+.p.edge-radius { border-radius: 5px; }
+
+/* Float */
+.p.left { float: left; }
+
+.p.right { float: right; }
+
+.p.clear { clear: both; }
+
+/* Layer */
+.p.layer { position: absolute; }
+
+.p.layer-relative { position: relative; }
+
+.p.layer-fixed { position: fixed; }
+
+.p.order-super { z-index: 1000; }
+
+.p.order-v { z-index: 500; }
+
+.p.order-iv { z-index: 400; }
+
+.p.order-iii { z-index: 300; }
+
+.p.order-ii { z-index: 200; }
+
+.p.order-i { z-index: 100; }
+
+/* Box */
+.p.box { display: block; margin: 10px 0; padding: 10px; background: rgba(0, 0, 0, 0.05); line-height: normal; }
+
+.p.box-align-center { margin-right: auto; margin-left: auto; }
+
+/* Absolutely area */
+.p.abs { overflow: hidden; }
+
+/* Extended */
+::-webkit-scrollbar { width: 10px; height: 12px; }
+
+::-webkit-scrollbar-button:start:decrement, ::-webkit-scrollbar-button:end:increment { display: black; }
+
+::-webkit-scrollbar-track { background-color: whitesmoke; box-shadow: inset 0 0 0 #d2d2d2, inset -1px 0 0 #e3e3e3; }
+
+::-webkit-scrollbar-track:hover { box-shadow: inset 1px 0 0 lightgray, inset -1px 0 0 #e3e3e3; }
+
+::-webkit-scrollbar-thumb { background-color: #cbcbcb; box-shadow: inset 1px 0 0 #b6b6b6, inset -1px 0 0 #b4b4b4, inset 0 1px 0 #afafaf, inset 0 -1px 0 #b5b5b5; }
+
+::-webkit-scrollbar-thumb:hover { background-color: #939393; box-shadow: inset 1px 0 0 #646464, inset -1px 0 0 #878787, inset 0 1px 0 #747474, inset 0 -1px 0 #747474; }
+
+::-webkit-scrollbar-thumb:active { background-color: #7a7a7a; box-shadow: inset 1px 0 0 #525252, inset -1px 0 0 #6d6d6d, inset 0 1px 0 #5f5f5f, inset 0 -1px 0 #5f5f5f; }

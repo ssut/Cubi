@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.exceptions import ObjectDoesNotExist
 
 from cubi.functions import day_to_string, minute_to_string
 from cubi.functions import imageinfo, imageinfo2
@@ -63,8 +64,10 @@ class CubiUser(AbstractUser):
 
     access_token = models.CharField("페이스북 엑세스 토큰", max_length=255, blank=True)
 
+
     # 즐겨찾기, ManyToMany로 연결
-    favorites = models.ManyToManyField('work.Work', related_name='user_by_favorites', blank=True)
+    # favorites = models.ManyToManyField('work.Work', related_name='user_by_favorites', blank=True)
+    # favorites = models.
     # 자신의 작품, ManyToMany로 연결
     own_works = models.ManyToManyField('work.Work', related_name='user_by_own_works', blank=True)
 
@@ -85,16 +88,93 @@ class CubiUser(AbstractUser):
             'created': minute_to_string(self.created),
         }
 
-    def add_favorite(self, work_instance):
-        self.favorites.add(work_instance)
+    '''
+    Get favorites
+
+    user = User.objects.get(id=id)
+    works = user.work_favorites
+    authors = user.author_favorites
+    '''
+    @property
+    def work_favorites(self):
+        favorites = UserWorkFavorites.objects.filter(user=self)
+        return favorites
+
+    @property
+    def author_favorites(self):
+        favorites = UserAuthorFavorites.objects.filter(user=self)
+        return favorites
+
+    def check_favorites_exist(self, inst):
+        from work.models import Work
+        if isinstance(inst, Work):
+            print self, inst
+            return UserWorkFavorites.objects.filter(user=self, work=inst).exists()
+        elif isinstance(inst, CubiUser):
+            return UserAuthorFavorites.objects.create(user=self, author=inst).exists()
+
+        return True
+
+    '''
+    Add favorites example
+
+    user = User.objects.get(id=id)
+    work = Work.objects.get(id=work_id)
+    author = User.objects.get(id=author_id)
+    user.add_favorites(work)
+    user.add_favorites(author)
+    '''
+    def add_favorites(self, inst):
+        from work.models import Work
+        if isinstance(inst, Work):
+            favorite = UserWorkFavorites.objects.create(user=self, work=inst)
+        elif isinstance(inst, CubiUser):
+            favorite = UserAuthorFavorites.objects.create(user=self, author=inst)
+
+        return favorite
+
+    '''
+    Delete favorites example
+
+    user = User.objects.get(id)
+    work = Work.objects.get(id=work_id)
+    author = User.objects.get(id=author_id)
+    try:
+        user.delete_favorites(work)
+        user.delete_favorites(author)
+    except ObjectDoesNotExist, e:
+        print 'favorite object does not exist'
+    '''
+    def delete_favorites(self, inst):
+        if isinstance(inst, UserWorkFavorites):
+            instance = UserWorkFavorites.objects.filter(user=self, work=inst)
+        elif isinstance(inst, UserAuthorFavorites):
+            instance = UserWorkFavorites.objects.filter(user=self, author=inst)
+
+        if instance.exists():
+            instance.delete()
+        else:
+            raise ObjectDoesNotExist()
 
     def add_work(self, work_instance):
         self.own_works.add(work_instance)
 
-    def remove_favorite(self, work_instance):
-        self.favorites.remove(work_instance)
-
     def remove_work(self, work_instance):
         self.own_works.remove(work_instance)
 
+
+class UserWorkFavorites(models.Model):
+    from work.models import Work
+    user = models.ForeignKey(CubiUser, related_name='work_favorites_by_user')
+    work = models.OneToOneField(Work, related_name='work_favorites_by_work')
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.user, self.work)
+
+class UserAuthorFavorites(models.Model):
+    user = models.ForeignKey(CubiUser, related_name='author_favorites_by_user')
+    author = models.ForeignKey(CubiUser, related_name='author_favorites_by_author')
+
+    def __unicode__(self):
+        return u'%s - %s' % (self.user, self.author)
 

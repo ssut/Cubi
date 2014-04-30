@@ -10,9 +10,11 @@ from django.views.decorators.http import require_http_methods
 # login
 from django.contrib.auth import authenticate, login, logout
 
-
+from work.models import Work
 from .models import CubiUser
 from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm, CubiUserEditForm, CubiUserPasswordChangeForm
+
+import json
 
 def signup(request):
     if request.method == 'POST':
@@ -163,3 +165,70 @@ def password_change(request):
             'form': form,
         }
         return render_to_response('member/passwordchange.html', d, RequestContext(request))
+
+@csrf_exempt
+def add_to_favorites(request):
+    user = request.user
+    _type = request.POST.get('type', None)
+    _id = request.POST.get('id', None)
+    if user is None or \
+        _id is None or \
+        _type is None or not request.is_ajax():
+        return HttpResponse('{}', content_type="application/json")
+
+    d = {
+        'success': False,
+        'message': '',
+    }
+
+    if _type == 'work':
+        work = Work.objects.filter(id=_id)
+        if not work.exists():
+            d['message'] = '존재하지 않는 작품입니다.'
+        elif user.check_favorites_exist(work[0]):
+            d['message'] = '이미 즐겨찾기에 등록된 작품입니다.'
+        else:
+            user.add_favorites(work[0])
+            d['success'] = True
+    elif _type == 'author':
+        author = CubiUser.objects.filter(id=_id)
+        if not author.exists():
+            d['message'] = '존재하지 않는 사용자입니다.'
+        elif user.check_favorites_exist(author[0]):
+            d['message'] = '이미 즐겨찾기에 등록된 작가입니다.'
+        else:
+            user.add_favorites(author[0])
+            d['succes'] = True
+
+    return HttpResponse(json.dumps(d), content_type="application/json")
+
+
+def get_favorites(request):
+    user = request.user
+    if user is None or not request.is_ajax():
+        return HttpResponse('{ "success": false }', content_type="application/json")
+
+    d = {
+        'success': False,
+        'data': {
+            'works': [],
+            'authors': [],
+        },
+    }
+
+    try:
+        d['data']['works'] = [{
+            'id': i.work.id,
+            'title': i.work.title,
+            'last_upload': i.work.last_upload.strftime('%Y-%m-%d'),
+            'author': i.work.author.nickname
+        } for i in user.work_favorites]
+        d['data']['authors'] = [{
+            'id': i.author.id,
+            'name': i.author.nickname
+        } for i in user.author_favorites]
+        d['success'] = True
+    except Exception, e:
+        print e
+
+    return HttpResponse(json.dumps(d), content_type="application/json")

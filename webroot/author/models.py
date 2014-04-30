@@ -2,11 +2,12 @@
 from django.db import models
 
 # Custom user model
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+# try:
+#     from django.contrib.auth import get_user_model
+#     User = get_user_model()
+# except ImportError:
+#     from django.contrib.auth.models import User
+from member.models import CubiUser as User
 
 from cubi.settings import DEFAULT_PROFILE_IMAGE
 from cubi.functions import minute_to_string

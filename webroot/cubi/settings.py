@@ -33,6 +33,17 @@ SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
 FACEBOOK_APP_ID = '442841165838586'
 FACEBOOK_APP_SECRET = '31a520eaf17fe3224f3c2b3151ebfae7'
 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+PIPELINE_CSS = {
+    'master': {
+        'source_filenames': (
+          'css/*',
+          ),
+        'output_filename': 'css/master.css',
+        'variant': 'datauri',
+    }
+}
+
 SITE_URL = 'http://192.168.56.1:8000'
 # SITE_URL = 'http://localhost:8000'
 DEFAULT_PROFILE_IMAGE = STATIC_URL + 'img/default_profile.png'
@@ -56,6 +67,7 @@ INSTALLED_APPS = (
     'kombu.transport.django',
     'djcelery',
     'registration',
+    'pipeline',
 
     'member',
     'board',
@@ -123,3 +135,4 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
