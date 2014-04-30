@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     # 챕터 뷰
     url(r'^chapter/view/(\d+)/$', 'work.views.chapter_view', name='chapter_view'),
 
+    # 작가 목록
+    url(r'^author/list/$', 'structure.views.author_list', name='author_list'),
+
     ## Member
     # 로그인
     url(r'^signin/$', 'member.views.signin', name='signin'),

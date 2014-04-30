@@ -139,8 +139,8 @@ class Work(models.Model):
     image_loading = models.ImageField(upload_to=path_image_work, blank=True)
     image_largeicon = models.ImageField(upload_to=path_image_work, blank=True)
     image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
-    last_upload = models.DateField(blank=True, null=True)
-    chapter_count = models.IntegerField(blank=True, null=True)
+    last_upload = models.DateField('마지막 챕터 업데이트 날짜', blank=True, null=True)
+    chapter_count = models.IntegerField('챕터 수', blank=True, null=True)
 
     @property
     def thumbnail_url(self):

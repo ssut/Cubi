@@ -1,0 +1,10 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+{% for author in authors %}
+프로필 이미지 : <img width="100px" src="{{ author.authorinfo_by_user.all.0.profile_image.url }}"><br>
+닉네임 : {{ author.authorinfo_by_user.all.0.nickname }}<br>
+한줄소개 : {{ author.authorinfo_by_user.all.0.introduce }}<br>
+<hr>
+{% endfor %}
+{% endblock %}
