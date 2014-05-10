@@ -89,11 +89,18 @@ class Comment(models.Model):
         }
 
 # 공통적으로 사용할 평점 클래스
-CHOICES_RATING = [(i,i+1) for i in range(10)]
 class Rating(models.Model):
+    # generate choices: tuple([(i, (i / 2.0)) for i in range(1, 11)])
+    RATING_CHOICES = (
+        (1, 0.5), (2, 1.0),
+        (3, 1.5), (4, 2.0),
+        (5, 2.5), (6, 3.0),
+        (7, 3.5), (8, 4.0),
+        (9, 4.5), (10, 5.0)
+    )
     author = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
-    score = models.IntegerField(choices=CHOICES_RATING)
+    score = models.IntegerField(choices=RATING_CHOICES)
 
     def __unicode__(self):
         return u'%s%s Rating(%d)' % (self.author.last_name, self.author.first_name, self.score)
