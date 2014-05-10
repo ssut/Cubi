@@ -212,6 +212,20 @@ class Chapter(models.Model):
     thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
     cover = models.ImageField(upload_to=get_image_chapter_cover_path, blank=True)
 
+    @property
+    def avg_rating(self):
+        dict = {}
+        ratings = ChapterRating.objects.filter(chapter=self)
+        avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
+        if avg_rating:
+            dict['rating'] = round(avg_rating / 2.0, 1)
+            dict['count'] = ratings.count()
+        else:
+            dict['rating'] = 0.0
+            dict['count'] = 0
+
+        return dict
+
     def __unicode__(self):
         return self.title
 
