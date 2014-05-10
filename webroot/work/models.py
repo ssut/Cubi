@@ -154,6 +154,20 @@ class Work(models.Model):
         chapter = Chapter.objects.filter(work=self).order_by('-reg_no')[0]
         return chapter.thumbnail.url
 
+    @property
+    def avg_rating(self):
+        dict = {}
+        ratings = ChapterRating.objects.filter(chapter__work=self)
+        avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
+        if avg_rating:
+            dict['rating'] = round(avg_rating / 2.0, 1)
+            dict['count'] = ratings.count()
+        else:
+            dict['rating'] = 0.0
+            dict['count'] = 0
+
+        return dict
+
     def __unicode__(self):
         return self.title
 
