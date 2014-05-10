@@ -17,9 +17,9 @@
 		url: '{{ media_url }}{{ image.image }}',
 		width: {{ image.image.width }},
 		height: {{ image.image.height }},
-		offset: {{ images|calc_offset:forloop.counter }}
+		offset: {{ images|calc_offset:forloop.counter }},
+		loaded: false
 	},
-
 	{% endfor %}];
 
 	var canvas = document.getElementById('view');
@@ -29,7 +29,9 @@
 	}
 	var ctx = canvas.getContext('2d');
 
-	$(images).each(function() {
+	var drawImage = function() {
+		if(this.loaded) return;
+		this.loaded = true;
 		var image = new Image();
 		image.src = this.url;
 		image.width = this.width;
@@ -37,9 +39,17 @@
 		image.setAttribute('data-offset', this.offset);
 
 		image.onload = function() {
-			console.log('load complete');
 			ctx.drawImage(this, 0, this.getAttribute('data-offset'), this.width, this.height);
 		}
+	};
+
+	$(window).scroll(function() {
+		var scrollTop = $(document).scrollTop();
+		{% for image in images %}
+		if(scrollTop > {{ images|calc_offset:forloop.counter }}) {
+			drawImage.call(images[{{ forloop.counter|add:"-1" }}]);
+		}
+		{% endfor %}
 	});
 })(jQuery);
 </script>
