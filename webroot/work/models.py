@@ -150,6 +150,14 @@ class Work(models.Model):
     chapter_count = models.IntegerField('챕터 수', blank=True, null=True)
 
     @property
+    def chapters_manager(self):
+        return self.chapter_by_work
+
+    @property
+    def chapters(self):
+        return self.chapters_manager.all()
+
+    @property
     def thumbnail_url(self):
         chapter = Chapter.objects.filter(work=self).order_by('-reg_no')[0]
         return chapter.thumbnail.url
