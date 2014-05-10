@@ -1,10 +1,46 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load aggerate_height %}
 
 {% block content %}
 
-{% for image in images %}
-<img src="{{ media_url }}{{ image.image }}"><br>
-{% endfor %}
+<canvas id="view" width="{{ images.first.image.width }}" height="{{ images|aggerate_height }}"></canvas>
+{% endblock %}
 
+{% block script %}
+<script src="{% static 'js/excanvas.min.js' %}"></script>
+<script>
+(function($) {
+	var images = [
+	{% for image in images %}
+	{
+		url: '{{ media_url }}{{ image.image }}',
+		width: {{ image.image.width }},
+		height: {{ image.image.height }},
+		offset: {{ images|calc_offset:forloop.counter }}
+	},
+
+	{% endfor %}];
+
+	var canvas = document.getElementById('view');
+	if (typeof G_vmlCanvasManager !== "undefined") {
+		G_vmlCanvasManager.init_(document);
+		G_vmlCanvasManager.initElement(canvas);
+	}
+	var ctx = canvas.getContext('2d');
+
+	$(images).each(function() {
+		var image = new Image();
+		image.src = this.url;
+		image.width = this.width;
+		image.height = this.height;
+		image.setAttribute('data-offset', this.offset);
+
+		image.onload = function() {
+			console.log('load complete');
+			ctx.drawImage(this, 0, this.getAttribute('data-offset'), this.width, this.height);
+		}
+	});
+})(jQuery);
+</script>
 {% endblock %}
