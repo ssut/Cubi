@@ -18,6 +18,14 @@ urlpatterns = patterns('',
     # 챕터 뷰
     url(r'^chapter/view/(\d+)/$', 'work.views.chapter_view', name='chapter_view'),
 
+    # 댓글 쓰기
+    url(r'^chapter/(\d+)/comment$', 'work.views.add_chapter_comment',
+            name='add_chapter_comment'),
+
+    # 평점 보내기
+    url(r'^chapter/(\d+)/rating$', 'work.views.add_chapter_rating',
+            name='add_chapter_rating'),
+
     # 작가 목록
     url(r'^author/list/$', 'structure.views.author_list', name='author_list'),
 

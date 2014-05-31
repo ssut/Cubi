@@ -3,8 +3,50 @@
 {% load aggerate_height %}
 
 {% block content %}
-
 <canvas id="view" width="{{ images.first.image.width }}" height="{{ images|aggerate_height }}"></canvas>
+
+<div>
+평균 별점: {{ avg_rating }}<br>
+{% if not user_rated and user.is_authenticated %}
+<form method="post" action="{% url "add_chapter_rating" chapter.id %}">
+	{% csrf_token %}
+	평점 남기기:
+	<select name="rating">
+		<option value="1">0.5</option>
+		<option value="2">1.0</option>
+		<option value="3">1.5</option>
+		<option value="4">2.0</option>
+		<option value="5">2.5</option>
+		<option value="6">3.0</option>
+		<option value="7">3.5</option>
+		<option value="8">4.0</option>
+		<option value="9">4.5</option>
+		<option value="10">5.0</option>
+	</select>
+	<input type="submit">
+</form>
+{% endif %}
+</div>
+
+<div>
+{% for comment in comments %}
+	<div>
+		<strong>{{ comment.author }}</strong>
+		<p>
+			{{ comment.content }}
+		</p>
+		<span>
+			{{ comment.created }}
+		</span>
+	</div>
+{% endfor %}
+<form action="{% url "add_chapter_comment" chapter.id %}" method="post">
+	{% csrf_token %}
+	댓글 남기기:
+	<input type="text" name="comment">
+	<input type="submit">
+</form>
+</div>
 {% endblock %}
 
 {% block script %}
