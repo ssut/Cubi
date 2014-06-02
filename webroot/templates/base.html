@@ -19,7 +19,7 @@
 	  {% block head %}
 	  {% endblock %}
 	</head>
-	<body>
+	<body class="{% if request.path != '/' %}not-index{% endif %}">
 		<header>
 			<section class="p w100p h45 edge-bottom-belize-hole peter-river-half layer-fixed order-v">
 				<section class="p w900 h45 box-align-center">
@@ -104,7 +104,7 @@
 			{% endblock %}
 			<section class="p clear"></section>
 		</section>
-		<footer class="p h100 edge-top-silver">
+		<footer class="p h100 edge-top-silver order-super">
 			<section class="p w900 box-align-center">
 				<h3 class="p left h100 font pt24 spacing-small color-midnight-blue">tinicube</h3>
 				<ul class="p right h100 no-list no-margin row-align">
