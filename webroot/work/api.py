@@ -15,6 +15,14 @@ from django.contrib.sessions.models import Session
 # exceptions
 from django.core.exceptions import ObjectDoesNotExist
 
+# Custom user model
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+# other
 import json
 
 from cubi.settings import MEDIA_URL
@@ -22,6 +30,53 @@ from cubi.functions import return_failed_json, return_success_json
 from work.models import *
 
 
+
+
+'''
+통합 앱 용 API
+    recent_update_chapter_list : 최근 업데이트 Chapter 목록
+    new_work_list : 신규 Work 목록
+    popular_work_list : 인기 Work 목록
+    new_author_list : 신규 Author 목록
+    popular_author_list : 인기 Author 목록
+'''
+# 최근 업데이트 Chapter 목록
+@require_http_methods(["POST"])
+@csrf_exempt
+def recent_update_chapter_list(request):
+    chapters = Chapter.objects.all().order_by('-created')[:10]
+    data = { 'chapters': [chapter.json() for chapter in chapters], }
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+# 신규 Work 목록
+@require_http_methods(["POST"])
+@csrf_exempt
+def new_work_list(request):
+    works = Work.objects.all().order_by('-created')[:10]
+    data = { 'works': [work.json() for work in works], }
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def popular_work_list(request):
+    works = Work.objects.all().order_by('-created')[:10]
+    data = { 'works': [work.json() for work in works], }
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def new_author_list(request):
+    authors = User.objects.filter(type='2').order_by('date_joined')[:10]
+    data = { 'authors': [author.json() for author in authors], }
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+@require_http_methods(["POST"])
+@csrf_exempt
+def popular_author_list(request):
+    authors = User.objects.filter(type='2').order_by('date_joined')[:10]
+    data = { 'authors': [author.json() for author in authors], }
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 '''
 Work

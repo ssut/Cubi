@@ -11,6 +11,9 @@ urlpatterns = patterns('member.api',
 )
 
 urlpatterns += patterns('work.api',
+    url(r'^tinicube/chapter/recentupdatelist/$', 'recent_update_chapter_list'),
+    url(r'^tinicube/work/newlist/$', 'new_work_list'),
+
     url(r'^work/list/$', 'work_list'),
     url(r'^work/comment/list/$', 'work_comment_list'),
     url(r'^work/comment/add/$', 'work_comment_add'),

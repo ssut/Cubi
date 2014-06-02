@@ -74,7 +74,7 @@ class CubiUser(AbstractUser):
     objects = CubiUserManager()
 
     def __unicode__(self):
-        return u'%s' % (self.nickname)
+        return u'%d] %s(%s)' % (self.id, self.nickname, self.email)
 
     def json(self):
         return {
