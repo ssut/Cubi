@@ -1,25 +1,51 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block content %}
-
-<div>
-	<img src="{{ media_url }}{{ work.thumbnail_url }}">
-	{{ work.title }} / {{ work.author }}<br>
-	연재 시작일 : {{ work.created }}<br>
-	최근 업로드 일자 : {{ work.last_upload }}<br>
-	<button id="add_to_favorites" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="mint" data-style="zoom-in" data-size="xs"><span class="ladda-label">Add Favorites</span></button>
-</div>
-<br><br><br><br><br><br><br><br>
-{% for chapter in chapters %}
-<a href="{% url 'chapter_view' chapter.id %}">
-<div>
-	<img src="{{ chapter.thumbnail.url }}">
-	{{ chapter.title }} / {{ chapter.created }}
-</div>
-</a>
-{% endfor %}
-
+{% block hcontent %}
+<section class="chapter">
+	<section class="p w900 box-align-center">
+		<section class="p layer-relative"><img src="{{ work.thumbnail_url }}" alt="" class="p w400 h200 layer">
+			<article class="p font layer-relative">
+			<h2>{{ work.title }}<span class="p show font pt10">{{ work.author }}</span></h2>
+				<p>{{ work.description }}</p>
+				<div class="p layer">
+				<button id="add_to_favorites" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">즐겨찾기 추가</span></button>
+				</div>
+			</article>
+		</section>
+		<nav class="p font text-align-center">
+			<ul class="p no-list no-margin edge-bottom-silver">
+			{% for chapter in chapters %}
+				<li class="p edge-top-silver">
+				<a href="{% url 'chapter_view' chapter.id %}" class="p no-line layer-relative show h100p font pt12">
+					<img src="{{ chapter.thumbnail.url }}" alt="" class="p layer">
+					<b class="p color-midnight-blue">{{ chapter.title }}</b>
+					<span class="p right font pt10 color-asbestos">{{ chapter.created|date:"Y/m/d" }}</span>
+				</a>
+				</li>
+			{% endfor %}
+			</ul>
+			<!--
+			<ul class="p no-list no-margin m-top15 box-align-center">
+				<li class="button p left"><a href="#"><img src="{% static 'img/icon.navigator.prev.png' %}" alt=""></a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">101</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">102</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">103</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">104</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12"><span class="p font weight-bold pt12">105</span></a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">106</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">107</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">108</a></li>
+				<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">109</a></li>
+				<li class="button p left"><a href="#"><img src="{% static 'img/icon.navigator.next.png' %}" alt=""></a></li>
+				<li class="p clear"></li>
+			</ul>
+			-->
+		</nav>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
 {% endblock %}
 
 {% block script %}

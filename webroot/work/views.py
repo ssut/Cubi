@@ -2,6 +2,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
 from cubi.functions import day_to_string
 from cubi.settings import MEDIA_URL
@@ -36,10 +37,50 @@ def chapter_list(request, work_id):
 def chapter_view(request, chapter_id):
     chapter = Chapter.objects.get(id=chapter_id)
     images = Image.objects.filter(chapter=chapter)
+    user = request.user
 
+    rating = chapter.avg_rating['rating'] if 'rating' in chapter.avg_rating else '0'
     d = {
+        'chapter': chapter,
         'images': images,
         'media_url': MEDIA_URL,
+        'avg_rating': rating,
+        'user_rated': False,
+        'comments': ChapterComment.objects.filter(chapter=chapter).order_by('-created')
     }
 
+    if user.is_authenticated:
+        rating = ChapterRating.objects.filter(chapter=chapter, author=user).exists()
+        if rating:
+            print rating
+            d['user_rated'] = True
+
     return render_to_response('work/chapter_view.html', d, RequestContext(request))
+
+def add_chapter_rating(request, chapter_id):
+    chapter = Chapter.objects.get(id=chapter_id)
+    user = request.user
+
+    if chapter and not ChapterRating.objects.filter(chapter=chapter, author=user).exists():
+        rating = ChapterRating.objects.create(
+            author=user,
+            score=int(request.POST.get('rating', '')),
+            chapter=chapter
+        )
+        url = reverse('chapter_view', chapter.id)
+        return HttpResponse('<script> location.replace("' + url + '") </script>')
+
+def add_chapter_comment(request, chapter_id):
+    chapter = Chapter.objects.get(id=chapter_id)
+    user = request.user
+    comment = request.POST.get('comment', '')
+
+    if chapter and len(comment) > 0:
+        comment = ChapterComment.objects.create(
+            author=user,
+            content=comment,
+            chapter=chapter
+        )
+        url = '/chapter/view/' + str(chapter.id)
+        return HttpResponse('<script> location.replace("' + url + '") </script>')
+

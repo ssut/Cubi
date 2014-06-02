@@ -2,20 +2,34 @@
 {% load staticfiles %}
 
 {% block content %}
+<section class="artworks">
+	<section class="p w900 h345 box-align-center m-top15">
+		<section class="p w900 h345 layer-relative">
+			<section class="p w900 h345 layer">
+				<section class="p alizarin w900 h345 layer"><img src="{% static 'img/_.sample01.png' %}"></section>
+				<section class="p emerald w900 h345 layer"><img src="{% static 'img/_.sample02.png' %}"></section>
+				<section class="p amethyst w900 h345 layer"><img src="{% static 'img/_.sample03.png' %}"></section>
+			</section>
+		</section>
+	</section>
 
-
-{% for work in works %}
-<a href="{% url 'chapter_list' work.id %}">
-<div>
-	<img src="{{ work.thumbnail_url }}">
-	{{ work.title }} / {{ work.author }}<br>
-	연재 시작일 : {{ work.created }}<br>
-	최근 업로드 일자 : {{ work.last_upload }}<br>
-</div>
-</a>
-<hr>
-
-{% endfor %}
-
-
+	{% for work in works %}
+		{% if forloop.counter|divisibleby:1 or forloop.first %}
+			<section class="p w900 box-align-center m-top30 p-top15 edge-top-silver">
+		{% endif %}
+		<section class="p w290 {% if forloop.counter|divisibleby:1 %}left{% endif %}{% if forloop.counter|divisibleby:2 %} m-horizon15{% endif %}{% if forloop.counter|divisibleby:3 %}right{% endif %}">
+			<h3 class="p m-bottom15 font pt12 weight-semibold h20">
+				<a href="{% url 'chapter_list' work.id %}" class="p no-line color-black left line-h20">{{ work.title }}</a>
+				<a href="{% url 'chapter_list' work.id %}" class="p no-line color-asbestos font pt10 right line-h20">{{ work.author }}</a></h3>
+			<a href="chapter.html"><img src="{{ work.thumbnail_url }}"></a>
+			<p class="p p-top15 font">{{ work.description }}</p>
+		</section>
+		{% if forloop.counter|divisibleby:3 or forloop.last %}
+			<section class="p clear"></section>
+			</section>
+		{% endif %}
+	{% endfor %}
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
 {% endblock %}
