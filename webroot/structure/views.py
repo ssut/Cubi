@@ -12,6 +12,10 @@ except ImportError:
 
 from work.models import *
 
+
+def temp(request):
+    return render_to_response('index/temp.html')
+
 def index(request):
     return render_to_response('index/index.html', RequestContext(request))
 
