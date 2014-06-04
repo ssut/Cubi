@@ -30,12 +30,16 @@ class NaverWebtoon(object):
         return last
 
     def count_comic(self, id):
-        url = urllib.urlopen('http://comic.naver.com/challenge/detail.nhn?titleId=%s&no=1' % ( id )).read()
-        # try:
-        print self._no.search(url)
-        no = int(self._no.search(url).group(1))
-        # except Exception, e:
-            # raise WebtoonDoesNotExist()
+        url = 'http://comic.naver.com/challenge/list.nhn?titleId=507102&page=%s' % (id)
+        page = BeautifulSoup(urllib.urlopen(url).read())
+        # document.querySelector('table.viewList td.title a').href
+        url = '%s%s' % ('http://comic.naver.com',
+            page.select('table.viewList td.title a')[0]['href'])
+        page = urllib.urlopen(url).read()
+        try:
+            no = int(self._no.search(page).group(1))
+        except Exception, e:
+            raise WebtoonDoesNotExist()
 
         return no
 
