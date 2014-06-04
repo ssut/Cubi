@@ -13,6 +13,10 @@ TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT_PATH = os.path.join(BASE_DIR, 'static_root')
 MEDIA_PATH = os.path.join(BASE_DIR, 'media')
+print 'BASE_DIR :', BASE_DIR
+print 'TEMPLATE_DIR :', TEMPLATE_PATH
+print 'STATIC_DIR :', STATIC_PATH
+print 'MEDIA_DIR :', MEDIA_PATH
 
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
