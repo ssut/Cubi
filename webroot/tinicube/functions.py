@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-SITE_URL = settings.SITE_URL
+# SITE_URL = settings.SITE_URL
 #Custom User model
 # try:
 #     from django.contrib.auth import get_user_model
@@ -14,7 +14,7 @@ from datetime import datetime, time, date
 import json
 
 
-default_image = 'http://192.168.56.1:8000/static/img/default_title.png'
+default_image = '/static/img/default_title.png'
 
 
 ### datetime -> String 변환 함수 ###
@@ -43,7 +43,7 @@ def imageinfo(instance):
         'has_image': True if instance else False,
         'width': instance.width if instance else '',
         'height': instance.height if instance else '',
-        'url': SITE_URL + instance.url if instance else '',
+        'url': instance.url if instance else '',
     }
 
 def imageinfo2(instance):
@@ -51,7 +51,7 @@ def imageinfo2(instance):
         'has_image': True if instance else False,
         'width': instance.width if instance else '',
         'height': instance.height if instance else '',
-        'url': SITE_URL + instance.url if instance else default_image,
+        'url': instance.url if instance else default_image,
     }
 
 # json리턴

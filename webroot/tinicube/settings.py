@@ -42,7 +42,7 @@ PIPELINE_CSS = {
     }
 }
 
-SITE_URL = 'http://192.168.56.1:8000'
+# SITE_URL = 'http://192.168.56.1:8000'
 # SITE_URL = 'http://localhost:8000'
 DEFAULT_PROFILE_IMAGE = STATIC_URL + 'img/default_profile.png'
 
