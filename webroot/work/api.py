@@ -56,6 +56,7 @@ def new_work_list(request):
     data = { 'works': [work.json() for work in works], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+# 인기 Work 목록
 @require_http_methods(["POST"])
 @csrf_exempt
 def popular_work_list(request):
@@ -63,6 +64,7 @@ def popular_work_list(request):
     data = { 'works': [work.json() for work in works], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+# 신규 Author 목록
 @require_http_methods(["POST"])
 @csrf_exempt
 def new_author_list(request):
@@ -70,7 +72,7 @@ def new_author_list(request):
     data = { 'authors': [author.json() for author in authors], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
-
+# 인기 Author 목록
 @require_http_methods(["POST"])
 @csrf_exempt
 def popular_author_list(request):

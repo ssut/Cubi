@@ -11,6 +11,7 @@ from member.models import CubiUser as User
 
 from cubi.settings import DEFAULT_PROFILE_IMAGE
 from cubi.functions import minute_to_string
+from cubi.functions import imageinfo, imageinfo2
 
 class WaitConvert(models.Model):
     user = models.ForeignKey(User)
@@ -33,3 +34,13 @@ class AuthorInfo(models.Model):
 
     def __unicode__(self):
         return u'%s%s\'s AuthorInfo' % (self.user.last_name, self.user.first_name)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'nickname': self.nickname,
+            'introduce_simple': self.introduce_simple,
+            'introduce_full': self.introduce_full,
+            'verified': self.verified,
+            'profile_image': imageinfo(self.profile_image),
+        }

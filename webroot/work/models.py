@@ -13,7 +13,6 @@ from member.models import CubiUser as User
 
 from cubi.functions import day_to_string, minute_to_string, time_to_string
 from cubi.functions import imageinfo, imageinfo2
-
 from cubi.settings import MEDIA_URL
 
 # Upload path
