@@ -188,8 +188,8 @@ def crawl(*args, **kargs):
 
         last_result = False
         for chapter in chapter_list:
-            if not Chapter.filter(reg_no=chapter['no'], work=work).exists():
-                last_result = crawl(type=type, comic_number=comic_number, chapter_number=chapter_list['no'], user=user)
+            if not Chapter.objects.filter(reg_no=chapter['no'], work=work).exists():
+                last_result = crawl(type=type, comic_number=comic_number, chapter_number=chapter['no'], user=user)
         
         return last_result
     elif args_len == 4: # 한 화만 선택해서 크롤링

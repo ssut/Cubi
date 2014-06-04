@@ -105,6 +105,7 @@ def list(comic_number):
             'rating': '',
             'date': item_date,
         }
+        print dict
         dict_list.append(dict)
 
     return dict_list
