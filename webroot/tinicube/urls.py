@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'^django_admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
-    # url(r'^$', 'structure.views.index', name='index'),
+    url(r'^index/$', 'structure.views.index', name='index'),
     url(r'^$', 'structure.views.temp', name='temp'),
 
     # 작품 목록
