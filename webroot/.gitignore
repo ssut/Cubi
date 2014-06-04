@@ -1,0 +1,4 @@
+static_root/
+media/
+db.sqlite3
+.python-version
