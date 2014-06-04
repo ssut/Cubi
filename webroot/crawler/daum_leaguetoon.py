@@ -105,7 +105,7 @@ def list(comic_number):
             'rating': '',
             'date': item_date,
         }
-        print dict
+        print '%s] %s (%s)' % (dict['no'], dict['title'], dict['date'])
         dict_list.append(dict)
 
     return dict_list
@@ -122,7 +122,8 @@ def detail(detail_num):
         br.open(url_open)
         response = br.open(url_detail)
     except Exception, e:
-        raise WebtoonChapterDoesNotExist()
+        # raise WebtoonChapterDoesNotExist()
+        pass
 
     title = page.select('span.episode_title')[0].text
 

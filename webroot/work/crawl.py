@@ -16,6 +16,23 @@ from PIL import Image as PIL_Image
 from cStringIO import StringIO
 import os
 
+# Log
+cur_path = os.path.dirname(os.path.abspath(__file__))
+log_file_path = os.path.join(cur_path, 'logger.txt')
+import logging
+from logging import handlers
+
+log = logging.getLogger('MyLogger')
+log.setLevel(logging.DEBUG)
+# 콘솔 출력과 파일 출력을 같이 사용
+conh = logging.StreamHandler()
+conh.setLevel(logging.DEBUG)
+fileh = handlers.RotatingFileHandler(log_file_path, maxBytes=1024, backupCount=5) # 로그 로테이션을 사용
+log.addHandler(conh)
+log.addHandler(fileh)
+
+
+
 REAL_PATH = ''
 FIELD_PATH = ''
 MEDIA_PATH = settings.MEDIA_ROOT
@@ -109,58 +126,80 @@ def make_chapter(chapter_dict, work, type):
     return chapter_instance, chapter_created
 
 def save_chapter_contents(chapter_instance, work, images, type):
+    log.debug('- Save Chapter Contents (Work:%s, ChapterNum:%s, ImagesNum:%s, Type:%s) -' % (work, str(chapter_instance.reg_no), len(images), type))
     chapter_number = chapter_instance.reg_no
     crop_list = get_croplist(images)
 
     # 크롭된 이미지 저장 후 Content instance 생성
     for i, image in enumerate(crop_list):
-        filename = u'%s_%s_%02d_%02d.jpg' % ( work.id, chapter_number, 0, i + 1 )
+        log.debug(' Crop List[%s] Process')
+
+        # 파일명 지정 (GIF, 그외)
+        if image.format == 'GIF':
+            filename = u'%s_%s_%02d_%02d.gif' % ( work.id, chapter_number, 0, i + 1 )
+        else:
+            filename = u'%s_%s_%02d_%02d.jpg' % ( work.id, chapter_number, 0, i + 1 )
+
+        log.debug('  Current Image(FileName:%s) Instance create' % (filename))
         fieldpath = get_field_path(filename)
         filepath = get_save_path(filename)
         
-        image.save(filepath, 'JPEG', quality=90)
+        # 이미지 저장 (GIF, 그외)
+        if image.format == 'GIF':
+            image.save(filepath, 'GIF')
+        else:
+            image.save(filepath, 'JPEG', quality=90)
 
         image_instance = Image(chapter=chapter_instance, sequence=i, image=fieldpath)
         image_instance.save()
+        log.debug('  Current Image(FileName:%s) Instance saved' % (filename))
+
+
 
 def get_croplist(images):
+    log.debug('  - Get Croplist (ImagesNum:%s) -' % (len(images)))
     combined_image = None
     image_list, crop_list = [], []
     image_width, image_height = 0, []
     # StringIO 에 담겨져있는 이미지를 PIL 이미지로 바꿔서 리스트에 저장
     for i, image in enumerate(images):
+        log.debug('      Current Image[%s] Process start' % (i))
         try:
             img = PIL_Image.open(images[i])
+            log.debug('        Current Image[%s] Open success' % (i))
         except Exception, e:
+            log.debug('        Current Image[%s] Open failed' % (i))
             pass
 
-        if img.mode != 'RGB':
-            img = img.convert('RGB')
-
-        image_list.append(img)
-        image_width = img.size[0]
-        image_height.append(img.size[1])
-
-    # 이미지를 하나로 합치기 위해서 전체 사이즈에 맞는 빈 이미지 생성
-    combined_image = PIL_Image.new('RGB', ( image_width, sum(image_height) ))
-    # 이미지 붙이기
-    for i, image in enumerate(image_list):
-        y = 0 if i == 0 else sum(image_height[:i])
-        combined_image.paste(image, ( 0, y, image_width, y + image_height[i] ))
-
-    # 이미지 자르기(every 2000px)
-    while combined_image.size[1] > 0:
-        if combined_image.size[1] > 2000:
-            crop_height = 2000
+        if img.format == 'GIF':
+            log.debug('        Current Image[%s] format is %s' % (i, img.format))
+            log.debug('        GIF File crop skip')
+            crop_list.append(img)
         else:
-            crop_height = combined_image.size[1]
+            if img.mode != 'RGB':
+                log.debug('        Current Image[%s] mode is %s' % (i, img.mode))
+                log.debug('        Current Image[%s] mode is not RGB' % (i))
+                # img = img.convert('RGB')
+                log.debug('        Current Image[%s] mode convert to RGB' % (i))
 
-        box1 = ( 0, 0, combined_image.size[0], crop_height )
-        crop_list.append(combined_image.crop(box1))
+            log.debug('          Crop Image every 2000px start')
+            while img.size[1] > 0:
+                if img.size[1] > 2000:
+                    log.debug('            Remain height > 2000')
+                    crop_height = 2000
+                else:
+                    log.debug('            Remain height < 2000, value:%s' % (img.size[1]))
+                    crop_height = img.size[1]
 
-        box2 = ( 0, crop_height, combined_image.size[0], combined_image.size[1] )
-        combined_image = combined_image.crop(box2)
+                box1 = (0, 0, img.size[0], crop_height)
+                crop_list.append(img.crop(box1))
 
+                box2 = (0, crop_height, img.size[0], img.size[1])
+                img = img.crop(box2)
+                log.debug('              Crop Image, Remain height:%s' % (img.size[1]))
+            log.debug('          Crop Image every 2000px end')
+
+    log.debug('      Current Image[%s] Process end\n' % (i))
     return crop_list
 
 # 웹툰 크롤링
