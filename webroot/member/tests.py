@@ -2,7 +2,7 @@
 from django.test import TestCase
 from django.test.client import Client
 import json
-from member.models import CubiUser
+from member.models import TinicubeUser
 
 class MemberAPITestCase(TestCase):
     def setUp(self):
@@ -15,5 +15,5 @@ class MemberAPITestCase(TestCase):
                 "nickname":"testnick1"
                 })
         #print signup_res
-        users = CubiUser.objects.filter(nickname="testnick1")[0]
+        users = TinicubeUser.objects.filter(nickname="testnick1")[0]
         self.assertEqual(users.nickname,"testnick1")

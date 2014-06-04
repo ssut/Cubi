@@ -26,7 +26,7 @@ STATIC_ROOT = STATIC_ROOT_PATH
 MEDIA_ROOT = MEDIA_PATH
 MEDIA_URL = '/media/'
 
-AUTH_USER_MODEL = 'member.CubiUser'
+AUTH_USER_MODEL = 'member.TinicubeUser'
 ACCOUNT_ACTIVATION_DAYS = 7
 
 SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
@@ -104,12 +104,12 @@ AUTHENTICATION_BACKENDS = (
     'member.backends.EmailAuthBackend',
     'member.backends.FacebookAuthBackend',
 )
-AUTH_USER_MODEL = 'member.CubiUser'
+AUTH_USER_MODEL = 'member.TinicubeUser'
 FACEBOOK_APP_ID = '232589236930454'
 FACEBOOK_API_SECRET = 'ba79942815fda6f882c626762cf964ed'
 
-ROOT_URLCONF = 'cubi.urls'
-WSGI_APPLICATION = 'cubi.wsgi.application'
+ROOT_URLCONF = 'tinicube.urls'
+WSGI_APPLICATION = 'tinicube.wsgi.application'
 
 DATABASES = {
     'default': {

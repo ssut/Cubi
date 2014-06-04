@@ -4,8 +4,8 @@ from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 from django.db.models import Q
 
-from cubi.functions import day_to_string
-from cubi.settings import MEDIA_URL
+from tinicube.functions import day_to_string
+from tinicube.settings import MEDIA_URL
 
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

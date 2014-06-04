@@ -21,7 +21,7 @@ except ImportError:
 # Authenticate
 from django.contrib.auth import authenticate, login
 
-from cubi.functions import return_failed_json, return_success_json
+from tinicube.functions import return_failed_json, return_success_json
 
 import json
 
@@ -53,7 +53,7 @@ def login(request):
 
         return HttpResponse(json.dumps(data), content_type='application/json')
 
-from .models import CubiUser
+from .models import TinicubeUser
 import django.core.exceptions
 
 @csrf_exempt
@@ -67,7 +67,7 @@ def signup(request):
         if None in [ email, password]:
             raise exceptions.FieldError
 
-        new_user = CubiUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
+        new_user = TinicubeUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
         data = {
             'user_data': new_user.json()
         }

@@ -13,11 +13,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
 from work.models import Work
-from .models import CubiUser
+from .models import TinicubeUser
 from .backends import FacebookAuthBackend
-from member.forms import CubiUserSignupForm, CubiUserSigninForm, CubiUserConvertToAuthorForm, CubiUserEditForm, CubiUserPasswordChangeForm
+from member.forms import TinicubeUserSignupForm, TinicubeUserSigninForm, TinicubeUserConvertToAuthorForm, TinicubeUserEditForm, TinicubeUserPasswordChangeForm
 
-from cubi import settings
+from tinicube import settings
 
 from rauth import OAuth2Service
 
@@ -33,22 +33,22 @@ facebook = OAuth2Service(
 
 def signup(request):
     if request.method == 'POST':
-        form = CubiUserSignupForm(request.POST)
+        form = TinicubeUserSignupForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             nickname = form.cleaned_data['nickname']
             password = form.cleaned_data['password']
 
-            if CubiUser.objects.filter(email=email).exists():
+            if TinicubeUser.objects.filter(email=email).exists():
                 error_msg = u'이미 사용중인 이메일 입니다'
                 d = {'return_status': 'failed', 'reason': error_msg}
                 return render_to_response('member/signup_failed.html', d, RequestContext(request))
-            elif CubiUser.objects.filter(nickname=nickname).exists():
+            elif TinicubeUser.objects.filter(nickname=nickname).exists():
                 error_msg = u'이미 사용중인 닉네임 입니다'
                 d = {'return_status': 'failed', 'reason': error_msg}
                 return render_to_response('member/signup_failed.html', d, RequestContext(request))
             else:
-                user = CubiUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
+                user = TinicubeUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
                 d = {'user': user}
                 return render_to_response('member/signup_complete.html', d, RequestContext(request))
         else:
@@ -56,7 +56,7 @@ def signup(request):
             d = {'return_status': 'failed', 'reason': error_msg}
             return render_to_response('member/signup_failed.html', d, RequestContext(request))
     else:
-        form = CubiUserSignupForm()
+        form = TinicubeUserSignupForm()
         d = {
             'form': form,
         }
@@ -64,7 +64,7 @@ def signup(request):
 
 def signin(request):
     if request.method == 'POST':
-        form = CubiUserSigninForm(request.POST)
+        form = TinicubeUserSigninForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
@@ -80,7 +80,7 @@ def signin(request):
             error_msg = u'로그인 양식의 내용이 올바르지 않습니다'
             return render_to_response('member/signin_failed.html', d, RequestContext(request))
     else:
-        form = CubiUserSigninForm()
+        form = TinicubeUserSigninForm()
         d = {
             'form': form,
         }
@@ -111,7 +111,7 @@ def signin_with_facebook_callback(request):
         return HttpResponse('<script> alert("페이스북 연결 실패"); location.replace("' + reverse('signin') + '") </script>')
 
     fbid = session.get('me').json()['id']
-    user = CubiUser.objects.filter(access_token=fbid)
+    user = TinicubeUser.objects.filter(access_token=fbid)
     if user.exists():
         user = authenticate(user_id=user[0].id)
         print user
@@ -171,7 +171,7 @@ def convert_to_author(request):
     if request.method == 'POST':
         pass
     else:
-        form = CubiUserConvertToAuthorForm()
+        form = TinicubeUserConvertToAuthorForm()
         d = {
             'form': form,
         }
@@ -181,7 +181,7 @@ def convert_to_author(request):
 def member_info(request):
     user = request.user
     if request.method == 'POST':
-        form = CubiUserEditForm(request.POST)
+        form = TinicubeUserEditForm(request.POST)
         if form.is_valid():
             # request한 user와 새로 들어온 form의 Password로 인증
             print user.email
@@ -214,7 +214,7 @@ def member_info(request):
         # print user.email
         # print user.nickname
         # print user.password
-        form = CubiUserEditForm(initial={'email': user.email, 'nickname': user.nickname})
+        form = TinicubeUserEditForm(initial={'email': user.email, 'nickname': user.nickname})
         d = {
             'form': form,
         }
@@ -224,7 +224,7 @@ def member_info(request):
 def password_change(request):
     user = request.user
     if request.method == 'POST':
-        form = CubiUserPasswordChangeForm(request.POST)
+        form = TinicubeUserPasswordChangeForm(request.POST)
         if form.is_valid():
             # request한 user와 새로 들어온 form의 Password로 인증
             print user.email
@@ -251,7 +251,7 @@ def password_change(request):
             error_msg = u'비밀번호 변경 양식의 내용이 올바르지 않습니다'
             return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))
     else:
-        form = CubiUserPasswordChangeForm()
+        form = TinicubeUserPasswordChangeForm()
         d = {
             'form': form,
         }
@@ -283,7 +283,7 @@ def add_to_favorites(request):
             user.add_favorites(work[0])
             d['success'] = True
     elif _type == 'author':
-        author = CubiUser.objects.filter(id=_id)
+        author = TinicubeUser.objects.filter(id=_id)
         if not author.exists():
             d['message'] = '존재하지 않는 사용자입니다.'
         elif user.check_favorites_exist(author[0]):

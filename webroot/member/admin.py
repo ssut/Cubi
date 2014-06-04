@@ -1,7 +1,7 @@
 from django.contrib import admin
-from member.models import CubiUser
+from member.models import TinicubeUser
 
-class CubiUserAdmin(admin.ModelAdmin):
+class TinicubeUserAdmin(admin.ModelAdmin):
     list_display = ['type', 'username', 'nickname']
 
-admin.site.register(CubiUser, CubiUserAdmin)
+admin.site.register(TinicubeUser, TinicubeUserAdmin)

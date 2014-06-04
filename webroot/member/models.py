@@ -3,8 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
 
-from cubi.functions import day_to_string, minute_to_string
-from cubi.functions import imageinfo, imageinfo2
+from tinicube.functions import day_to_string, minute_to_string
+from tinicube.functions import imageinfo, imageinfo2
 
 from django.utils.timezone import utc
 
@@ -20,7 +20,7 @@ TYPE_MEMBER_CHOICES = (
     ('2', '작가'),
 )
 
-class CubiUserManager(BaseUserManager):
+class TinicubeUserManager(BaseUserManager):
     def create_default_user(self, username, nickname, password, type='2', first_name='Admin', last_name='Cubi', email='Cubi@Cubi.in', gender='M', tel='000', access_token='000'):
         user = self.create_user(type=type, username=username, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
         return user
@@ -50,7 +50,7 @@ class CubiUserManager(BaseUserManager):
         user.save(using=self.db)
         return user
 
-class CubiUser(AbstractUser):
+class TinicubeUser(AbstractUser):
     # 이미 있는 것
     # username, first_name, last_name, email,
     # password, groups, user_permissions,
@@ -71,7 +71,7 @@ class CubiUser(AbstractUser):
     # 자신의 작품, ManyToMany로 연결
     own_works = models.ManyToManyField('work.Work', related_name='user_by_own_works', blank=True)
 
-    objects = CubiUserManager()
+    objects = TinicubeUserManager()
 
     def __unicode__(self):
         return u'%d] %s(%s)' % (self.id, self.nickname, self.email)
@@ -120,7 +120,7 @@ class CubiUser(AbstractUser):
         if isinstance(inst, Work):
             print self, inst
             return UserWorkFavorites.objects.filter(user=self, work=inst).exists()
-        elif isinstance(inst, CubiUser):
+        elif isinstance(inst, TinicubeUser):
             return UserAuthorFavorites.objects.create(user=self, author=inst).exists()
 
         return True
@@ -138,7 +138,7 @@ class CubiUser(AbstractUser):
         from work.models import Work
         if isinstance(inst, Work):
             favorite = UserWorkFavorites.objects.create(user=self, work=inst)
-        elif isinstance(inst, CubiUser):
+        elif isinstance(inst, TinicubeUser):
             favorite = UserAuthorFavorites.objects.create(user=self, author=inst)
 
         return favorite
@@ -175,15 +175,15 @@ class CubiUser(AbstractUser):
 
 class UserWorkFavorites(models.Model):
     from work.models import Work
-    user = models.ForeignKey(CubiUser, related_name='work_favorites_by_user')
+    user = models.ForeignKey(TinicubeUser, related_name='work_favorites_by_user')
     work = models.OneToOneField(Work, related_name='work_favorites_by_work')
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.work)
 
 class UserAuthorFavorites(models.Model):
-    user = models.ForeignKey(CubiUser, related_name='author_favorites_by_user')
-    author = models.ForeignKey(CubiUser, related_name='author_favorites_by_author')
+    user = models.ForeignKey(TinicubeUser, related_name='author_favorites_by_user')
+    author = models.ForeignKey(TinicubeUser, related_name='author_favorites_by_author')
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.author)

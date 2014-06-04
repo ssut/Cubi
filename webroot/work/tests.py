@@ -176,5 +176,5 @@ class WorkTest(TestCase):
             print "work mobile api comment list result", comment_list
             
         #print signup_res
-        #users = CubiUser.objects.all()[0]
+        #users = TinicubeUser.objects.all()[0]
         #self.assertEqual(users.nickname,"nick1")

@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand, CommandError
 from django.db import connection
-from member.models import CubiUser
+from member.models import TinicubeUser
 
 user_list = [
     {
@@ -10,7 +10,7 @@ user_list = [
         'nickname': 'darjeeling',
         'first_name': u'권한',
         'last_name': u'배',
-        'email': 'baekwonhan@cubi.in',
+        'email': 'baekwonhan@tinicube.in',
         'gender': 'M',
         'tel': '000',
         'access_token': '000',
@@ -21,7 +21,7 @@ user_list = [
         'nickname': 'Arcanelux',
         'first_name': u'한영',
         'last_name': u'이',
-        'email': 'leehanyeong@cubi.in',
+        'email': 'leehanyeong@tinicube.in',
         'gender': 'M',
         'tel': '000',
         'access_token': '000',
@@ -32,7 +32,7 @@ user_list = [
         'nickname': 'baejujin',
         'first_name': u'주진',
         'last_name': u'배',
-        'email': 'baejujin@cubi.in',
+        'email': 'baejujin@tinicube.in',
         'gender': 'M',
         'tel': '000',
         'access_token': '000',
@@ -43,7 +43,7 @@ user_list = [
         'nickname': 'ssut',
         'first_name': u'수훈',
         'last_name': u'한',
-        'email': 'hansuhun@cubi.in',
+        'email': 'hansuhun@tinicube.in',
         'gender': 'M',
         'tel': '000',
         'access_token': '000',
@@ -52,7 +52,7 @@ user_list = [
 def create_member():
     print '\n== Member모델 초기 데이터 설정 시작 ==\n'
     for user_dict in user_list:
-        user_instance, created = CubiUser.objects.get_or_create(
+        user_instance, created = TinicubeUser.objects.get_or_create(
             type=user_dict['type'],
             username=user_dict['username'],
             nickname=user_dict['nickname'],

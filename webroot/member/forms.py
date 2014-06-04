@@ -5,16 +5,16 @@ from django import forms
 from member.models import *
 from member.widgets import SplitInputWidget
 
-class CubiUserSignupForm(forms.Form):
+class TinicubeUserSignupForm(forms.Form):
     email = forms.EmailField()
     nickname = forms.CharField(max_length=20)
     password = forms.CharField(widget=forms.PasswordInput())
 
-class CubiUserSigninForm(forms.Form):
+class TinicubeUserSigninForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
 
-class CubiUserConvertToAuthorForm(forms.Form):
+class TinicubeUserConvertToAuthorForm(forms.Form):
     work_name = forms.CharField(label='작품 이름', max_length=100)
     work_url = forms.URLField(label='작품 주소 링크')
     last_name = forms.CharField(label='성', max_length=20)
@@ -32,12 +32,12 @@ class CubiUserConvertToAuthorForm(forms.Form):
         )
     )
 
-class CubiUserEditForm(forms.Form):
+class TinicubeUserEditForm(forms.Form):
     email = forms.EmailField()
     nickname = forms.CharField(max_length=20)
     password = forms.CharField(widget=forms.PasswordInput())
 
-class CubiUserPasswordChangeForm(forms.Form):
+class TinicubeUserPasswordChangeForm(forms.Form):
     original_password = forms.CharField(widget=forms.PasswordInput())
     new_password = forms.CharField(widget=forms.PasswordInput())
     new_password_confirm = forms.CharField(widget=forms.PasswordInput())

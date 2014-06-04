@@ -27,7 +27,7 @@ log.setLevel(logging.DEBUG)
 # 콘솔 출력과 파일 출력을 같이 사용
 conh = logging.StreamHandler()
 conh.setLevel(logging.DEBUG)
-fileh = handlers.RotatingFileHandler(log_file_path, maxBytes=1024, backupCount=5) # 로그 로테이션을 사용
+fileh = handlers.RotatingFileHandler(log_file_path, maxBytes=1024, backupCount=0) # 로그 로테이션을 사용
 log.addHandler(conh)
 log.addHandler(fileh)
 

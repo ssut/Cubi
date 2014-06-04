@@ -7,11 +7,11 @@ from django.db import models
 #     User = get_user_model()
 # except ImportError:
 #     from django.contrib.auth.models import User
-from member.models import CubiUser as User
+from member.models import TinicubeUser as User
 
-from cubi.settings import DEFAULT_PROFILE_IMAGE
-from cubi.functions import minute_to_string
-from cubi.functions import imageinfo, imageinfo2
+from tinicube.settings import DEFAULT_PROFILE_IMAGE
+from tinicube.functions import minute_to_string
+from tinicube.functions import imageinfo, imageinfo2
 
 class WaitConvert(models.Model):
     user = models.ForeignKey(User)

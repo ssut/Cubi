@@ -63,7 +63,7 @@ urlpatterns = patterns('',
     url(r'^reg_work/$', 'structure.views.reg_work', name='reg_work'),
 
     # API
-    url(r'^api/', include('cubi.urls_api')),
+    url(r'^api/', include('tinicube.urls_api')),
 
 
     url(r'^worklist/$', 'structure.views.work_list', name='work_list_api'),

@@ -25,8 +25,8 @@ except ImportError:
 # other
 import json
 
-from cubi.settings import MEDIA_URL
-from cubi.functions import return_failed_json, return_success_json
+from tinicube.settings import MEDIA_URL
+from tinicube.functions import return_failed_json, return_success_json
 from work.models import *
 
 
