@@ -83,7 +83,11 @@ class NaverWebtoon(object):
             tr.pop(0)
 
             for row in tr:
-                no = int(self._no.search(row.select('a')[0]['href']).group(1))
+                href = row.select('a')[0]['href']
+                try:
+                    no = int(self._no.search(href).group(1))
+                except:
+                    no = int(href[href.index("&no=")+4:])
                 thumbnail = row.select('img')[0]['src']
                 title = row.select('img')[0]['title']
                 rating = row.select('span.star + strong')[0].text
