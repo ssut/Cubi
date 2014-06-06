@@ -39,7 +39,7 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
-          'css/*',
+          'css/*.css',
           ),
         'output_filename': 'css/master.css',
         'variant': 'datauri',
