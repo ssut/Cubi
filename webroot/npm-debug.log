@@ -1,0 +1,54 @@
+info it worked if it ends with ok
+verbose cli [ 'node',
+verbose cli   '/usr/bin/npm',
+verbose cli   'install',
+verbose cli   'https://github.com/yui/yuglify.git' ]
+info using npm@1.1.4
+info using node@v0.6.12
+verbose config file /root/.npmrc
+verbose config file /usr/etc/npmrc
+verbose config file /usr/share/npm/npmrc
+verbose cache add [ 'https://github.com/yui/yuglify.git', null ]
+silly cache add: name, spec, args [ undefined,
+silly cache add: name, spec, args   'https://github.com/yui/yuglify.git',
+silly cache add: name, spec, args   [ 'https://github.com/yui/yuglify.git', null ] ]
+verbose parsed url { protocol: 'https:',
+verbose parsed url   slashes: true,
+verbose parsed url   host: 'github.com',
+verbose parsed url   hostname: 'github.com',
+verbose parsed url   href: 'https://github.com/yui/yuglify.git',
+verbose parsed url   pathname: '/yui/yuglify.git',
+verbose parsed url   path: '/yui/yuglify.git' }
+verbose addRemoteTarball [ 'https://github.com/yui/yuglify.git', null ]
+verbose mkdir (expected) error ENOENT, no such file or directory '/tmp/npm-1402062847095'
+verbose mkdir (expected) error ENOENT, no such file or directory '/tmp/npm-1402062847095/1402062847100-0.34738383954390883'
+verbose mkdir done: /tmp/npm-1402062847095/1402062847100-0.34738383954390883 755
+verbose fetch to /tmp/npm-1402062847095/1402062847100-0.34738383954390883/tmp.tgz
+http GET https://github.com/yui/yuglify.git
+http 200 https://github.com/yui/yuglify.git
+silly uid, gid for cache dir [ 0, 0 ]
+verbose mkdir (expected) error ENOENT, no such file or directory '/root/.npm'
+verbose mkdir done: /root/.npm 755
+verbose mkdir (expected) error ENOENT, no such file or directory '/tmp/npm-1402062847095/1402062847100-0.34738383954390883/___package.npm'
+verbose mkdir done: /tmp/npm-1402062847095/1402062847100-0.34738383954390883/___package.npm 755
+verbose unpack_ uid, gid [ 0, 0 ]
+verbose unpackTarget /tmp/npm-1402062847095/1402062847100-0.34738383954390883/package
+silly gunzTarPerm modes [ '755', '644' ]
+ERR! Not a package /tmp/npm-1402062847095/1402062847100-0.34738383954390883/tmp.tgz
+ERR! couldn't unpack /tmp/npm-1402062847095/1402062847100-0.34738383954390883/tmp.tgz to /tmp/npm-1402062847095/1402062847100-0.34738383954390883
+ERR! Error: ENOENT, no such file or directory '/tmp/npm-1402062847095/1402062847100-0.34738383954390883/___package.npm/package/package.json'
+ERR! You may report this log at:
+ERR!     <http://bugs.debian.org/npm>
+ERR! or use
+ERR!     reportbug --attach /srv/www/tinicube/webroot/npm-debug.log npm
+ERR! 
+ERR! System Linux 3.2.0-63-generic
+ERR! command "node" "/usr/bin/npm" "install" "https://github.com/yui/yuglify.git"
+ERR! cwd /srv/www/tinicube/webroot
+ERR! node -v v0.6.12
+ERR! npm -v 1.1.4
+ERR! path /tmp/npm-1402062847095/1402062847100-0.34738383954390883/___package.npm/package/package.json
+ERR! code ENOENT
+ERR! message ENOENT, no such file or directory '/tmp/npm-1402062847095/1402062847100-0.34738383954390883/___package.npm/package/package.json'
+ERR! errno {}
+verbose exit [ 1, true ]
