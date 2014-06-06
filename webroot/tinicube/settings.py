@@ -12,7 +12,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT_PATH = os.path.join(BASE_DIR, 'static_root')
-MEDIA_PATH = os.path.join(BASE_DIR, 'media')
+
+# 서비스용, 로컬 분리
+if os.uname() == 'Linux':
+    MEDIA_PATH = '/srv/www/tinicube_upload'
+else:
+    MEDIA_PATH = os.path.join(BASE_DIR, 'media')
+
 print 'BASE_DIR :', BASE_DIR
 print 'TEMPLATE_DIR :', TEMPLATE_PATH
 print 'STATIC_DIR :', STATIC_PATH
