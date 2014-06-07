@@ -24,3 +24,77 @@
 <hr>
 {% endfor %}
 {% endblock %}
+
+{% block hcontent %}
+<section class="my_artwork">
+	<section class="p w900 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt">작가 정보 관리</h1>
+	</section>
+	<section class="info p w900 box-align-center m-top15 p-top15 edge-top-silver">
+		<section class="thumbnail p left"><img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64"></section>
+		<article class="p right">
+			<h2 class="p font pt14 weight-thin color-wet-asphalt">{{ author_info.nickname }}</h2><span class="p font pt9 color-asbestos">{{ author_info.introduce_simple }}</span>
+		</article>
+		<p class="p clear font pt10 color-asbestos">{{ author_info.introduce_full }}</p>
+	</section>
+	<section class="list-head p w900 m-top15 p-top15 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt left">나의 작품 목록</h1>
+		<button class="p font pt9 color-white right" onclick="location.href = '{% url 'author:addwork' %}'">작품 추가</button>
+	</section>
+	<section class="list p w900 box-align-center m-top15 p-top15 edge-top-silver">
+		{% for work in works %}
+		<section class="item p m-top15 p-top15">
+			<section class="cover p left"><img src="{{ work.thumbnail_url }}" alt="" width="290" height="145"></section>
+			<article class="p right layer-relative">
+				<h2 class="p font weight-thin pt14"><a href="{% url 'chapter_list' work.id %}">{{ work.title }}</a></h2><span class="p font pt9 color-asbestos">{{ work.description }}</span>
+				<div class="p layer font pt11 color-wet-asphalt"><span>총 연재 횟수 : {{ work.chapters.count }}회 /&nbsp;</span>{% if work.avg_rating.count > 0 %}<span>평균 별점 점수 : {{ work.avg_rating.rating }}점</span>{% endif %}</div>
+			</article>
+			{% if 1 == 2 %}
+			<section class="status p clear p-top15">
+				<section class="p left">
+					<section><span class="p left font pt9 color-white">웹</span>
+						<section class="toggle p left">
+							<section class="p layer-relative"><span class="p font pt9 layer">게재 완료</span>
+								<button class="p layer"></button><span class="p font pt9 layer">게재 중단</span>
+							</section>
+							<section class="p clear"></section>
+						</section>
+					</section>
+					<section class="p clear"></section>
+				</section>
+				<section class="p left">
+					<section><span class="p left font pt9 color-white">통합 애플리케이션</span>
+						<section class="toggle p left">
+							<section class="p layer-relative"><span class="p font pt9 layer">게재 완료</span>
+								<button class="p layer"></button><span class="p font pt9 layer">게재 중단</span>
+							</section>
+							<section class="p clear"></section>
+						</section>
+					</section>
+					<section class="p clear"></section>
+				</section>
+				<section class="p left">
+					<section><span class="p left font pt9 color-white">개별 애플리케이션</span>
+						<section class="toggle p left">
+							<section class="p layer-relative"><span class="p font pt9 layer">게재 완료</span>
+								<button class="p layer"></button><span class="p font pt9 layer">게재 중단</span>
+							</section>
+							<section class="p clear"></section>
+						</section>
+					</section>
+					<section class="p clear"></section>
+				</section>
+			</section>
+			{% endif %}
+			<section class="p clear"></section>
+		</section>
+		{% endfor %}
+
+		{% if works.count == 0 %}
+		<section class="blank p w900 h100 font pt12 color-asbestos">등록된 작품이 없습니다.<span class="p show font pt9">지금 바로 작품을 등록하여 연재를 시작하세요!</span></section>
+		{% endif %}
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}
