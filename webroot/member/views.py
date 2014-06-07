@@ -74,11 +74,18 @@ def signin(request):
                 return redirect('index')
             else:
                 error_msg = u'로그인에 실패하였습니다. 이메일과 비밀번호를 확인해주세요'
-                d = {'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/signin_failed.html', d, RequestContext(request))
+                d = {
+                    'form': form,
+                    'error': error_msg,
+                }
+                return render_to_response('member/signin.html', d, RequestContext(request))
         else:
             error_msg = u'로그인 양식의 내용이 올바르지 않습니다'
-            return render_to_response('member/signin_failed.html', d, RequestContext(request))
+            d = {
+                'form': form,
+                'error': error_msg,
+            }
+            return render_to_response('member/signin.html', d, RequestContext(request))
     else:
         form = TinicubeUserSigninForm()
         d = {
