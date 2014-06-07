@@ -57,3 +57,5 @@ webroot/media/
 .idea/
 somain.iml
 workspace.xml
+
+/webroot/logger.txt
