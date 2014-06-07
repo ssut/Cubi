@@ -65,10 +65,8 @@ def create_member():
         if created:
             user_instance.set_password(user_dict['username'])
             user_instance.save()
-            print u'\tUser [%s%s]\t\t생성' % (user_instance.last_name, user_instance.first_name)
-        else:
-            print u'\tUser [%s%s]\t\t이미있음' % (user_instance.last_name, user_instance.first_name)
 
+        print user_instance.email, created
 
 
     print '\n== Member모델 초기 데이터 설정 완료 ==\n'
