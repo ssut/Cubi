@@ -189,4 +189,11 @@ def addwork_info(request):
         d = {'form': form}
         return render_to_response('author/addwork_info.html', d, RequestContext(request))
 
-
+'''
+Author - ChapterList (작가의 작품목록에서 작품 클릭시 이쪽으로 넘어옴)
+    작품의 모든 챕터 보여줌
+    작품이 웹툰 자동 크롤링 상태일 때, reload버튼 필요
+    특정 Chapter를 보이지 않도록 하는 옵션 필요 (visibility조절)
+'''
+def chapter_list(request):
+    pass
