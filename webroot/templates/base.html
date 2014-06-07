@@ -11,6 +11,8 @@
 	<script src="{% static 'js/jquery.min.js' %}"></script>
 	<script src="{% static 'js/jquery.color.min.js' %}"></script>
 	<script src="{% static 'js/jquery.steps.min.js' %}"></script>
+	<script src="{% static 'js/selectivizr.js' %}"></script>
+	<script src="{% static 'js/placeholder.js' %}"></script>
 	<script src="{% static 'js/hexagon.js' %}"></script>
 	<script src="{% static 'js/ladda.min.js' %}"></script>
 	<script src="{% static 'js/tinicube.js' %}"></script>
@@ -20,7 +22,7 @@
 	  {% block head %}
 	  {% endblock %}
 	</head>
-	<body class="{% if request.path != '/' %}not-index{% endif %}">
+	<body class="{% if request.path != '/' and request.path != '/index/' %}not-index{% endif %}">
 		<header>
 			<section class="p w100p h45 edge-bottom-belize-hole peter-river-half layer-fixed order-v">
 				<section class="p w900 h45 box-align-center">
