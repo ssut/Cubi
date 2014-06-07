@@ -13,3 +13,28 @@
 	</div>
 </div>
 {% endblock %}
+
+{% block hcontent %}
+<section class="my_artwork_agreement">
+	<section class="p w900 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt">작품 연재 약관</h1>
+	</section>
+	<section class="p w900 box-align-center m-top15 p-top15 edge-top-silver">
+		<section class="textarea p wet-asphalt">
+			<textarea readonly="readonly" class="p transparent read-only font color-white">
+				니돈 다 내꺼
+			</textarea>
+		</section>
+		<section class="agree p p-top15">
+			<div>
+				<div></div>
+			</div><span class="p font pt9">약관에 동의합니다.</span>
+		</section>
+		<form id="signup-form" method="POST">{% csrf_token %}
+			<button disabled="disabled" class="p font peter-river color-white">다음</button>
+		</form>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}

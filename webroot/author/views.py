@@ -20,25 +20,18 @@ def introduce(request):
 
 # 작품 업로드 약관 동의
 def agreement(request):
-    if request.method == 'POST':
+    if request.method == 'POST': # 여기로 온 이상 무조건 동의한걸로 간주
         query_dict = request.POST
-        print query_dict
-        agreement_value = query_dict.get('agreement', 'false')
-        if agreement_value == 'true':
-            # 업로드 동의 시, 유저 타입을 2(작가)로 변경함
-            user = request.user
-            user.type = '2'
-            user.save()
+        # 업로드 동의 시, 유저 타입을 2(작가)로 변경함
+        user = request.user
+        user.type = '2'
+        user.save()
 
-            # 동시에 AuthorInfo인스턴스 만들어 배정
-            authorinfo_instance = AuthorInfo(user=user, nickname=user.nickname)
-            authorinfo_instance.save()
+        # 동시에 AuthorInfo인스턴스 만들어 배정
+        authorinfo_instance = AuthorInfo(user=user, nickname=user.nickname)
+        authorinfo_instance.save()
 
-            return redirect('author:index')
-        else:
-            error_msg = u'약관에 동의하셔야 합니다'
-            d = {'return_status': 'failed', 'reason': error_msg}
-            return render_to_response('author/agreement_failed.html', d, RequestContext(request))
+        return redirect('author:index')
     else:
         return render_to_response('author/agreement.html', RequestContext(request))
 
