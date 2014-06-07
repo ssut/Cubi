@@ -14,9 +14,9 @@
 			</article>
 		</section>
 		<nav class="p font text-align-center">
-			<ul class="p no-list no-margin edge-bottom-silver {% if chapter.work.author == user %}my-work{% endif %}">
+			<ul class="p no-list no-margin edge-bottom-silver {% if work.author == user %}my-work{% endif %}">
 			{% for chapter in chapters %}
-				{% if chapter.public %}
+				{% if chapter.public or chapter.work.author == user %}
 					<li class="p edge-top-silver">
 					<a href="{% url 'chapter_view' chapter.id %}" class="p no-line layer-relative show h100p font pt12">
 						<img src="{{ chapter.thumbnail.url }}" alt="" class="p layer">
@@ -79,19 +79,20 @@ $(function() {
 		});
 	});
 
-	{% if chapter.work.author == user %}
-	$('.update-chapter[data-id]').click(function() {
+	{% if work.author == user %}
+	$('.update-chapter').click(function() {
+		alert(1);
 		var l = $(this).ladda();
 		l.ladda('start');
 
 		$.ajax({
 			type: 'POST',
-			url: '{% url 'work.update_chapter' %}',
+			url: '{% url 'update_chapter' %}',
 			data: {
 				type: 'update',
 				id: $(this).data('id'),
 				csrfmiddlewaretoken: csrfToken,
-			}
+			},
 			success: function(data) {
 				alert(data.success ? '갱신 요청이 완료되었습니다.' : data.message);
 				l.ladda('stop');
@@ -99,21 +100,28 @@ $(function() {
 		});
 	});
 
-	$('.update-chapter-public[data-id]').click(function() {
+	$('.update-chapter-public').click(function() {
 		var l = $(this).ladda();
 		l.ladda('start');
 
 		$.ajax({
 			type: 'POST',
-			url: '{% url 'work.update_chapter' %}',
+			url: '{% url 'update_chapter' %}',
 			data: {
 				type: 'public',
 				id: $(this).data('id'),
 				csrfmiddlewaretoken: csrfToken,
 			},
+			context: this,
 			success: function(data) {
 				alert(data.message);
 				l.ladda('stop');
+
+				if(data.public) {
+					$(this).find('span').text('공개');
+				} else {
+					$(this).find('span').text('비공개');
+				}
 			}
 		});
 	});

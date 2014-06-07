@@ -27,6 +27,9 @@ urlpatterns = patterns('',
     url(r'^chapter/(\d+)/rating$', 'work.views.add_chapter_rating',
             name='add_chapter_rating'),
 
+    # (작가 전용) 작품 업데이트 (공개설정 변경, 갱신)
+    url(r'^chapter/update$', 'work.views.update_chapter', name='update_chapter'),
+
     # 작가 목록
     url(r'^author/list/$', 'structure.views.author_list', name='author_list'),
 

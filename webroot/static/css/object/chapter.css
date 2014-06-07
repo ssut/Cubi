@@ -1,0 +1,11 @@
+section.chapter ul.my-work li {
+	height: 80px !important;
+}
+
+section.chapter ul.my-work li a {
+	height: 45px !important;
+}
+
+section.chapter ul.my-work li div {
+	margin: 5px 0 0;
+}

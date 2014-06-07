@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+import json
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
@@ -83,4 +85,24 @@ def add_chapter_comment(request, chapter_id):
         )
         url = '/chapter/view/' + str(chapter.id)
         return HttpResponse('<script> location.replace("' + url + '") </script>')
+
+def update_chapter(request):
+    if request.method == 'POST':
+        t = request.POST.get('type', '')
+        i = request.POST.get('id', '')
+        chapter = Chapter.objects.get(id=i)
+        if not chapter:
+            return
+
+        if t == 'update': pass
+        elif t == 'public':
+            chapter.public = not chapter.public
+            chapter.save()
+            d = {
+                'message': (u'공개 설정되었습니다.' if chapter.public else u'비공개 설정되었습니다.'),
+                'public': chapter.public,
+            }
+            return HttpResponse(json.dumps(d), content_type='application/json')
+
+
 
