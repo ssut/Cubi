@@ -14,7 +14,8 @@ STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT_PATH = os.path.join(BASE_DIR, 'static_root')
 
 # 서비스용, 로컬 분리
-if os.uname() == 'Linux':
+print 'os.uname() :', os.uname()[0]
+if os.uname()[0] == 'Linux' or os.uname()[0] == u'Linux':
     MEDIA_PATH = '/srv/www/tinicube_upload'
 else:
     MEDIA_PATH = os.path.join(BASE_DIR, 'media')

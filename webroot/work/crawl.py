@@ -19,7 +19,15 @@ import os
 # Log
 cur_path = os.path.dirname(os.path.abspath(__file__))
 base_path = os.path.dirname(cur_path)
-log_file_path = os.path.join(base_path, 'logger.txt')
+
+# 서비스용, 로컬 분리
+print 'os.uname() :', os.uname()[0]
+if os.uname()[0] == 'Linux' or os.uname()[0] == u'Linux':
+    log_file_path = '/srv/www/tinicube_logger.txt'
+else:
+    log_file_path = os.path.join(base_path, 'logger.txt')
+
+
 import logging
 from logging import handlers
 

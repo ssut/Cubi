@@ -14,7 +14,7 @@
 {% for work in works %}
 <a href="{% url 'chapter_list' work.id %}">
 <div>
-	<img src="{{ work.thumbnail.url }}">
+	<img src="{{ work.thumbnail_url }}">
 	{{ work.title }} / {{ work.author }}<br>
 	연재 시작일 : {{ work.created }}<br>
 	최근 업로드 일자 : {{ work.last_upload }}<br>
