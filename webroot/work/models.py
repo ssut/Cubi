@@ -198,7 +198,7 @@ class Work(models.Model):
 # 작품 댓글
 class WorkComment(Comment):
     work = models.ForeignKey(Work)
-    
+
     def __unicode__(self):
         return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.work.title)
 
@@ -218,6 +218,7 @@ class Chapter(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
     cover = models.ImageField(upload_to=get_image_chapter_cover_path, blank=True)
+    public = models.BooleanField(default=True)
 
     @property
     def avg_rating(self):

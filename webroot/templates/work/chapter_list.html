@@ -14,15 +14,23 @@
 			</article>
 		</section>
 		<nav class="p font text-align-center">
-			<ul class="p no-list no-margin edge-bottom-silver">
+			<ul class="p no-list no-margin edge-bottom-silver {% if chapter.work.author == user %}my-work{% endif %}">
 			{% for chapter in chapters %}
-				<li class="p edge-top-silver">
-				<a href="{% url 'chapter_view' chapter.id %}" class="p no-line layer-relative show h100p font pt12">
-					<img src="{{ chapter.thumbnail.url }}" alt="" class="p layer">
-					<b class="p color-midnight-blue">{{ chapter.title }}</b>
-					<span class="p right font pt10 color-asbestos">{{ chapter.created|date:"Y/m/d" }}</span>
-				</a>
-				</li>
+				{% if chapter.public %}
+					<li class="p edge-top-silver">
+					<a href="{% url 'chapter_view' chapter.id %}" class="p no-line layer-relative show h100p font pt12">
+						<img src="{{ chapter.thumbnail.url }}" alt="" class="p layer">
+						<b class="p color-midnight-blue">{{ chapter.title }}</b>
+						<span class="p right font pt10 color-asbestos">{{ chapter.created|date:"Y/m/d" }}</span>
+					</a>
+					{% if chapter.work.author == user %}
+					<div>
+					<button class="update-chapter ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">갱신</span></button>
+					<button class="update-chapter-public ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">{% if chapter.public %}비{% endif %}공개</span></button>
+					</div>
+					{% endif %}
+					</li>
+				{% endif %}
 			{% endfor %}
 			</ul>
 			<!--
@@ -49,9 +57,9 @@
 {% endblock %}
 
 {% block script %}
-{% csrf_token %}
 <script>
 $(function() {
+	var csrfToken = $("{% csrf_token %}").val();
 	$('#add_to_favorites').click(function() {
 		var l = $(this).ladda();
 		l.ladda('start');
@@ -62,7 +70,7 @@ $(function() {
 			data: {
 				type: 'work',
 				id: $(this).data('id'),
-				csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+				csrfmiddlewaretoken: csrfToken,
 			},
 			success: function(data) {
 				alert(data.success ? '즐겨찾기에 등록되었습니다.' : data.message);
@@ -70,6 +78,46 @@ $(function() {
 			}
 		});
 	});
+
+	{% if chapter.work.author == user %}
+	$('.update-chapter[data-id]').click(function() {
+		var l = $(this).ladda();
+		l.ladda('start');
+
+		$.ajax({
+			type: 'POST',
+			url: '{% url 'work.update_chapter' %}',
+			data: {
+				type: 'update',
+				id: $(this).data('id'),
+				csrfmiddlewaretoken: csrfToken,
+			}
+			success: function(data) {
+				alert(data.success ? '갱신 요청이 완료되었습니다.' : data.message);
+				l.ladda('stop');
+			}
+		});
+	});
+
+	$('.update-chapter-public[data-id]').click(function() {
+		var l = $(this).ladda();
+		l.ladda('start');
+
+		$.ajax({
+			type: 'POST',
+			url: '{% url 'work.update_chapter' %}',
+			data: {
+				type: 'public',
+				id: $(this).data('id'),
+				csrfmiddlewaretoken: csrfToken,
+			},
+			success: function(data) {
+				alert(data.message);
+				l.ladda('stop');
+			}
+		});
+	});
+	{% endif %}
 });
 </script>
 {% endblock %}
