@@ -133,6 +133,7 @@ class WorkCategory(models.Model):
 # 작품
 class Work(models.Model):
     work_num = models.IntegerField(blank=True)
+    work_target = models.CharField(max_length=10)
     category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
     title = models.CharField(max_length=200)
@@ -305,7 +306,7 @@ class ChapterQueue(models.Model):
     chapter_number = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     is_checked = models.BooleanField(default=False)
-    checked_at = models.DateTimeField(blank=True)
+    checked_at = models.DateTimeField(blank=True, null=True)
     is_succeeded = models.BooleanField(default=False)
 
 # 주기적으로 실행될 셀러리 큐

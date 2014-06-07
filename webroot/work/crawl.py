@@ -97,8 +97,14 @@ def get_work(comic_number, user, type):
     comic_description = comic_info['description']
     comic_genre = comic_info['genre']
 
-    work_category, work_category_created = WorkCategory.objects.get_or_create(title=u'웹툰')
-    work, work_created = Work.objects.get_or_create(work_num=comic_number, category=work_category, title=comic_title, description=comic_description, author=user)
+    work_category, work_category_created = WorkCategory.objects.get_or_create(
+        title=u'웹툰')
+    work, work_created = Work.objects.get_or_create(work_num=comic_number,
+        work_target=type,
+        category=work_category,
+        title=comic_title,
+        description=comic_description,
+        author=user)
 
     work.description = comic_description
     work.save()

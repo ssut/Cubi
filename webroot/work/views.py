@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
 import json
 
+from datetime import datetime
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
@@ -93,8 +95,29 @@ def update_chapter(request):
         chapter = Chapter.objects.get(id=i)
         if not chapter:
             return
+        work = chapter.work
 
-        if t == 'update': pass
+        if t == 'update':
+            d = {}
+            queue = ChapterQueue.objects.filter(target=work.work_target,
+                comic_number=work.work_num,
+                chapter_number=chapter.reg_no,
+                is_checked=False)
+            if queue:
+                d['success'] = False
+                d['message'] = u'이미 등록된 큐가 있습니다.'
+            else:
+                queue = ChapterQueue.objects.create(
+                    target=work.work_target,
+                    user=request.user,
+                    comic_number=work.work_num,
+                    chapter_number=chapter.reg_no,
+                    checked_at=datetime.now()
+                    )
+                d['success'] = True
+                d['message'] = u'큐에 등록되었습니다.'
+
+            return HttpResponse(json.dumps(d), content_type='application/json')
         elif t == 'public':
             chapter.public = not chapter.public
             chapter.save()
