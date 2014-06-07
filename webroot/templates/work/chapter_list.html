@@ -25,6 +25,12 @@
 					</a>
 					{% if chapter.work.author == user %}
 					<div>
+					<button class="update-chapter-thumbnail ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs">
+						<div>
+							<input type="file" accept="image/*">
+							<input type="button" class="ladda-label" value="이미지 변경">
+						</div>
+					</button>
 					<button class="update-chapter ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">갱신</span></button>
 					<button class="update-chapter-public ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">{% if chapter.public %}비{% endif %}공개</span></button>
 					</div>
@@ -121,6 +127,38 @@ $(function() {
 					$(this).find('span').text('비공개');
 				} else {
 					$(this).find('span').text('공개');
+				}
+			}
+		});
+	});
+
+	$('.update-chapter-thumbnail input:first-child').change(function() {
+		var l = $(this).parent().parent().ladda();
+		var id = $(this).parent().parent().data('id');
+		$(this).attr('disabled', 'disabled');
+		l.ladda('start');
+
+		var file = this.files[0];
+		var data = new FormData();
+		if(!file) { return; }
+		data.append('csrfmiddlewaretoken', csrfToken);
+		data.append('type', 'thumbnail');
+		data.append('id', id);
+		data.append('image', file);
+
+		$.ajax({
+			url: '{% url 'update_chapter' %}',
+			data: data,
+			cache: false,
+			contentType: false,
+			processData: false,
+			type: 'POST',
+			success: function(data) {
+				if(data.success) {
+					alert('미리보기 파일이 변경되었습니다.');
+					location.reload();
+				} else {
+					alert(data.message);
 				}
 			}
 		});

@@ -1,7 +1,9 @@
 #-*- coding: utf-8 -*-
 import json
+import StringIO
 
 from datetime import datetime
+from PIL import Image as PIL_Image
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
@@ -126,6 +128,24 @@ def update_chapter(request):
                 'public': chapter.public,
             }
             return HttpResponse(json.dumps(d), content_type='application/json')
+        elif t == 'thumbnail':
+            image = request.FILES.get('image', '')
+            d = {
+                'success': False,
+                'message': '',
+            }
+            try:
+                io = StringIO.StringIO()
+                for chunk in image.chunks():
+                    io.write(chunk)
+                io.seek(0)
+                im = PIL_Image.open(io)
+                im.thumbnail((210, 90), PIL_Image.ANTIALIAS)
+                im.save(chapter.thumbnail.path, 'JPEG')
+            except Exception, e:
+                d['message'] = str(e)
+            else:
+                d['success'] = True
 
-
+            return HttpResponse(json.dumps(d), content_type='application/json')
 

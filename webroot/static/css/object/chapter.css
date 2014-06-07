@@ -9,3 +9,31 @@ section.chapter ul.my-work li a {
 section.chapter ul.my-work li div {
 	margin: 5px 0 0;
 }
+
+
+button.update-chapter-thumbnail div {
+	position: relative;
+	overflow: hidden;
+	display: inline;
+}
+
+button.update-chapter-thumbnail div input:first-child {
+	position: absolute;
+	right: 0;
+	top: 0;
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+}
+button.update-chapter-thumbnail div input[type="button"] {
+	border: 0;
+	background: transparent;
+	margin: 0;
+	padding: 0;
+	color: #FFF;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	z-index: 0;
+};
