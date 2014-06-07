@@ -36,4 +36,8 @@ button.update-chapter-thumbnail div input[type="button"] {
 	position: absolute;
 	top: 0;
 	z-index: 0;
-};
+}
+
+textarea, input {
+	-webkit-user-select: initial !important;
+}

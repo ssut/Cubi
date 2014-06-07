@@ -49,6 +49,102 @@
 </div>
 {% endblock %}
 
+{% block chapter_header %}
+<h4 class="p left h45 font pt18 color-white">
+	<a href="./" class="p no-line color-white">tinicube</a>
+	<span class="p hide color-wet-asphalt"><b>{{ work.title }}</b><span>&nbsp;:&nbsp;{{ chapter.title }}</span></span>
+</h4>
+{% endblock %}
+{% block hcontent %}
+<section class="view">
+	<section class="p w1000 box-align-center text-align-center">
+	<canvas id="view" width="{{ images.first.image.width }}" height="{{ images|aggerate_height }}"></canvas>
+		<!--<nav>
+			<ul class="p no-list">
+				<li class="button p left"><a href="#"><img src="{% static 'img/icon.navigator.view.prev.png' %}" alt=""></a></li>
+				<li class="p left"><a href="#" class="p no-line"><img src="rsrc/img/_.sample04.png" alt=""><span class="p font pt9 weight-thin color-asbestos">705</span></a></li>
+				<li class="p left"><a href="#" class="p no-line"><img src="rsrc/img/_.sample05.png" alt=""><span class="p font pt9 weight-thin color-asbestos">706</span></a></li>
+				<li class="p left"><a href="#" class="p no-line"><img src="rsrc/img/_.sample06.png" alt=""><span class="p font pt9 weight-thin color-asbestos">707</span></a></li>
+				<li class="p left"><a href="#" class="p no-line"><img src="rsrc/img/_.sample07.png" alt=""><span class="p font pt9 weight-thin color-asbestos">708</span></a></li>
+				<li class="p left"><a href="#" class="p no-line"><img src="rsrc/img/_.sample08.png" alt=""><span class="p font pt9 weight-thin color-asbestos">709</span></a></li>
+				<li class="button p left"><a href="#"><img src="{% static 'img/icon.navigator.view.next.png' %}" alt=""></a></li>
+			</ul>
+			<section class="p clear"></section>
+		</nav>-->
+	</section>
+	<section class="p edge-top-silver m-top15 clouds">
+		<section class="p w900 box-align-center p-top15">
+			<section class="p left h100 layer-relative">
+				<h4 class="p font weight-regular pt12">작가의 말<span class="p font weight-thin pt12 color-asbestos">&nbsp;({{ work.author }})</span></h4>
+				<p>{{ work.author.authorinfo_by_user.all.0.introduce_simple }}</p>
+				<section class="p layer">
+					<section class="p font left peter-river color-white pt9 layer-relative">
+						<form method="post" id="rating_form" action="{% url "add_chapter_rating" chapter.id %}">
+							{% csrf_token %}
+						</form>
+						{% if not user_rated and user.is_authenticated %}
+						<section id="rating" class="p left">●●◐○○<b>2.5</b></section>
+						<nav class="p layer">
+							<ul class="p no-list no-margin">
+								<li><a><span>●●●●●</span><b>5.0</b></a></li>
+								<li><a><span>●●●●◐</span><b>4.5</b></a></li>
+								<li><a><span>●●●●○</span><b>4.0</b></a></li>
+								<li><a><span>●●●◐○</span><b>3.5</b></a></li>
+								<li><a><span>●●●○○</span><b>3.0</b></a></li>
+								<li><a><span>●●◐○○</span><b>2.5</b></a></li>
+								<li><a><span>●●○○○</span><b>2.0</b></a></li>
+								<li><a><span>●◐○○○</span><b>1.5</b></a></li>
+								<li><a><span>●○○○○</span><b>1.0</b></a></li>
+								<li><a><span>◐○○○○</span><b>0.5</b></a></li>
+							</ul>
+						</nav>
+						<a href="javascript:$('#rating_form').submit()" class="p font pt9 no-line color-white right">주기</a>
+						{% else %}
+						<section id="rating" class="p left">{{ rating_str }}<b>{{ avg_rating }}</b></section>
+						<a class="p font pt9 no-line color-white right">별점</a>
+						{% endif %}
+					</section><!--<a href="javascript:function(){add_to_favorite()}()" class="p right peter-river font pt9 text-align-center color-white no-line">즐겨찾기 추가</a>-->
+				</section>
+			</section>
+			<section class="p right w300 h100 emerald"><a href="#" class="p left"><img src="{% static 'img/icon.share.twitter.png' %}" alt=""></a><a href="#" class="p left nephritis"><img src="{% static 'img/icon.share.facebook.png' %}" alt=""></a><a href="#" class="p left"><img src="{% static 'img/icon.share.kakao.png' %}" alt=""></a></section>
+			<section class="p clear"></section>
+			<section class="comment p m-top15 edge-top-silver p-top15">
+				<h4 class="p font pt12">댓글 달기</h4>
+				<form action="{% url "add_chapter_comment" chapter.id %}" method="post">{% csrf_token %}
+					<textarea placeholder="욕설 및 비방 등 규정에 위반되는 댓글은 삭제될 수 있습니다." class="p left font color-midnight-blue" name="comment"></textarea>
+					<button type="submit" class="p right font color-white">작성</button>
+				</form>
+				<section class="p clear">
+					{% for comment in comments %}
+						<article class="p m-top15 p-top15">
+							<h5 class="p font weight-bold pt10">{{ comment.author }}&nbsp;<span>via&nbsp;<span>Tinicube&nbsp;</span></span><span>when&nbsp;<span>{{ comment.created }}</span></span></h5>
+							<p class="p font">{{ comment.content }}</p>
+						</article>
+					{% endfor %}
+				</section>
+				<p class="p clear">&nbsp;</p>
+				<!--<ul class="p no-list no-margin m-top15 box-align-center">
+					<li class="button p left"><a href="#"><img src="rsrc/img/icon.navigator.prev.png" alt=""></a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">101</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">102</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">103</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">104</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12"><span class="p font weight-bold pt12">105</span></a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">106</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">107</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">108</a></li>
+					<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12">109</a></li>
+					<li class="button p left"><a href="#"><img src="rsrc/img/icon.navigator.next.png" alt=""></a></li>
+					<li class="p clear"></li>
+				</ul>-->
+			</section>
+		</section>
+	</section>
+	<script>declare(_chapter_view)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}
+
 {% block script %}
 <script src="{% static 'js/excanvas.min.js' %}"></script>
 <script>
@@ -85,16 +181,24 @@
 		}
 	};
 
+	var winHeight = $(window).height();
 	$(window).scroll(function() {
 		var scrollTop = $(document).scrollTop();
 		{% for image in images %}
-		if(scrollTop > {{ images|calc_offset:forloop.counter }}) {
+		if(scrollTop + winHeight > {{ images|calc_offset:forloop.counter }}) {
 			drawImage.call(images[{{ forloop.counter|add:"-1" }}]);
 		}
 		{% endfor %}
 	});
 
-	if(images[0]) { drawImage(images[0]); }
+	if(images[0]) { drawImage.call(images[0]); }
+
+	var rating = $('#rating');
+	$('#rating_form').submit(function() {
+		var r = parseInt(parseFloat(rating.find('b').text()) * 2.0);
+		var input = $('<input type="hidden" name="rating">').val(r);
+		$(this).append(input);
+	});
 })(jQuery);
 </script>
 {% endblock %}

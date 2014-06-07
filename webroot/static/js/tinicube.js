@@ -150,4 +150,55 @@
     });
   });
 
+  glob(function() {
+    return $('body > section.my_artwork_agreement .agree').click(function() {
+      if ($(this).child('div').hasClass('selected')) {
+        $(this).child('div').removeClass('selected');
+        return $('body > section.my_artwork_agreement button').attr('disabled', 'disabled');
+      } else {
+        $(this).child('div').addClass('selected');
+        return $('body > section.my_artwork_agreement button').removeAttr('disabled');
+      }
+    });
+  });
+
+  glob(function() {
+    return $('body > section.my_artwork > section.list section.status section.toggle').click(function() {
+      $(this).toggleClass('inverse');
+      if ($(this).hasClass('inverse')) {
+        $(this).find('section.p.layer-relative').animate({
+          left: -60
+        }, 250);
+        $(this).find('button').animate({
+          backgroundColor: 'rgb(149, 165, 166)'
+        }, 250);
+      } else {
+        $(this).find('section.p.layer-relative').animate({
+          left: 0
+        }, 250);
+        $(this).find('button').animate({
+          backgroundColor: 'rgb(41, 128, 185)'
+        }, 250);
+      }
+      return true;
+    });
+  });
+
+  glob(function() {
+    $('body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section').click(function() {
+      return $(this).toggleClass('open');
+    });
+    $('body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li a').click(function() {
+      return $('body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section.open section').html($(this).html());
+    });
+    return $('body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > a').click(function() {
+      $(this).toggleClass('remove');
+      if ($(this).hasClass('remove')) {
+        return $(this).html('즐겨찾기 삭제');
+      } else {
+        return $(this).html('즐겨찾기 추가');
+      }
+    });
+  });
+
 }).call(this);

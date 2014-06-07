@@ -147,6 +147,10 @@ a img {
   border: 0;
 }
 
+input {
+  -webkit-user-select: initial;
+}
+
 /* Specific condition */
 a.p.no-line {
   text-decoration: none;
@@ -154,6 +158,10 @@ a.p.no-line {
 
 ul.p.no-list {
   list-style: none;
+}
+
+textarea.p.read-only {
+  border: 0;
 }
 
 /* Showing */
@@ -552,6 +560,10 @@ form.p input[type=text].p.white:focus, form.p input[type=password].p.white:focus
 
 .p.asbestos, .p.asbestos-half, .p.asbestos-semi {
   background: #7f8c8d;
+}
+
+.p.transparent {
+  background: transparent;
 }
 
 .p.turquoise-half {

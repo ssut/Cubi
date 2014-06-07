@@ -127,6 +127,10 @@ ul.p.row-align li {
   color: #7f8c8d;
 }
 
+.p.color-emerald {
+  color: #2ecc71;
+}
+
 .p.text-shadow {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
 }
@@ -444,6 +448,12 @@ body > section.chapter nav ul:first-child li a img {
 body > section.chapter nav ul:first-child li a > * {
   line-height: 45px;
 }
+body > section.chapter nav ul:first-child li a b {
+  line-height: 35px;
+}
+body > section.chapter nav ul:first-child li a b > span {
+  margin-top: -10px;
+}
 body > section.chapter nav ul:nth-child(2) {
   display: inline-block;
 }
@@ -473,6 +483,227 @@ body > section.chapter nav ul:nth-child(2) li.button a {
   line-height: normal;
 }
 body > section.chapter nav ul:nth-child(2) li.p.clear {
+  width: 0;
+  height: 0;
+}
+body > section.view > section:first-child nav ul {
+  width: 600px;
+  margin: 0 auto;
+}
+body > section.view > section:first-child nav li {
+  width: 100px;
+  height: 125px;
+  margin-left: 15px;
+  overflow: hidden;
+}
+body > section.view > section:first-child nav li.button {
+  width: 20px;
+  margin: 0;
+}
+body > section.view > section:first-child nav li.button a {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+}
+body > section.view > section:first-child nav li.button a img {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  padding: 40px 0;
+}
+body > section.view > section:first-child nav ul li:nth-child(2) {
+  margin: 0;
+}
+body > section.view > section:first-child nav li img {
+  width: 98px;
+  height: 98px;
+  border: solid 1px rgba(0, 0, 0, 0.55);
+}
+body > section.view > section:first-child nav li span {
+  line-height: 25px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child {
+  width: 585px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child h4 {
+  height: 30px;
+  line-height: 30px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child p {
+  height: 60px;
+  padding-top: 10px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section {
+  width: 235px;
+  top: 0;
+  right: 0;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > * {
+  cursor: pointer;
+  width: 95px;
+  height: 30px;
+  border-radius: 5px;
+  line-height: 30px;
+  transition: background 0.25s linear;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > *:first-child {
+  width: 130px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > a.remove {
+  background: #e74c3c;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > a:active {
+  background: #2980b9;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > a.remove:active {
+  background: #c0392b;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section b {
+  display: inline-block;
+  padding-left: 5px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section > section {
+  width: 95px;
+  height: 20px;
+  padding: 5px 0;
+  border-radius: 5px 0 0 0;
+  text-align: center;
+  line-height: 20px;
+  transition: background 0.125s linear;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav {
+  display: none;
+  width: 95px;
+  border-radius: 0 0 5px 5px;
+  top: 30px;
+  left: 0;
+  transition: display 0.125s linear;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li {
+  width: 95px;
+  height: 30px;
+  text-align: center;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li a {
+  display: block;
+  width: 95px;
+  height: 30px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li a:hover {
+  background: rgba(255, 255, 255, 0.125);
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li a:active {
+  background: rgba(0, 0, 0, 0.125);
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li:nth-child(even) {
+  background: #27ae60;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section nav li:last-child {
+  border-radius: 0 0 5px 5px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section > a {
+  width: 25px;
+  height: 20px;
+  padding: 5px;
+  border-radius: 0 5px 5px 0;
+  line-height: 20px;
+  transition: background 0.125s linear;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section > a:active {
+  background: #2980b9;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section.open section {
+  background: #2980b9;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:first-child > section > section.open nav {
+  display: block;
+  background: #2ecc71;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:nth-child(2) {
+  border-radius: 10px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section:nth-child(2) a {
+  width: 100px;
+  height: 100px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment {
+  text-align: center;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment h4 {
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 5px;
+  text-align: left;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment textarea {
+  width: 789px;
+  max-width: 789px;
+  height: 28px;
+  max-height: 28px;
+  padding: 5px;
+  border: solid 1px #3498db;
+  border-right-width: 0;
+  border-radius: 5px 0 0 5px;
+  background: white;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment button {
+  cursor: pointer;
+  width: 100px;
+  height: 40px;
+  border: 0;
+  border-radius: 0 5px 5px 0;
+  background: #3498db;
+  transition: background 0.125s linear;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment button:active {
+  background: #2980b9;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment section {
+  text-align: left;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment section article {
+  border-top: dashed 1px #7f8c8d;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment section article:first-child {
+  border: 0;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment section article h5 span {
+  font-weight: normal;
+  color: #7f8c8d;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment section article p {
+  padding-top: 5px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul * {
+  display: inline-block;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul li {
+  display: block;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 0 0 9px;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul li a {
+  line-height: 24px;
+  text-align: center;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul li a span {
+  color: #e74c3c;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul li:first-child {
+  padding: 0;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul li.button a {
+  width: 12px;
+  height: 12px;
+  padding: 6px;
+  line-height: normal;
+}
+body > section.view > section:nth-child(2) > section:first-child > section.comment ul li.p.clear {
   width: 0;
   height: 0;
 }
@@ -526,6 +757,187 @@ body > section.login > section form.p div > * {
 }
 body > section.login.fail > section form.p div > * {
   line-height: 45px;
+}
+body > section.my_artwork_agreement .textarea {
+  padding: 15px;
+  border-radius: 10px;
+}
+body > section.my_artwork_agreement textarea {
+  width: 855px;
+  height: 170px;
+  padding-right: 15px;
+  overflow: auto;
+  word-break: break-all;
+}
+body > section.my_artwork_agreement .agree {
+  cursor: pointer;
+  display: inline-block;
+  height: 25px;
+}
+body > section.my_artwork_agreement .agree > * {
+  float: left;
+}
+body > section.my_artwork_agreement .agree > div {
+  width: 9px;
+  height: 9px;
+  margin: 5px 5px 5px 0;
+  border: solid 3px #bdc3c7;
+  border-radius: 3px;
+  background: #bdc3c7;
+}
+body > section.my_artwork_agreement .agree > div.selected div {
+  width: 9px;
+  height: 9px;
+  border-radius: 1.5px;
+  background: #34495e;
+}
+body > section.my_artwork_agreement .agree span {
+  line-height: 25px;
+}
+body > section.my_artwork_agreement button {
+  cursor: pointer;
+  display: block;
+  width: 290px;
+  height: 35px;
+  margin: 10px auto;
+  padding: 5px;
+  border: 0;
+  border-radius: 5px;
+}
+body > section.my_artwork_agreement button[disabled='disabled'] {
+  cursor: default;
+  background: #bdc3c7;
+  color: #ecf0f1;
+}
+body > section.my_artwork_agreement button:active {
+  background: #2980b9;
+}
+body > section.my_artwork_agreement button[disabled='disabled'] {
+  background: #bdc3c7;
+}
+body > section.my_artwork > section.info section.thumbnail {
+  width: 62px;
+  height: 62px;
+  border: solid 1px rgba(0, 0, 0, 0.25);
+  background: white url(../img/_.sample13.png) no-repeat 0 0;
+}
+body > section.my_artwork > section.info article {
+  width: 821px;
+  height: 32px;
+  padding: 15px 0;
+}
+body > section.my_artwork > section.info p {
+  padding-top: 10px;
+}
+body > section.my_artwork > section.list-head {
+  height: 25px;
+}
+body > section.my_artwork > section.list-head button {
+  cursor: pointer;
+  margin: 5px 0;
+  padding: 5px 10px 5px 22px;
+  border: 0;
+  border-radius: 5px;
+  background: #3498db url(../img/icon.plus.png) no-repeat 8px 50%;
+  transition: background 0.2s linear;
+}
+body > section.my_artwork > section.list-head button:active {
+  background-color: #2980b9;
+}
+body > section.my_artwork > section.list section.blank {
+  border: dashed 1px #95a5a6;
+  border-radius: 15px;
+  text-align: center;
+  line-height: 85px;
+}
+body > section.my_artwork > section.list section.blank span {
+  margin-top: -30px;
+}
+body > section.my_artwork > section.list section.blank:last-child {
+  margin-top: 15px;
+}
+body > section.my_artwork > section.list section.item.p:first-child {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+body > section.my_artwork > section.list section.item {
+  border-top: dashed 1px #bdc3c7;
+}
+body > section.my_artwork > section.list section.item section.cover {
+  width: 290px;
+  height: 145px;
+}
+body > section.my_artwork > section.list section.item article {
+  width: 595px;
+  height: 105px;
+  padding: 10px 0;
+}
+body > section.my_artwork > section.list section.item div {
+  bottom: 0;
+  left: 0;
+}
+body > section.my_artwork > section.list section.item:nth-child(1) section.cover {
+  background: url(../img/_.sample04.png);
+}
+body > section.my_artwork > section.list section.item:nth-child(2) section.cover {
+  background: url(../img/_.sample05.png);
+}
+body > section.my_artwork > section.list section.item:nth-child(3) section.cover {
+  background: url(../img/_.sample06.png);
+}
+body > section.my_artwork > section.list section.item:nth-child(4) section.cover {
+  background: url(../img/_.sample07.png);
+}
+body > section.my_artwork > section.list section.status > section > section > span {
+  display: inline-block;
+  height: 20px;
+  padding: 5px 10px;
+  border-radius: 5px 0 0 5px;
+  background: #1abc9c;
+  line-height: 20px;
+}
+body > section.my_artwork > section.list section.status section.toggle {
+  cursor: pointer;
+  display: block;
+  width: 90px;
+  height: 20px;
+  margin-right: 20px;
+  padding: 5px;
+  border-radius: 0 5px 5px 0;
+  background: #3498db;
+  color: white;
+  overflow: hidden;
+  transition: all 0.25s linear;
+}
+body > section.my_artwork > section.list section.status section.toggle section.p.layer-relative {
+  height: 20px;
+}
+body > section.my_artwork > section.list section.status section.toggle span {
+  display: inline-block;
+  width: 55px;
+  height: 20px;
+  padding-right: 5px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  line-height: 20px;
+}
+body > section.my_artwork > section.list section.status section.toggle span:nth-child(3) {
+  left: 90px;
+}
+body > section.my_artwork > section.list section.status section.toggle button {
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  border: 0;
+  border-radius: 5px;
+  background: #2980b9;
+  top: 0;
+  left: 60px;
+}
+body > section.my_artwork > section.list section.status section.toggle.inverse {
+  background: #bdc3c7;
 }
 
 footer {

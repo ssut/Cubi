@@ -8,6 +8,12 @@
     }
   });
 
+  $.fn.extend({
+    child: function(selector) {
+      return $(this).children(selector);
+    }
+  });
+
   hex = function() {};
 
   hex.ctx = (function() {

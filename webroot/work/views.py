@@ -42,15 +42,27 @@ def chapter_list(request, work_id):
 
 def chapter_view(request, chapter_id):
     chapter = Chapter.objects.get(id=chapter_id)
+    work = chapter.work
     images = Image.objects.filter(chapter=chapter)
     user = request.user
 
     rating = chapter.avg_rating['rating'] if 'rating' in chapter.avg_rating else '0'
+    tmp_rating = rating
+    rating_str = ''
+    for i in range(int(rating)):
+        rating_str += u'●'
+        tmp_rating -= 1
+    if tmp_rating > 0:
+        rating_str += u'◐'
+    for i in range(5 - len(rating_str)):
+        rating_str += u'○'
     d = {
         'chapter': chapter,
+        'work': work,
         'images': images,
         'media_url': MEDIA_URL,
         'avg_rating': rating,
+        'rating_str': rating_str,
         'user_rated': False,
         'comments': ChapterComment.objects.filter(chapter=chapter).order_by('-created')
     }
