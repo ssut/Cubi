@@ -103,7 +103,7 @@ def get_work(comic_number, user, type):
         work_target=type,
         category=work_category,
         title=comic_title,
-        description=comic_description,
+        description_full=comic_description,
         author=user)
 
     work.description = comic_description
