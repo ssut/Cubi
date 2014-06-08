@@ -31,7 +31,7 @@
 			<input id="id_password" name="password" type="password" placeholder="Password" class="p white">
 			<input id="id_password_confirm" type="password" placeholder="Re-enter password" class="p white">
 			<input type="submit" value="수정 완료" class="p font pt10 color-white">
-			<div class="p font color-white text-align-center"><a href="#" class="p no-line">회원 탈퇴</a></div>
+			<div class="p font color-white text-align-center"><a href="javascript:delete_account()" class="p no-line">회원 탈퇴</a></div>
 		</form>
 	</section>
 	<script>declare(_not_index)</script>
@@ -39,11 +39,10 @@
 </section>
 {% endblock %}
 
-
-
 {% block script %}
 <script>
 $(function() {
+	var csrfToken = $("{% csrf_token %}").val();
 	$('#signup-form').submit(function() {
 		var p = $('#id_password').val(),
 			p_confirm = $('#id_password_confirm').val();
@@ -53,6 +52,27 @@ $(function() {
 			return false;
 		}
 	});
+
+	window.delete_account = function() {
+		if(confirm('정말로 탈퇴하시겠습니까?\r\n주의: 삭제된 개인정보는 복구할 수 없습니다.')) {
+			var rand = parseInt(Math.random() * 999999);
+			if(prompt('다음 문자를 똑같이 입력하세요: ' + rand, '') == rand) {
+				$.ajax({
+					type: 'POST',
+					url: '{% url 'member:delete_account' %}',
+					data: {
+						csrfmiddlewaretoken: csrfToken,
+					},
+					success: function(data) {
+						alert(data.message);
+						if(data.success) {
+							location.replace('/');
+						}
+					}
+				});
+			}
+		}
+	}
 });
 </script>
 {% endblock %}
