@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
-
-
-{% block title %}
-tinicube - 공지사항 내용
-{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{% static 'css/notice_view.css' %}">
-{% endblock %}
-
-{% block content %}
-	{{ notice.title }}<br>
-	{{ notice.content }}
+{% block hcontent %}
+<section class="notice">
+	<section class="p w900 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt">공지사항</h1>
+	</section>
+	<article class="p w900 box-align-center m-top15 edge-top-silver">
+		<section>
+			<h4 class="p left font pt12">{{ notice.title }}</h4><span class="p right font pt9 color-asbestos">{{ notice.created|date:'Y-m-d' }}</span>
+		</section>
+		<section class="p font pt10">
+			{{ notice.content|linebreaksbr }}
+		</section>
+	</article>
+	{% include 'board/notice_list.html' %}
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
 {% endblock %}

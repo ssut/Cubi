@@ -1,50 +1,31 @@
-{% extends 'base.html' %}
 {% load staticfiles %}
 
-
-{% block title %}
-Cubi - 공지사항 목록
-{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{% static 'css/noticelist.css' %}">
-{% endblock %}
-
-{% block content %}
-<h1>공지사항</h1>
-{% if notices %}
-	{% for notice in notices %}
-		<a href="{% url 'notice_view' notice.id %}">
-		<div>{{ notice.title }} <small>{{ notice.created }}</small></div>
-		</a>
-	{% endfor %}
-{% else %}
-	<h4>공지사항이 없습니다</h4>
-{% endif %}
-
-<ul class="pagination">
-	{% if notices.has_previous %}
-	<li><a href="?page={{ notices.previous_page_number }}">Prev</a></li>
-	{% endif %}
-
-	{% if notices.page_range_data.show_first %}
-	<li><a href="?page=1">1</a></li>
-	{% endif %}
-
-	{% for i in notices.page_range_data.page_range %}
-		{% ifequal i notices.number %}
-			<li class="active"><a>{{ i }}</a></li>
-		{% else %}
-			<li><a href="?page={{ i }}">{{ i }}</a></li>
-		{% endifequal %}
-	{% endfor %}
-
-	{% if notices.page_range_data.show_last %}
-	<li><a href="?page={{ i }}">{{ notices.paginator.num_pages }}</a></li>
-	{% endif %}
-
-	{% if notices.has_next %}
-	<li><a href="?page={{ notices.next_page_number }}">Next</a></li>
-	{% endif %}
-</ul>
-{% endblock %}
+<nav class="p w900 box-align-center m-top15 edge-top-silver">
+	<section><span class="p font pt12 color-wet-asphalt">번호</span><span class="p font pt12 color-wet-asphalt">제목</span><span class="p font pt12 color-wet-asphalt">날짜</span></section>
+	<ul class="p no-list no-margin">
+		{% if notices %}
+			{% for notice in notices %}
+			<li><a href="{% url 'notice_view' notice.id %}"><span class="p font pt12 color-wet-asphalt">{{ notice.id }}</span><span class="p font pt12 color-wet-asphalt">{{ notice.title }}</span><span class="p font pt12 color-wet-asphalt">{{ notice.created|date:'Y-m-d' }}</span></a></li>
+			{% endfor %}
+		{% endif %}
+	</ul>
+	<ul class="p no-list no-margin m-top15 box-align-center">
+		{% if notices.has_previous %}
+		<li class="button p left"><a href="#"><img src="{% static 'img/icon.navigator.prev.png' %}" alt=""></a></li>
+		{% endif %}
+		{% for i in notices.page_range_data.page_range %}
+			{% if notices.page_range_data.show_first %}
+			<li class="p left"><a href="?page=1" class="p no-line font color-midnight-blue pt12">1</a></li>
+			{% endif %}
+			{% ifequal i notices.number %}
+			<li class="p left"><a href="#" class="p no-line font color-midnight-blue pt12"><span class="p font weight-bold pt12">{{ i }}</span></a></li>
+			{% else %}
+			<li class="p left"><a href="?page={{ i }}" class="p no-line font color-midnight-blue pt12">{{ i }}</a></li>
+			{% endifequal %}
+		{% endfor %}
+		{% if notices.has_next %}
+		<li class="button p left"><a href="#"><img src="{% static 'img/icon.navigator.next.png' %}" alt=""></a></li>
+		{% endif %}
+		<li class="p clear"></li>
+	</ul>
+</nav>

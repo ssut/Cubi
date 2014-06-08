@@ -26,12 +26,26 @@ def notice_list(request):
         'notices': notices,
     }
 
-    return render_to_response('board/notice_list.html', d, RequestContext(request))
+    return render_to_response('board/notice_list_full.html', d, RequestContext(request))
 
 def notice_view(request, notice_id):
+    page = request.GET.get('page')
+    notice_list = Notice.objects.all()
+    paginator = Paginator(notice_list, 2, adjacent_pages=3)
+
+    try:
+        notices = paginator.page(page)
+    except PageNotAnInteger:
+        page = 1
+        notices = paginator.page(page)
+    except EmptyPage:
+        page = paginator.num_pages
+        notices = paginator.page(page)
+
     notice = Notice.objects.get(id=notice_id)
 
     d = {
+        'notices': notices,
         'notice': notice,
     }
 
