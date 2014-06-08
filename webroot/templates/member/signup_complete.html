@@ -2,10 +2,8 @@
 {% load staticfiles %}
 
 {% block content %}
-회원가입 성공 : {{ user.email }} / {{ user.nickname }}
-<div id="signup-btn-submit" class="form-group">
-	<div>
-		<a href="{% url 'index' %}"><button>메인화면으로 이동</button></a>
-	</div>
-</div>
+<script>
+	alert("{{ user.nickname }}님, 회원가입에 성공했습니다.");
+	location.replace("/");
+</script>
 {% endblock %}
