@@ -220,6 +220,7 @@ class Chapter(models.Model):
     thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
     cover = models.ImageField(upload_to=get_image_chapter_cover_path, blank=True)
     public = models.BooleanField(default=True)
+    description = models.TextField(blank=True, max_length=150)
 
     @property
     def avg_rating(self):
