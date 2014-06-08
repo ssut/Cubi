@@ -67,10 +67,9 @@ def chapter_view(request, chapter_id):
         'comments': ChapterComment.objects.filter(chapter=chapter).order_by('-created')
     }
 
-    if user.is_authenticated:
+    if user.is_authenticated():
         rating = ChapterRating.objects.filter(chapter=chapter, author=user).exists()
         if rating:
-            print rating
             d['user_rated'] = True
 
     return render_to_response('work/chapter_view.html', d, RequestContext(request))
