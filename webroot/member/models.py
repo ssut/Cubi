@@ -4,9 +4,11 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
 
 from tinicube.functions import day_to_string, minute_to_string
-from tinicube.functions import imageinfo, imageinfo2
+from tinicube.functions import imageinfo
 
 from django.utils.timezone import utc
+
+from author.models import AuthorInfo
 
 import datetime
 
@@ -77,7 +79,7 @@ class TinicubeUser(AbstractUser):
         return u'%d] %s(%s)' % (self.id, self.nickname, self.email)
 
     def json(self):
-        return {
+        dict = {
             'id': self.id,
             'username': self.username,
             'name': u'%s%s' % (self.last_name, self.first_name),
@@ -87,6 +89,10 @@ class TinicubeUser(AbstractUser):
             'tel': self.tel,
             'created': minute_to_string(self.created),
         }
+        if self.type == '2' :
+            if AuthorInfo.objects.filter(user=self).exists():
+                dict['author_info'] = AuthorInfo.objects.get(user=self).json()
+        return dict
 
     '''
     Check facebook account is connected
@@ -114,6 +120,14 @@ class TinicubeUser(AbstractUser):
     def author_favorites(self):
         favorites = UserAuthorFavorites.objects.filter(user=self)
         return favorites
+
+    @property
+    def author_info(self):
+        if self.type == '2':
+            author_info = AuthorInfo.objects.get(user=self)
+            return author_info.json()
+        else:
+            return ''
 
     def check_favorites_exist(self, inst):
         from work.models import Work

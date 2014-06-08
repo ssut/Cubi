@@ -2,6 +2,7 @@
 from django.template import RequestContext
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
+import django.core.exceptions
 
 # Session
 from django.contrib.sessions.backends.db import SessionStore
@@ -22,8 +23,28 @@ except ImportError:
 from django.contrib.auth import authenticate, login
 
 from tinicube.functions import return_failed_json, return_success_json
+from author.models import AuthorInfo
+from work.models import Work
 
 import json
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def author_info(request):
+    query_dict = request.POST
+    user_id = query_dict['user_id']
+
+    user = User.objects.get(id=user_id)
+    author_info = AuthorInfo.objects.get(user=user)
+
+    works = Work.objects.filter(author=user)
+
+    dict = {
+        'author_info': author_info.json(),
+        'works': [work.json() for work in works],
+    }
+    return HttpResponse(json.dumps(dict), content_type='application/json')
+
 
 @csrf_exempt
 def login(request):
@@ -53,8 +74,7 @@ def login(request):
 
         return HttpResponse(json.dumps(data), content_type='application/json')
 
-from .models import TinicubeUser
-import django.core.exceptions
+
 
 @csrf_exempt
 @require_http_methods(["POST"])

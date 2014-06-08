@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('member.api',
     url(r'^login/$', 'login'),
     url(r'^signup/$', 'signup'),
+    url(r'^author_info/$', 'author_info'),
 )
 
 urlpatterns += patterns('work.api',

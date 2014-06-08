@@ -14,8 +14,6 @@ from datetime import datetime, time, date
 import json
 
 
-default_image = '/static/img/default_title.png'
-
 
 ### datetime -> String 변환 함수 ###
 def day_to_string(value):
@@ -37,21 +35,12 @@ def time_to_string(value):
         return u'None'
 
 
-# 이미지 정보
-def imageinfo(instance):
+def imageinfo(instance, url=None):
     return {
         'has_image': True if instance else False,
         'width': instance.width if instance else '',
         'height': instance.height if instance else '',
-        'url': instance.url if instance else '',
-    }
-
-def imageinfo2(instance):
-    return {
-        'has_image': True if instance else False,
-        'width': instance.width if instance else '',
-        'height': instance.height if instance else '',
-        'url': instance.url if instance else default_image,
+        'url': instance.url if instance else url,
     }
 
 # json리턴

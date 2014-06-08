@@ -44,7 +44,7 @@ from work.models import *
 @require_http_methods(["POST"])
 @csrf_exempt
 def recent_update_chapter_list(request):
-    chapters = Chapter.objects.all().order_by('-created')[:10]
+    chapters = Chapter.objects.all().order_by('-created')[:5]
     data = { 'chapters': [chapter.json() for chapter in chapters], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -52,7 +52,7 @@ def recent_update_chapter_list(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def new_work_list(request):
-    works = Work.objects.all().order_by('-created')[:10]
+    works = Work.objects.all().order_by('-created')[:3]
     data = { 'works': [work.json() for work in works], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -60,7 +60,7 @@ def new_work_list(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def popular_work_list(request):
-    works = Work.objects.all().order_by('-created')[:10]
+    works = Work.objects.all().order_by('-created')[:5]
     data = { 'works': [work.json() for work in works], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -68,7 +68,7 @@ def popular_work_list(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def new_author_list(request):
-    authors = User.objects.filter(type='2').order_by('date_joined')[:10]
+    authors = User.objects.filter(type='2').order_by('date_joined')[:3]
     data = { 'authors': [author.json() for author in authors], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -76,7 +76,7 @@ def new_author_list(request):
 @require_http_methods(["POST"])
 @csrf_exempt
 def popular_author_list(request):
-    authors = User.objects.filter(type='2').order_by('date_joined')[:10]
+    authors = User.objects.filter(type='2').order_by('date_joined')[:5]
     data = { 'authors': [author.json() for author in authors], }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
