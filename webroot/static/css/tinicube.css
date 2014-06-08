@@ -646,6 +646,11 @@ body > section.view > section:nth-child(2) > section:first-child > section.comme
   border-radius: 5px 0 0 5px;
   background: white;
 }
+body > section.view > section:nth-child(2) > section:first-child > section.comment textarea:focus {
+  padding: 4px 5px 4px 4px;
+  border-width: 2px;
+  border-right-width: 0;
+}
 body > section.view > section:nth-child(2) > section:first-child > section.comment button {
   cursor: pointer;
   width: 100px;
@@ -753,6 +758,96 @@ body > section.login > section form.p input[type=submit]:hover {
 }
 body > section.login > section form.p div > * {
   line-height: 75px;
+  color: #226a99;
+}
+body > section.register > h1 {
+  margin: -250px 0 0 -165px;
+  top: 50%;
+  left: 50%;
+  color: #2980b9;
+}
+body > section.register > h1 span {
+  color: #8e44ad;
+}
+body > section.register > section {
+  height: 280px;
+  margin: -182.5px 0 0 -165px;
+  top: 50%;
+  left: 50%;
+}
+body > section.register > section form.p input {
+  margin-bottom: 10px;
+}
+body > section.register > section form.p input[type=text].p, body > section.register > section form.p input[type=password].p {
+  display: block;
+  width: 282px;
+  height: 25px;
+  padding: 3px 7px;
+  border-width: 2px;
+  transition: border-color 0.25s linear;
+}
+body > section.register > section form.p input[type=text].p:focus, body > section.register > section form.p input[type=password].p:focus {
+  border-color: #2980b9;
+}
+body > section.register > section form.p input[type=submit] {
+  cursor: pointer;
+  width: 300px;
+  height: 35px;
+  border: 0;
+  border-radius: 5px;
+  background: #2980b9;
+  transition: background 0.125s linear;
+}
+body > section.register > section form.p input[type=submit]:hover {
+  background: #2575a9;
+}
+body > section.register > section form.p div > * {
+  line-height: 55px;
+  color: #226a99;
+}
+body > section.my-info > h1 {
+  margin: -250px 0 0 -165px;
+  top: 50%;
+  left: 50%;
+  color: #2980b9;
+}
+body > section.my-info > h1 span {
+  color: #8e44ad;
+}
+body > section.my-info > section {
+  height: 280px;
+  margin: -182.5px 0 0 -165px;
+  top: 50%;
+  left: 50%;
+}
+body > section.my-info > section form.p input {
+  margin-bottom: 10px;
+}
+body > section.my-info > section form.p input[type=text].p, body > section.my-info > section form.p input[type=password].p {
+  display: block;
+  width: 282px;
+  height: 25px;
+  padding: 3px 7px;
+  border-width: 2px;
+  transition: border-color 0.25s linear;
+}
+body > section.my-info > section form.p input[type=text].p:focus, body > section.my-info > section form.p input[type=password].p:focus {
+  border-color: #2980b9;
+}
+body > section.my-info > section form.p input[type=submit] {
+  cursor: pointer;
+  width: 300px;
+  height: 35px;
+  border: 0;
+  border-radius: 5px;
+  background: #2980b9;
+  transition: background 0.125s linear;
+}
+body > section.my-info > section form.p input[type=submit]:hover {
+  background: #2575a9;
+}
+body > section.my-info > section form.p div > * {
+  line-height: 55px;
   color: #226a99;
 }
 body > section.login.fail > section form.p div > * {
@@ -924,6 +1019,8 @@ body > section.my_artwork > section.list section.status section.toggle span {
   line-height: 20px;
 }
 body > section.my_artwork > section.list section.status section.toggle span:nth-child(3) {
+  padding-left: 5px;
+  padding-right: 0;
   left: 90px;
 }
 body > section.my_artwork > section.list section.status section.toggle button {
@@ -938,6 +1035,113 @@ body > section.my_artwork > section.list section.status section.toggle button {
 }
 body > section.my_artwork > section.list section.status section.toggle.inverse {
   background: #bdc3c7;
+}
+body > section.notice article > section:first-child {
+  height: 40px;
+  padding: 0 10px;
+  border-bottom: solid 2px #bdc3c7;
+}
+body > section.notice article > section:first-child > * {
+  line-height: 40px;
+}
+body > section.notice article > section:nth-child(2) {
+  padding: 10px;
+  text-align: justify;
+  line-height: 160%;
+}
+body > section.notice article > section:nth-child(2) p {
+  padding: 0.5em 0;
+  text-indent: 1em;
+}
+body > section.notice article > section:nth-child(2) p:first-child {
+  padding-top: 0;
+}
+body > section.notice article > section:nth-child(2) p:last-child {
+  padding-bottom: 0;
+}
+body > section.notice nav {
+  text-align: center;
+}
+body > section.notice nav section {
+  border-bottom: solid 2px #bdc3c7;
+}
+body > section.notice nav section span.p {
+  display: inline-block;
+  height: 45px;
+  font-weight: bold;
+  line-height: 45px;
+}
+body > section.notice nav section span:first-child {
+  width: 120px;
+}
+body > section.notice nav section span:nth-child(2) {
+  width: 600px;
+}
+body > section.notice nav section span:nth-child(3) {
+  width: 180px;
+}
+body > section.notice nav ul:nth-child(2) span.p {
+  display: inline-block;
+  height: 45px;
+  line-height: 45px;
+}
+body > section.notice nav ul:nth-child(2) span:first-child {
+  width: 120px;
+}
+body > section.notice nav ul:nth-child(2) span:nth-child(2) {
+  width: 600px;
+  text-align: left;
+}
+body > section.notice nav ul:nth-child(2) span:nth-child(3) {
+  width: 180px;
+}
+body > section.notice nav ul:nth-child(2) li {
+  border-bottom: dashed 1px #bdc3c7;
+}
+body > section.notice nav ul:nth-child(2) li:nth-child(even) {
+  background: rgba(0, 0, 0, 0.05);
+}
+body > section.notice nav ul:nth-child(2) li:last-child {
+  border-bottom-style: solid;
+}
+body > section.notice nav ul:nth-child(2) li.selected span:first-child {
+  background: transparent url(../img/icon.bullet.go.png) no-repeat 50% 50%;
+  color: transparent;
+}
+body > section.notice nav ul:nth-child(2) li.selected span:nth-child(2), body > section.notice nav ul:nth-child(2) li.selected span:nth-child(3) {
+  font-weight: bold;
+}
+body > section.notice nav ul:nth-child(3) {
+  display: inline-block;
+}
+body > section.notice nav ul:nth-child(3) * {
+  display: inline-block;
+}
+body > section.notice nav ul:nth-child(3) li {
+  display: block;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 0 0 9px;
+}
+body > section.notice nav ul:nth-child(3) li a {
+  line-height: 24px;
+  text-align: center;
+}
+body > section.notice nav ul:nth-child(3) li a span {
+  color: #e74c3c;
+}
+body > section.notice nav ul:nth-child(3) li:first-child {
+  padding: 0;
+}
+body > section.notice nav ul:nth-child(3) li.button a {
+  width: 12px;
+  height: 12px;
+  padding: 6px;
+  line-height: normal;
+}
+body > section.notice nav ul:nth-child(3) li.p.clear {
+  width: 0;
+  height: 0;
 }
 
 footer {

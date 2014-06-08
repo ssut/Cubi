@@ -1,56 +1,39 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block content %}
+{% block hcontent %}
+<section class="register{% if reason %} fail{% endif %}">
+	<h1 class="p layer w300 h100 font weight-thin pt48 spacing-small">Reg!ster{% if reason %}<span>fail</span>{% endif %}</h1>
+	<section class="p layer w300 peter-river edge-radius-huge p15">
+		<form id="signup-form" class="p" method="post">{% csrf_token %}
+			{% if reason %}
+			<span class="p font color-white">{{ reason }}</span>
+			{% endif %}
+			<input type="text" id="id_email" name="email" placeholder="이메일 주소" class="p white" required>
+			<input type="text" id="id_nickname" name="nickname" placeholder="닉네임" class="p white" required>
+			<input type="password" id="id_password" name="password" placeholder="비밀번호" class="p white" required>
+			<input type="password" id="id_password_confirm" placeholder="비밀번호 확인" class="p white" required>
+			<input type="submit" value="약관 동의 &amp; 회원가입" class="p font pt10 color-white">
+			<div class="p font color-white text-align-center"><a href="#" class="p no-line">이용 약관</a><span>&nbsp;/&nbsp;</span><a href="#" class="p no-line">개인정보취급방침</a></div>
+		</form>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}
 
-<div>회원가입</div>
-<div>
-	<form id="signup-form" method="POST" enctype="multipart/form-data">{% csrf_token %}
-		<div class="signup-group">
-			<div class="form-group">
-				<label for="{{ form.email.id_for_label }}" class="control-label">
-					{{ form.email.label }}
-				</label>
-				<div class="col-lg-6">
-					{{ form.email }}
-				</div>
-				<div class="col-lg-3">
-					{{ form.email.errors }}
-				</div>
-			</div>
+{% block script %}
+<script>
+$(function() {
+	$('#signup-form').submit(function() {
+		var p = $('#id_password').val(),
+			p_confirm = $('#id_password_confirm').val();
 
-			<div class="form-group">
-				<label for="{{ form.nickname.id_for_label }}" class="control-label">
-					{{ form.nickname.label }}
-				</label>
-				<div class="col-lg-6">
-					{{ form.nickname }}
-				</div>
-				<div class="col-lg-3">
-					{{ form.nickname.errors }}
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="{{ form.password.id_for_label }}" class="control-label">
-					{{ form.password.label }}
-				</label>
-				<div class="col-lg-6">
-					{{ form.password }}
-				</div>
-				<div class="col-lg-3">
-					{{ form.password.errors }}
-				</div>
-			</div>
-
-			<div id="signup-btn-submit" class="form-group">
-				<div>
-					<button type="submit" class="btn btn-default">가입신청</button>
-				</div>
-			</div>
-		</div>
-		
-	</form>
-</div>
-
+		if(p != p_confirm) {
+			alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+			return false;
+		}
+	});
+});
+</script>
 {% endblock %}

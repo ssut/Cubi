@@ -41,12 +41,12 @@ def signup(request):
 
             if TinicubeUser.objects.filter(email=email).exists():
                 error_msg = u'이미 사용중인 이메일 입니다'
-                d = {'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/signup_failed.html', d, RequestContext(request))
+                d = {'form': form, 'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/signup.html', d, RequestContext(request))
             elif TinicubeUser.objects.filter(nickname=nickname).exists():
                 error_msg = u'이미 사용중인 닉네임 입니다'
-                d = {'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/signup_failed.html', d, RequestContext(request))
+                d = {'form': form, 'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/signup.html', d, RequestContext(request))
             else:
                 user = TinicubeUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
                 d = {'user': user}
@@ -54,7 +54,7 @@ def signup(request):
         else:
             error_msg = u'가입양식의 내용이 올바르지 않습니다'
             d = {'return_status': 'failed', 'reason': error_msg}
-            return render_to_response('member/signup_failed.html', d, RequestContext(request))
+            return render_to_response('member/signup.html', d, RequestContext(request))
     else:
         form = TinicubeUserSignupForm()
         d = {
