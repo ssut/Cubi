@@ -5,10 +5,12 @@ from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 
 from datetime import datetime
+from textwrap import dedent as trim
 
 from author.forms import AddworkForm
 from author.models import AuthorInfo
 from work.models import *
+from member.models import TinicubeUser as User
 
 REAL_PATH = ''
 FIELD_PATH = ''
@@ -17,6 +19,25 @@ MEDIA_PATH = settings.MEDIA_ROOT
 # 작품 업로드 소개
 def introduce(request):
     return render_to_response('author/introduce.html', RequestContext(request))
+
+def info(request, author_id):
+    author = User.objects.get(id=author_id)
+    if not author or author.type != '2':
+        return HttpResponse(trim("""\
+            <script>
+            alert("존재하지 않는 회원이거나 작가가 아닙니다.");
+            history.go(-1);
+            </script>
+        """))
+    else:
+        author_info = AuthorInfo.objects.get(user=author)
+        works = Work.objects.filter(author=author)
+        d = {
+            'author': author,
+            'author_info': author_info,
+            'works': works,
+        }
+        return render_to_response('author/info.html', d)
 
 # 작품 업로드 약관 동의
 def agreement(request):

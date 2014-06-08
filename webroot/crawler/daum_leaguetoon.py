@@ -107,6 +107,7 @@ def list(comic_number):
         }
         print '%s] %s (%s)' % (dict['no'], dict['title'], dict['date'])
         dict_list.append(dict)
+    dict_list.reverse()
 
     return dict_list
 

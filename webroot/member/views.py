@@ -210,7 +210,6 @@ def member_info(request):
                 d = {'return_status': 'success', 'user': user}
 
                 return render_to_response('member/info_edit_success.html', d, RequestContext(request))
-                
             else:
                 # 이 부분은 message띄우면서 입력정보로 form다시 띄워주기
                 error_msg = u'비밀번호를 확인해주세요'
