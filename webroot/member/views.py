@@ -63,6 +63,7 @@ def signup(request):
         return render_to_response('member/signup.html', d, RequestContext(request))
 
 def signin(request):
+    if request.user.is_authenticated: return HttpResponseRedirect('/')
     if request.method == 'POST':
         form = TinicubeUserSigninForm(request.POST)
         if form.is_valid():
