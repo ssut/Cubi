@@ -2,10 +2,8 @@
 {% load staticfiles %}
 
 {% block content %}
-회원정보 변경 성공 ({{ user.email }}, {{ user.nickname }})
-<div id="signup-btn-submit" class="form-group">
-	<div>
-		<a href="{% url 'index' %}"><button>메인으로</button></a>
-	</div>
-</div>
+<script>
+	alert("회원정보가 수정되었습니다.");
+	location.replace(document.referrer);
+</script>
 {% endblock %}

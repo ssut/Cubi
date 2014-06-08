@@ -2,10 +2,8 @@
 {% load staticfiles %}
 
 {% block content %}
-회원정보 변경 실패 ({{ reason }})
-<div id="signup-btn-submit" class="form-group">
-	<div>
-		<a href="{% url 'index' %}"><button>메인으로</button></a>
-	</div>
-</div>
+<script>
+	alert("{{ reason }}");
+	history.go(-1);
+</script>
 {% endblock %}

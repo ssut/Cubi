@@ -20,3 +20,39 @@
 {% endif %}
 </form>
 {% endblock %}
+
+{% block hcontent %}
+<section class="my-info">
+	<h1 class="p layer w300 h100 font weight-thin pt48 spacing-small">My !nfo</h1>
+	<section class="p layer w300 peter-river edge-radius-huge p15">
+		<form id="signup-form" class="p" method="post">{% csrf_token %}
+			<input type="text" id="id_email" name="email" value="{{ form.email.value }}" placeholder="ID or Email address" readonly="readonly" class="p white">
+			<input type="text" id="id_nickname" name="nickname" value="{{ form.nickname.value }}" placeholder="Nickname" class="p white">
+			<input id="id_password" name="password" type="password" placeholder="Password" class="p white">
+			<input id="id_password_confirm" type="password" placeholder="Re-enter password" class="p white">
+			<input type="submit" value="수정 완료" class="p font pt10 color-white">
+			<div class="p font color-white text-align-center"><a href="#" class="p no-line">회원 탈퇴</a></div>
+		</form>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}
+
+
+
+{% block script %}
+<script>
+$(function() {
+	$('#signup-form').submit(function() {
+		var p = $('#id_password').val(),
+			p_confirm = $('#id_password_confirm').val();
+
+		if(p != p_confirm) {
+			alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+			return false;
+		}
+	});
+});
+</script>
+{% endblock %}
