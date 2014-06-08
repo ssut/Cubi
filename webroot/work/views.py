@@ -159,4 +159,11 @@ def update_chapter(request):
                 d['success'] = True
 
             return HttpResponse(json.dumps(d), content_type='application/json')
-
+        elif t == 'comment':
+            comment = request.POST.get('comment', '')
+            d = {'success': False, 'message': ''}
+            if comment:
+                chapter.description = comment
+                chapter.save()
+                d = {'success': True}
+            return HttpResponse(json.dumps(d), content_type='application/json')

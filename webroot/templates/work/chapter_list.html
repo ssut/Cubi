@@ -35,7 +35,7 @@
 					</button>
 					<button class="update-chapter ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">갱신</span></button>
 					<button class="update-chapter-public ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">{% if chapter.public %}비{% endif %}공개</span></button>
-					<button class="update-chapter-comment ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">작가 한마디 수정</span></button>
+					<button class="update-chapter-comment ladda-button ladda-small" data-id="{{ chapter.id }}" data-comment="{{ chapter.description }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">작가 한마디 수정</span></button>
 					</div>
 					{% endif %}
 					</li>
@@ -165,6 +165,36 @@ $(function() {
 				}
 			}
 		});
+	});
+
+	$('.update-chapter-comment').click(function() {
+		var original = $(this).data('comment');
+		var input = prompt('변경할 작가 한마디를 입력해주세요.', original);
+		if(input != original) {
+			var l = $(this).ladda();
+			l.ladda('start');
+
+			$.ajax({
+				url: '{% url 'update_chapter' %}',
+				data: {
+					type: 'comment',
+					id: $(this).data('id'),
+					comment: input,
+					csrfmiddlewaretoken: csrfToken,
+				},
+				type: 'POST',
+				success: function(data) {
+					if(data.success) {
+						alert('작가 한마디가 수정되었습니다.');
+						$(this).data('comment', input);
+					} else {
+						alert(data.message);
+					}
+
+					l.ladda('stop');
+				}
+			});
+		}
 	});
 	{% endif %}
 });
