@@ -12,7 +12,7 @@ from datetime import datetime
 from member.models import TinicubeUser as User
 
 from tinicube.functions import day_to_string, minute_to_string, time_to_string
-from tinicube.functions import imageinfo, imageinfo2
+from tinicube.functions import imageinfo
 from tinicube.settings import MEDIA_URL
 
 # Upload path
@@ -136,16 +136,26 @@ class Work(models.Model):
     work_target = models.CharField(max_length=10)
     category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    market_android = models.CharField(max_length=100, blank=True)
-    market_ios = models.CharField(max_length=100, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    thumbnail = models.ImageField(upload_to=path_image_work, blank=True)
-    cover = models.ImageField(upload_to=get_path, blank=True)
-    image_loading = models.ImageField(upload_to=path_image_work, blank=True)
-    image_largeicon = models.ImageField(upload_to=path_image_work, blank=True)
-    image_smallicon = models.ImageField(upload_to=path_image_work, blank=True)
+    title = models.CharField('작품명', max_length=200)
+    description_simple = models.CharField('작품 한줄 설명', max_length=100)
+    description_full = models.TextField('작품 설명', blank=True)
+    market_android = models.CharField('안드로이드 마켓 주소', max_length=100, blank=True)
+    market_ios = models.CharField('iOS 마켓 주소', max_length=100, blank=True)
+    created = models.DateTimeField('생성일자', auto_now_add=True)
+    
+    image_thumbnail_square = models.ImageField('정사각형 썸네일', upload_to=get_path, blank=True)
+    image_thumbnail_rectangle = models.ImageField('배너형태 썸네일', upload_to=get_path, blank=True)
+    image_cover_large = models.ImageField('웹에서 쓸 큰 커버이미지(작품목록 가장 상단)', upload_to=get_path, blank=True)
+    image_cover = models.ImageField('웹에서 쓸 커버이미지(작품목록 개별 작품 커버)', upload_to=get_path, blank=True)
+
+    mobile_cover_top = models.ImageField('모바일 ChapterList 커버이미지(637x421)', upload_to=get_path, blank=True)
+    mobile_cover_pager = models.ImageField('모바일 CoverImagePager 커버이미지(637x421, 제목 및 설명 필요)', upload_to=get_path, blank=True)
+    mobile_cover_small = models.ImageField('통합앱 메인화면 커버이미지(1080x240)', upload_to=get_path, blank=True)
+    mobile_loading_android = models.ImageField('안드로이드 로딩 이미지', upload_to=get_path, blank=True)
+    mobile_loading_ios = models.ImageField('iOS 로딩 이미지', upload_to=get_path, blank=True)
+    mobile_largeicon = models.ImageField('모바일 큰 아이콘(1024x1024 이상)', upload_to=get_path, blank=True)
+    mobile_smallicon = models.ImageField('모바일 작은 아이콘(안드144x144, iOS)', upload_to=get_path, blank=True)
+
     last_upload = models.DateField('마지막 챕터 업데이트 날짜', blank=True, null=True)
     chapter_count = models.IntegerField('챕터 수', blank=True, null=True)
 
@@ -189,11 +199,22 @@ class Work(models.Model):
             'market_android': self.market_android,
             'market_ios': self.market_ios,
             'created': day_to_string(self.created),
-            'thumbnail': imageinfo(self.thumbnail),
-            'cover': imageinfo2(self.cover),
-            'image_loading': imageinfo(self.image_loading),
-            'image_largeicon': imageinfo(self.image_largeicon),
-            'image_smallicon': imageinfo(self.image_smallicon),
+
+            'image_thumbnail_square': imageinfo(self.image_thumbnail_square),
+            'image_thumbnail_rectangle': imageinfo(self.image_thumbnail_rectangle),
+            'image_cover_large': imageinfo(self.image_cover_large),
+            'image_cover': imageinfo(self.image_cover),
+
+            'mobile_cover_top': imageinfo(self.mobile_cover_top),
+            'mobile_cover_pager': imageinfo(self.mobile_cover_pager),
+            'mobile_cover_small': imageinfo(self.mobile_cover_small),
+            'mobile_loading_android': imageinfo(self.mobile_loading_android),
+            'mobile_loading_ios': imageinfo(self.mobile_loading_ios),
+            'mobile_largeicon': imageinfo(self.mobile_largeicon),
+            'mobile_smallicon': imageinfo(self.mobile_smallicon),
+
+            'last_upload': day_to_string(self.last_upload),
+            'chapter_count': self.chapter_count,
         }
 
 # 작품 댓글
@@ -217,8 +238,10 @@ class Chapter(models.Model):
     work = models.ForeignKey(Work, related_name='chapter_by_work')
     title = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
-    thumbnail = models.ImageField(upload_to=get_image_chapter_thumbnail_path, blank=True)
-    cover = models.ImageField(upload_to=get_image_chapter_cover_path, blank=True)
+    thumbnail = models.ImageField(upload_to=get_path, blank=True)
+    thumbnail_large = models.ImageField(upload_to=get_path, blank=True)
+    cover = models.ImageField(upload_to=get_path, blank=True)
+    cover_large = models.ImageField(upload_to=get_path, blank=True)
     public = models.BooleanField(default=True)
     description = models.TextField(blank=True, max_length=150)
 
@@ -246,7 +269,9 @@ class Chapter(models.Model):
             'title': self.title,
             'created': day_to_string(self.created),
             'thumbnail': imageinfo(self.thumbnail),
+            'thumbnail_large': imageinfo(self.thumbnail_large),
             'cover': imageinfo(self.cover),
+            'cover_large': imageinfo(self.cover_large),
         }
 
     def save(self, *args, **kwargs):
