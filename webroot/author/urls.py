@@ -6,6 +6,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('author.views',
+    url(r'^(\d+)/$', 'info', name='info'),
+
     url(r'^introduce/$', 'introduce', name='introduce'),
     url(r'^agreement/$', 'agreement', name='agreement'),
     url(r'^index/$', 'index', name='index'),
