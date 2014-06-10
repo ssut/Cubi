@@ -36,12 +36,15 @@ def time_to_string(value):
 
 
 def imageinfo(instance, url=None):
-    return {
+    dict = {
         'has_image': True if instance else False,
         'width': instance.width if instance else '',
         'height': instance.height if instance else '',
         'url': instance.url if instance else url,
     }
+    if not instance and url == None:
+        dict['url'] = ''
+    return dict
 
 # json리턴
 def return_failed_json(reason=''):

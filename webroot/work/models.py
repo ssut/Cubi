@@ -195,7 +195,8 @@ class Work(models.Model):
             'category': self.category.title,
             'author': self.author.nickname,
             'title': self.title,
-            'description': self.description,
+            'description_simple': self.description_simple,
+            'description_full': self.description_full,
             'market_android': self.market_android,
             'market_ios': self.market_ios,
             'created': day_to_string(self.created),
@@ -256,7 +257,6 @@ class Chapter(models.Model):
         else:
             dict['rating'] = 0.0
             dict['count'] = 0
-
         return dict
 
     def __unicode__(self):
@@ -264,6 +264,9 @@ class Chapter(models.Model):
 
     def json(self):
         return {
+            'work_title': self.work.title,
+            'work_author': self.work.author.nickname,
+            'work_id': self.work.id,
             'id': self.id,
             'reg_no': self.reg_no,
             'title': self.title,
