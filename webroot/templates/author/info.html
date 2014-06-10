@@ -7,7 +7,7 @@
 		<h1 class="p font pt16 weight-thin color-wet-asphalt">작가 정보</h1>
 	</section>
 	<section class="info p w900 box-align-center m-top15 p-top15 edge-top-silver">
-		<section class="thumbnail p left"><img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64"></section>
+		<section class="thumbnail p left">{% if author_info.profile_image %}<img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64">{% endif %}</section>
 		<article class="p right">
 			<h2 class="p font pt14 weight-thin color-wet-asphalt">{{ author_info.nickname }}</h2><span class="p font pt9 color-asbestos">{{ author_info.introduce_simple }}</span>
 		</article>

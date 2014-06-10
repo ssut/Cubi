@@ -332,3 +332,22 @@ def get_favorites(request):
         print e
 
     return HttpResponse(json.dumps(d), content_type="application/json")
+
+@login_required
+def delete_account(request):
+    if request.method != 'POST' or not request.is_ajax():
+        return
+    referer = request.META.get('HTTP_REFERER')
+    if not referer or referer.find('/member/info') == -1:
+        return
+
+    try:
+        user = request.user
+        logout(request)
+        user.delete()
+    except:
+        d = {'success': False, 'message': '계정 삭제 도중 오류가 발생했습니다.'}
+    else:
+        d = {'success': True, 'message': '계정이 삭제되었습니다.'}
+    return HttpResponse(json.dumps(d), content_type="application/json")
+

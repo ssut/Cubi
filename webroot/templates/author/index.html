@@ -1,37 +1,13 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block content %}
-<h2>작가 페이지</h2><br><br>
-<h3>작가 정보</h3><hr>
-작가 썸네일 : <img width="100" src="{{ author_info.profile_image.url }}"><br>
-작가 닉네임 : {{ author_info.nickname }}<br>
-작가 한줄소개 : {{ author_info.introduce_simple }}<br>
-작가 소개 : {{ author_info.introduce_full }}<br>
-<br><br><br>
-<h3>작품 목록</h3><a href="{% url 'author:addwork' %}">작품 추가하기</a><hr>
-
-{% for work in works %}
-<a href="{% url 'chapter_list' work.id %}">
-<div>
-	<img src="{{ work.thumbnail_url }}">
-	{{ work.title }} / {{ work.author }}<br>
-	연재 시작일 : {{ work.created }}<br>
-	최근 업로드 일자 : {{ work.last_upload }}<br>
-	총 업로드 횟수 : {{ work.chapter_count }}<br>
-</div>
-</a>
-<hr>
-{% endfor %}
-{% endblock %}
-
 {% block hcontent %}
 <section class="my_artwork">
 	<section class="p w900 box-align-center">
 		<h1 class="p font pt16 weight-thin color-wet-asphalt">작가 정보</h1>
 	</section>
 	<section class="info p w900 box-align-center m-top15 p-top15 edge-top-silver">
-		<section class="thumbnail p left"><img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64"></section>
+		<section class="thumbnail p left">{% if author_info.profile_image %}<img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64">{% endif %}</section>
 		<article class="p right">
 			<h2 class="p font pt14 weight-thin color-wet-asphalt">{{ author_info.nickname }}</h2><span class="p font pt9 color-asbestos">{{ author_info.introduce_simple }}</span>
 		</article>

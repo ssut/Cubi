@@ -106,7 +106,7 @@
 					</section><!--<a href="javascript:function(){add_to_favorite()}()" class="p right peter-river font pt9 text-align-center color-white no-line">즐겨찾기 추가</a>-->
 				</section>
 			</section>
-			<section class="p right w300 h100 emerald"><a href="#" class="p left"><img src="{% static 'img/icon.share.twitter.png' %}" alt=""></a><a href="#" class="p left nephritis"><img src="{% static 'img/icon.share.facebook.png' %}" alt=""></a><a href="#" class="p left"><img src="{% static 'img/icon.share.kakao.png' %}" alt=""></a></section>
+			<section class="p right w300 h100 emerald"><a href="javascript:send('twitter')" class="p left"><img src="{% static 'img/icon.share.twitter.png' %}" alt=""></a><a href="#" class="p left nephritis"><img src="{% static 'img/icon.share.facebook.png' %}" alt=""></a><a href="#" class="p left"><img src="{% static 'img/icon.share.kakao.png' %}" alt=""></a></section>
 			<section class="p clear"></section>
 			<section class="comment p m-top15 edge-top-silver p-top15">
 				<h4 class="p font pt12">댓글 달기</h4>
@@ -199,6 +199,19 @@
 		var input = $('<input type="hidden" name="rating">').val(r);
 		$(this).append(input);
 	});
+
+	window.send = function(t) {
+		if(t == 'twitter') {
+			var twtTitle = document.title;
+			var twtUrl = location.href;
+			var maxLength = 140 - (twtUrl.length + 1);
+			if (twtTitle.length > maxLength) {
+				twtTitle = twtTitle.substr(0, (maxLength - 3))+'...';
+			}
+			var twtLink = 'http://twitter.com/home?status=' + encodeURIComponent(twtTitle + ' ' + twtUrl);
+			window.open(twtLink, '_blank', 'width=400, height=280');
+		}
+	}
 })(jQuery);
 </script>
 {% endblock %}

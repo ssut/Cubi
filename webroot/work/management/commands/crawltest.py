@@ -9,7 +9,7 @@ class Command(BaseCommand):
         from work import crawl as crawler
         from work.models import ChapterQueue
         from member.models import TinicubeUser
-        
+
         user = TinicubeUser.objects.get(id=1)
         if args[0] == 'naver' or args[0] == 'NAVER':
             type = ChapterQueue.NAVER
