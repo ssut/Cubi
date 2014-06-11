@@ -1,6 +1,6 @@
 import os
-import sys
 import site
+import sys
 
 #site.addsitedir('/home/pahkey/virtualenv/codejob/lib/python2.7/site-packages')
 site.addsitedir('/usr/local/lib/python2.7/site-packages')

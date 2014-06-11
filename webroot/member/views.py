@@ -1,8 +1,10 @@
 #-*- encoding: utf-8 -*-
+import json
+
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
 
 # decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -12,16 +14,14 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from work.models import Work
-from .models import TinicubeUser
 from .backends import FacebookAuthBackend
-from member.forms import TinicubeUserSignupForm, TinicubeUserSigninForm, TinicubeUserConvertToAuthorForm, TinicubeUserEditForm, TinicubeUserPasswordChangeForm
+from .models import TinicubeUser
+from .forms import TinicubeUserSignupForm, TinicubeUserSigninForm, TinicubeUserConvertToAuthorForm, TinicubeUserEditForm, TinicubeUserPasswordChangeForm
+from work.models import Work
 
 from tinicube import settings
 
 from rauth import OAuth2Service
-
-import json
 
 facebook = OAuth2Service(
     client_id=settings.FACEBOOK_APP_ID,

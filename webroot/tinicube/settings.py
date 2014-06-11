@@ -1,5 +1,7 @@
 #-*- coding: utf-8 -*-
 import os
+import sys
+
 import djcelery
 
 HOST = 'localhost:8000'
@@ -142,7 +144,6 @@ else:
     }
 
 
-import sys
 if 'test' in sys.argv:
     DATABASES = {
         'default': {
