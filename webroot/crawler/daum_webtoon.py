@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import urllib
 import re
 import StringIO
@@ -12,11 +12,13 @@ list_url = 'http://cartoon.media.daum.net/webtoon/view/'
 comic_title = 'dogandrabbit'
 
 detail_url = 'http://cartoon.media.daum.net/webtoon/viewer/'
-detail_url_json = 'http://cartoon.media.daum.net/webtoon/viewer_images.js?webtoon_episode_id='
+detail_url_json = "http://cartoon.media.daum.net/webtoon/" \
+                  "viewer_images.js?webtoon_episode_id="
 
 # 정식웹툰
 def detail(detail_num):
-    # mechanize를 이용해서 detail_url에서 쿠키얻어 저장한 뒤(자동) detail_url_json에 요청해야만 값 받아옴
+    # mechanize를 이용해서 detail_url에서 쿠키얻어 저장한 뒤(자동)
+    # detail_url_json에 요청해야만 값 받아옴
     br = mechanize.Browser()
     url_open = '%s%d' % (detail_url, detail_num)
     url_detail = '%s%d' % (detail_url_json, detail_num)
@@ -66,7 +68,6 @@ def list(comic_title):
     comic_genre = dl_list_more_info.contents[3].string
     comic_grade = dl_list_more_info.contents[7].string
 
-
     # 회차정보 얻어오기
     scripts = soup.find_all('script')
 
@@ -74,18 +75,12 @@ def list(comic_title):
     for i in range(len(scripts)):
         script = scripts[i]
         if script.string:
-            # print 'string not None'
             if 'data1' in script.string:
-                # print '    has data1'
                 string_data1 = script.string
             else:
                 pass
-                # print '    don\'t has data1'
         else:
             pass
-            # print 'string None'
-
-    # print string_data1
 
     con = re.compile(r'data1.*?\{(.*?)\}')
     data1_list = con.findall(string_data1)
@@ -122,7 +117,8 @@ def list(comic_title):
         # print chapter_info
         chapter_list.append(chapter_info)
 
-    # 제목, 작가명, 작품정보, 이용가, 장르, 각 화 chapter_number를 포함한 chapter_info 리스트 반환
+    # 제목, 작가명, 작품정보, 이용가, 장르, 각 화 chapter_number 를 포함한
+    # chapter_info 리스트 반환
     d = {
         'comic_title': comic_title,
         'author_name': author_name,

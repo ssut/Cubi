@@ -1,11 +1,13 @@
-#-*- coding: utf-8 -*-
-import urllib
-import re
+# -*- coding: utf-8 -*-
 import StringIO
+import json
+import re
+import urllib
+
+import mechanize
+
 from bs4 import BeautifulSoup
 from datetime import datetime
-import mechanize
-import json
 
 from .exceptions import WebtoonDoesNotExist, WebtoonChapterDoesNotExist
 
@@ -13,13 +15,12 @@ from .exceptions import WebtoonDoesNotExist, WebtoonChapterDoesNotExist
 list_url = 'http://cartoon.media.daum.net/league/view/'
 rss_url = 'http://webtoon.daum.net/league/rss/'
 detail_url = 'http://cartoon.media.daum.net/league/viewer/'
-detail_url_json = 'http://cartoon.media.daum.net/data/leaguetoon/viewer_images/'
+detail_json = 'http://cartoon.media.daum.net/data/leaguetoon/viewer_images/'
 
 def info(comic_number):
     # 작품 정보
     br = mechanize.Browser()
     url_open = '%s%s' % (list_url, comic_number)
-    # url_rss = '%s%s' % (rss_url, comic_number)
 
     try:
         response = br.open(url_open)
@@ -47,11 +48,8 @@ def info(comic_number):
 
     # 작품소개
     div_more = soup.find('div', 'wrap_more')
-    # print div_more
     dl_description = div_more.find_all('dl')[0]
-    # print dl_description
     comic_description = dl_description.dd['title']
-    # print comic_description
 
     info = {
         'title': comic_title,
@@ -64,10 +62,10 @@ def info(comic_number):
     return info
 
 def list(comic_number):
-    ### 작품 정보 ###
+    # 작품 정보
     br = mechanize.Browser()
 
-    ### 작품 리스트 ###
+    # 작품 리스트
     url_rss = '%s%s' % (rss_url, comic_number)
 
     try:
@@ -75,7 +73,7 @@ def list(comic_number):
         data_xml = response.read()
     except Exception, e:
         raise WebtoonDoesNotExist()
-    
+
     soup = BeautifulSoup(data_xml, 'xml')
 
     dict_list = []
@@ -115,7 +113,7 @@ def list(comic_number):
 def detail(detail_num):
     br = mechanize.Browser()
     url_open = '%s%s' % (detail_url, detail_num)
-    url_detail = '%s%s' % (detail_url_json, detail_num)
+    url_detail = '%s%s' % (detail_json, detail_num)
 
     try:
         page = BeautifulSoup(br.open(url_open).read())
@@ -123,12 +121,11 @@ def detail(detail_num):
         br.open(url_open)
         response = br.open(url_detail)
     except Exception, e:
-        # raise WebtoonChapterDoesNotExist()
         pass
 
     title = page.select('span.episode_title')[0].text
 
-    selector = 'div.episode_list ul li a[href$="%s"] img' % ( detail_num )
+    selector = 'div.episode_list ul li a[href$="%s"] img' % (detail_num)
     thumb = StringIO.StringIO()
     thumb.write(urllib.urlopen(page.select(selector)[0]['src']).read())
     thumb.seek(0)
@@ -137,7 +134,7 @@ def detail(detail_num):
         'no': detail_num,
         'title': title,
         'thumbnail': thumb,
-        'date': datetime.now(), # 다음 detail 페이지에서는 날짜 정보를 보내주지 않음
+        'date': datetime.now(),  # 다음 detail 페이지에서는 날짜 정보를 보내주지 않음
         'images': []
     }
 
