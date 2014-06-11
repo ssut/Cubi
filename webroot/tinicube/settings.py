@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import os
 import sys
 
@@ -8,7 +8,7 @@ HOST = 'localhost:8000'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
-if 'DJANGO_PRODUCTION' os.environ:
+if 'DJANGO_PRODUCTION' in os.environ:
     DEBUG = TEMPLATE_DEBUG = False
 
 BROKER_URL = "django://"
