@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from crawler import daum_leaguetoon as DaumLeaguetoon
 from crawler.naver_webtoon import NaverWebtoon

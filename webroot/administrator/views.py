@@ -1,8 +1,10 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+import json
+
+from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from django.db.models import Q
 
 from tinicube.functions import day_to_string
 from tinicube.settings import MEDIA_URL
@@ -19,25 +21,29 @@ except ImportError:
     from django.contrib.auth.models import User
 
 from author.models import WaitConvert
-from work.models import *
 from work import crawl as crawler
+from work.models import *
 
 from crawler import daum_leaguetoon as DaumLeaguetoon
-from crawler.naver_webtoon import NaverWebtoon
 from crawler.exceptions import WebtoonDoesNotExist, WebtoonChapterDoesNotExist
+from crawler.naver_webtoon import NaverWebtoon
 
 from datetime import datetime
-import json
+
 
 def index(request):
-    return render_to_response('administrator/index.html', RequestContext(request))
+    return render_to_response('administrator/index.html',
+                              RequestContext(request))
+
 
 def wait_convert_list(request):
     waiting_list = WaitConvert.objects.all().order_by('-created')
     d = {
         'waiting_list': waiting_list,
     }
-    return render_to_response('administrator/wait_convert_list.html', d, RequestContext(request))
+    return render_to_response('administrator/wait_convert_list.html', d,
+                              RequestContext(request))
+
 
 def convert(request, user_id, boolean):
     user = User.objects.get(id=user_id)
@@ -52,13 +58,16 @@ def convert(request, user_id, boolean):
                 d = {'reason': u'작가 전환 실패'}
             user.save()
             waitconvert.delete()
-            return render_to_response('administrator/convert_success.html', d, RequestContext(request))
+            return render_to_response('administrator/convert_success.html', d,
+                                      RequestContext(request))
         except:
             d = {'reason': u'작가 전환 실패'}
-            return render_to_response('administrator/convert_failed.html', d, RequestContext(request))
+            return render_to_response('administrator/convert_failed.html', d,
+                                      RequestContext(request))
     else:
         d = {'reason': u'작가 전환 실패'}
-        return render_to_response('administrator/convert_failed.html', d, RequestContext(request))
+        return render_to_response('administrator/convert_failed.html', d,
+                                  RequestContext(request))
 
 
 def member_list(request, type='1'):
@@ -73,8 +82,9 @@ def member_list(request, type='1'):
         'members': members,
         'media_url': MEDIA_URL,
     }
-    
+
     return render_to_response(template, d, RequestContext(request))
+
 
 def work_list(request):
     # if request.method == 'POST':
@@ -85,14 +95,18 @@ def work_list(request):
         'media_url': MEDIA_URL,
     }
 
-    return render_to_response('administrator/work_list.html', d, RequestContext(request))
+    return render_to_response('administrator/work_list.html', d,
+                              RequestContext(request))
+
 
 def crawl_list(request):
     d = {
         'targets': ChapterQueue.TARGET_CHOICES,
     }
 
-    return render_to_response('administrator/crawl_list.html', d, RequestContext(request))
+    return render_to_response('administrator/crawl_list.html', d,
+                              RequestContext(request))
+
 
 def get_crawl_list(request):
     num = int(request.GET.get('no', '0'))
@@ -124,7 +138,9 @@ def get_crawl_list(request):
         'current_page': num,
         'num_pages': paginator.num_pages,
     }
-    return HttpResponse(json.dumps(d, cls=DjangoJSONEncoder), content_type="application/json")
+    return HttpResponse(json.dumps(d, cls=DjangoJSONEncoder),
+                        content_type="application/json")
+
 
 def add_crawl_list(request):
     if not request.method == 'POST' or not request.is_ajax():
@@ -136,38 +152,40 @@ def add_crawl_list(request):
     }
 
     target = request.POST.get('target', None)
-    comic_number = int(request.POST.get('comic_number', '0'))
+    num = int(request.POST.get('comic_number', '0'))
     time = int(request.POST.get('time', '0'))
     user = int(request.POST.get('user', '0'))
 
     l = [item[0] for item in ChapterQueue.TARGET_CHOICES]
-    if not target in l:
+    if target not in l:
         d['message'] = 'target error'
-    elif ChapterPeriodicQueue.objects.filter(comic_number=comic_number).count() > 0:
+    elif ChapterPeriodicQueue.objects.filter(comic_number=num).count() > 0:
         d['message'] = 'comic number already exists'
     elif time > 23 or time < 0:
         d['message'] = 'time error'
     elif not User.objects.filter(id=user).exists():
         d['message'] = 'user not exists'
     else:
-        method = NaverWebtoon().list if target == ChapterQueue.NAVER else DaumLeaguetoon.list
+        method = NaverWebtoon(
+        ).list if target == ChapterQueue.NAVER else DaumLeaguetoon.list
         try:
-            method(comic_number)
+            method(num)
         except Exception, e:
             d['message'] = 'webtoon not exists'
         else:
             queue = ChapterPeriodicQueue.objects.create(
-                   target=target,
-                   user=User.objects.get(id=user),
-                   comic_number=comic_number,
-                   every_hour=time,
-                   last_run_at=datetime.now(),
-                   last_run_result=False
-               )
+                target=target,
+                user=User.objects.get(id=user),
+                comic_number=num,
+                every_hour=time,
+                last_run_at=datetime.now(),
+                last_run_result=False
+            )
             queue.save()
             d['success'] = True
 
     return HttpResponse(json.dumps(d), content_type="application/json")
+
 
 def crawl_instantly(request):
     if not request.method == 'POST' or not request.is_ajax():
@@ -184,12 +202,13 @@ def crawl_instantly(request):
     user = int(request.POST.get('user', '0'))
 
     l = [item[0] for item in ChapterQueue.TARGET_CHOICES]
-    if not target in l:
+    if target not in l:
         d['message'] = 'target error'
     elif not User.objects.filter(id=user).exists():
         d['message'] = 'user not exists'
     else:
-        method = NaverWebtoon().detail if target == ChapterQueue.NAVER else DaumLeaguetoon.detail
+        method = NaverWebtoon(
+        ).detail if target == ChapterQueue.NAVER else DaumLeaguetoon.detail
         try:
             method(comic_number, chapter_number)
         except WebtoonDoesNotExist, e:
@@ -197,8 +216,9 @@ def crawl_instantly(request):
         except WebtoonChapterDoesNotExist, e:
             d['message'] = 'webtoon chapter not exists'
         else:
-            result = crawler.crawl(type=target, comic_number= comic_number,
-                chapter_number=chapter_number, user=User.objects.get(id=user))
+            result = crawler.crawl(type=target, comic_number=comic_number,
+                                   chapter_number=chapter_number,
+                                   user=User.objects.get(id=user))
             if result is True:
                 d['success'] = True
             else:
@@ -225,6 +245,7 @@ def toggle_crawl_enabled(request):
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
+
 def search_user(request):
     keyword = request.GET.get('query', None).replace('@', '')
     if keyword is None or not request.is_ajax():
@@ -241,9 +262,10 @@ def search_user(request):
     }
     for user in user_list:
         d['suggestions'].append({
-                'value': u'{0} ({2}, {1})'.format(user.username, user.email,
-                    user.last_name + user.first_name),
-                'data': user.id,
-            })
+            'value': u'{0} ({2}{3}, {1})'.format(user.username, user.email,
+                                                 user.last_name,
+                                                 user.first_name),
+            'data': user.id,
+        })
 
     return HttpResponse(json.dumps(d), content_type="application/json")

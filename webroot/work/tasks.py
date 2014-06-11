@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from celery.task.schedules import crontab
 from celery.decorators import periodic_task
 from datetime import datetime, timedelta
