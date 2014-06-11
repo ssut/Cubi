@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.core.paginator import EmptyPage, PageNotAnInteger
 from tinicube.paginator import FlynsarmyPaginator as Paginator
 
-from board.models import Notice
+from .models import Notice
 
 def notice_list(request):
     page = request.GET.get('page')
@@ -26,7 +26,8 @@ def notice_list(request):
         'notices': notices,
     }
 
-    return render_to_response('board/notice_list_full.html', d, RequestContext(request))
+    return render_to_response('board/notice_list_full.html', d,
+                              RequestContext(request))
 
 def notice_view(request, notice_id):
     page = request.GET.get('page')
@@ -49,4 +50,5 @@ def notice_view(request, notice_id):
         'notice': notice,
     }
 
-    return render_to_response('board/notice_view.html', d, RequestContext(request))
+    return render_to_response('board/notice_view.html', d,
+                              RequestContext(request))

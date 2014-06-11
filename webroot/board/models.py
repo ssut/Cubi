@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.db import models
 
 class Notice(models.Model):
@@ -9,4 +9,3 @@ class Notice(models.Model):
 
     def __unicode__(self):
         return self.title
-
