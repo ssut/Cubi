@@ -1,32 +1,25 @@
-#-*- coding: utf-8 -*-
-from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-# SITE_URL = settings.SITE_URL
-#Custom User model
-# try:
-#     from django.contrib.auth import get_user_model
-#     User = get_user_model()
-# except ImportError:
-#     from django.contrib.auth.models import User
-
-# datetime
-from datetime import datetime, time, date
+# -*- coding: utf-8 -*-
 import json
 
+from datetime import datetime, time, date
 
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 
-### datetime -> String 변환 함수 ###
+# datetime -> String 변환 함수 ###
 def day_to_string(value):
     if isinstance(value, datetime):
         return value.strftime('%Y-%m-%d')
     else:
         return u'None'
 
+
 def minute_to_string(value):
     if isinstance(value, datetime):
         return value.strftime('%Y-%m-%d %H:%M')
     else:
         return u'None'
+
 
 def time_to_string(value):
     if isinstance(value, datetime):
@@ -42,7 +35,7 @@ def imageinfo(instance, url=None):
         'height': instance.height if instance else '',
         'url': instance.url if instance else url,
     }
-    if not instance and url == None:
+    if not instance and url is None:
         dict['url'] = ''
     return dict
 

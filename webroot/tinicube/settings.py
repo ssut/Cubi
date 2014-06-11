@@ -53,8 +53,8 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
-          'css/*.css',
-          ),
+            'css/*.css',
+        ),
         'output_filename': 'css/master.css',
         'variant': 'datauri',
     }
@@ -67,8 +67,10 @@ DEFAULT_PROFILE_IMAGE = STATIC_URL + 'img/default_profile.png'
 ALLOWED_HOSTS = []
 
 # Raven (sentry)
+RAVEN_DSN = "http://072c38e9bf5747cd883eef67d08d9dda" \
+            ":49dd7d63b03143ea96e4c8fcc558bb8f@sentry.ssut.me/3"
 RAVEN_CONFIG = {
-    'dsn': 'http://072c38e9bf5747cd883eef67d08d9dda:49dd7d63b03143ea96e4c8fcc558bb8f@sentry.ssut.me/3',
+    'dsn': RAVEN_DSN,
 }
 
 INSTALLED_APPS = (
@@ -145,17 +147,17 @@ else:
 
 
 if 'test' in sys.argv:
+    filename = os.path.join(os.path.dirname(__file__), 'test.sqlite3')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(os.path.dirname(__file__), 'test.sqlite3'),
-            'TEST_NAME': os.path.join(os.path.dirname(__file__), 'test.sqlite3'),
+            'NAME': filename,
+            'TEST_NAME': filename,
         }
     }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
-
 LANGUAGE_CODE = 'ko-kr'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -165,6 +167,4 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
 STATIC_URL = '/static/'
-

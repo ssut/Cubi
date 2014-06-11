@@ -1,17 +1,19 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('member.api',
+urlpatterns = patterns(
+    'member.api',
     url(r'^login/$', 'login'),
     url(r'^signup/$', 'signup'),
     url(r'^author_info/$', 'author_info'),
 )
 
-urlpatterns += patterns('work.api',
+urlpatterns += patterns(
+    'work.api',
     url(r'^tinicube/chapter/recentupdatelist/$', 'recent_update_chapter_list'),
     url(r'^tinicube/work/newlist/$', 'new_work_list'),
     url(r'^tinicube/work/poplist/$', 'popular_work_list'),
@@ -32,5 +34,3 @@ urlpatterns += patterns('work.api',
     url(r'^chapter/rating/$', 'chapter_rating'),
     url(r'^chapter/rating/add/$', 'chapter_rating_add'),
 )
-
-
