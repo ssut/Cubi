@@ -6,6 +6,8 @@ HOST = 'localhost:8000'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
+if 'DJANGO_PRODUCTION' os.environ:
+    DEBUG = TEMPLATE_DEBUG = False
 
 BROKER_URL = "django://"
 CELERY_IMPORTS = ('work.tasks', )
