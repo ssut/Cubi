@@ -59,7 +59,7 @@ class TinicubeUser(AbstractUser):
     # is_staff, is_active, is_superuser,
     # last_login, date_joined
     type = models.CharField("회원 타입", max_length=1, choices=TYPE_MEMBER_CHOICES, db_index=True)
-    nickname = models.CharField("닉네임", max_length=8, blank=True)
+    nickname = models.CharField("닉네임", max_length=20, blank=True)
     gender = models.CharField("성별", max_length=1, choices=TYPE_GENDER_CHOICES, blank=True)
     tel = models.CharField("연락처", max_length=14, blank=True)
     created = models.DateTimeField(auto_now_add=True)

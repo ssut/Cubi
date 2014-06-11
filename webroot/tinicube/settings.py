@@ -122,12 +122,24 @@ FACEBOOK_API_SECRET = 'ba79942815fda6f882c626762cf964ed'
 ROOT_URLCONF = 'tinicube.urls'
 WSGI_APPLICATION = 'tinicube.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if os.uname()[0] == 'Linux' or os.uname()[0] == u'Linux':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'tinicube_db',
+            'USER': 'tinicube_user',
+            'PASSWORD': 'gksdud1!',
+            'HOST': '',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
+
 
 import sys
 if 'test' in sys.argv:
