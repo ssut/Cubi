@@ -1,8 +1,9 @@
-#-*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 import json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden, Http404
+from django.http import HttpResponse, HttpResponseRedirect, \
+    HttpResponseForbidden, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
 
@@ -16,7 +17,9 @@ from django.contrib.auth.decorators import login_required
 
 from .backends import FacebookAuthBackend
 from .models import TinicubeUser
-from .forms import TinicubeUserSignupForm, TinicubeUserSigninForm, TinicubeUserConvertToAuthorForm, TinicubeUserEditForm, TinicubeUserPasswordChangeForm
+from .forms import TinicubeUserSignupForm, TinicubeUserSigninForm, \
+    TinicubeUserConvertToAuthorForm, TinicubeUserEditForm, \
+    TinicubeUserPasswordChangeForm
 from work.models import Work
 
 from tinicube import settings
@@ -31,6 +34,7 @@ facebook = OAuth2Service(
     access_token_url='https://graph.facebook.com/oauth/access_token',
     base_url='https://graph.facebook.com/')
 
+
 def signup(request):
     if request.method == 'POST':
         form = TinicubeUserSignupForm(request.POST)
@@ -41,26 +45,34 @@ def signup(request):
 
             if TinicubeUser.objects.filter(email=email).exists():
                 error_msg = u'이미 사용중인 이메일 입니다'
-                d = {'form': form, 'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/signup.html', d, RequestContext(request))
+                d = {'form':
+                     form, 'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/signup.html', d,
+                                          RequestContext(request))
             elif TinicubeUser.objects.filter(nickname=nickname).exists():
                 error_msg = u'이미 사용중인 닉네임 입니다'
-                d = {'form': form, 'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/signup.html', d, RequestContext(request))
+                d = {'form':
+                     form, 'return_status': 'failed', 'reason': error_msg}
+                return render_to_response('member/signup.html', d,
+                                          RequestContext(request))
             else:
-                user = TinicubeUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
+                user = TinicubeUser.objects.create_user(
+                    "1", email, "", "", email, 'M', '', '', nickname, password)
                 d = {'user': user}
-                return render_to_response('member/signup_complete.html', d, RequestContext(request))
+                return render_to_response('member/signup_complete.html', d,
+                                          RequestContext(request))
         else:
             error_msg = u'가입양식의 내용이 올바르지 않습니다'
             d = {'return_status': 'failed', 'reason': error_msg}
-            return render_to_response('member/signup.html', d, RequestContext(request))
+            return render_to_response('member/signup.html', d,
+                                      RequestContext(request))
     else:
         form = TinicubeUserSignupForm()
         d = {
             'form': form,
         }
-        return render_to_response('member/signup.html', d, RequestContext(request))
+        return render_to_response('member/signup.html', d,
+                                  RequestContext(request))
 
 def signin(request):
     if request.user.is_authenticated():
@@ -80,23 +92,28 @@ def signin(request):
                     'form': form,
                     'error': error_msg,
                 }
-                return render_to_response('member/signin.html', d, RequestContext(request))
+                return render_to_response('member/signin.html', d,
+                                          RequestContext(request))
         else:
             error_msg = u'로그인 양식의 내용이 올바르지 않습니다'
             d = {
                 'form': form,
                 'error': error_msg,
             }
-            return render_to_response('member/signin.html', d, RequestContext(request))
+            return render_to_response('member/signin.html', d,
+                                      RequestContext(request))
     else:
         form = TinicubeUserSigninForm()
         d = {
             'form': form,
         }
-        return render_to_response('member/signin.html', d, RequestContext(request))
+        return render_to_response('member/signin.html', d,
+                                  RequestContext(request))
+
 
 def signin_with_facebook(request):
-    redirect_uri = request.build_absolute_uri(reverse('member:signin_with_facebook_callback'))
+    redirect_uri = request.build_absolute_uri(
+        reverse('member:signin_with_facebook_callback'))
     params = {
         'scope': 'read_stream',
         'response_type': 'code',
@@ -108,16 +125,19 @@ def signin_with_facebook(request):
 
 
 def signin_with_facebook_callback(request):
-    redirect_uri = request.build_absolute_uri(reverse('member:signin_with_facebook_callback'))
+    redirect_uri = request.build_absolute_uri(
+        reverse('member:signin_with_facebook_callback'))
     code = request.GET.get('code', '')
 
     try:
         session = facebook.get_auth_session(data={
             'code': code,
             'redirect_uri': redirect_uri
-            })
+        })
     except Exception, e:
-        return HttpResponse('<script> alert("페이스북 연결 실패"); location.replace("' + reverse('signin') + '") </script>')
+        resp = "<script> alert(\"페이스북 연결 실패\"); location.replace(\"" + \
+               reverse('signin') + "\") </script>"
+        return HttpResponse(resp)
 
     fbid = session.get('me').json()['id']
     user = TinicubeUser.objects.filter(access_token=fbid)
@@ -127,16 +147,21 @@ def signin_with_facebook_callback(request):
         login(request, user)
         return redirect('index')
     else:
-        return HttpResponse('<script> alert("일치하는 계정 없음"); location.replace("' + reverse('signin') + '") </script>')
+        resp = "<script> alert(\"일치하는 계정 없음\"); location.replace(\"" + \
+               reverse('signin') + "\") </script>"
+        return HttpResponse(resp)
+
 
 @login_required
 def signout(request):
     logout(request)
     return render_to_response('member/signout.html')
 
+
 @login_required
 def connect_facebook(request):
-    redirect_uri = request.build_absolute_uri(reverse('member:connect_facebook_callback'))
+    redirect_uri = request.build_absolute_uri(
+        reverse('member:connect_facebook_callback'))
     params = {
         'scope': 'read_stream',
         'response_type': 'code',
@@ -149,7 +174,8 @@ def connect_facebook(request):
 @login_required
 def connect_facebook_callback(request):
     user = request.user
-    redirect_uri = request.build_absolute_uri(reverse('member:connect_facebook_callback'))
+    redirect_uri = request.build_absolute_uri(
+        reverse('member:connect_facebook_callback'))
     code = request.GET.get('code', '')
 
     try:
@@ -158,12 +184,16 @@ def connect_facebook_callback(request):
             'redirect_uri': redirect_uri
         })
     except Exception, e:
-        return HttpResponse('<script> alert("페이스북 연결 안됨"); location.replace("' + reverse('member_info') + '") </script>')
+        resp = "<script> alert(\"페이스북 연결 실패\"); location.replace(\"" + \
+               reverse('member_info') + "\") </script>"
+        return HttpResponse(resp)
 
     fbid = session.get('me').json()['id']
     user.access_token = fbid
     user.save()
-    return HttpResponse('<script> alert("페이스북 연결됨"); location.replace("' + reverse('member_info') + '") </script>')
+    resp = "<script> alert(\"페이스북 연결 완료\"); location.replace(\"" + \
+           reverse('member_info') + "\") </script>"
+    return HttpResponse(resp)
 
 @login_required
 def disconnect_facebook(request):
@@ -171,7 +201,9 @@ def disconnect_facebook(request):
     user.access_token = ''
     user.save()
 
-    return HttpResponse('<script> alert("페이스북 끊김"); location.replace("' + reverse('member_info') + '") </script>')
+    resp = "<script> alert(\"페이스북 연결 해제 완료\"); location.replace(\"" + \
+           reverse('member_info') + "\") </script>"
+    return HttpResponse(resp)
 
 def convert_to_author(request):
     user = request.user
@@ -184,7 +216,9 @@ def convert_to_author(request):
         d = {
             'form': form,
         }
-        return render_to_response('member/convert_to_author.html', d, RequestContext(request))
+        return render_to_response('member/convert_to_author.html', d,
+                                  RequestContext(request))
+
 
 @login_required
 def member_info(request):
@@ -195,7 +229,8 @@ def member_info(request):
             # request한 user와 새로 들어온 form의 Password로 인증
             print user.email
             print form.cleaned_data['password']
-            user = authenticate(username=user.email, password=form.cleaned_data['password'])
+            user = authenticate(username=user.email,
+                                password=form.cleaned_data['password'])
             if user is not None:
                 email = form.cleaned_data['email']
                 nickname = form.cleaned_data['nickname']
@@ -209,24 +244,27 @@ def member_info(request):
 
                 d = {'return_status': 'success', 'user': user}
 
-                return render_to_response('member/info_edit_success.html', d, RequestContext(request))
+                return render_to_response('member/info_edit_success.html', d,
+                                          RequestContext(request))
             else:
                 # 이 부분은 message띄우면서 입력정보로 form다시 띄워주기
                 error_msg = u'비밀번호를 확인해주세요'
                 d = {'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/info_edit_failed.html', d, RequestContext(request))
+                return render_to_response('member/info_edit_failed.html', d,
+                                          RequestContext(request))
         else:
             error_msg = u'회원정보 수정 양식의 내용이 올바르지 않습니다'
-            return render_to_response('member/info_edit_failed.html', d, RequestContext(request))
+            return render_to_response('member/info_edit_failed.html', d,
+                                      RequestContext(request))
     else:
-        # print user.email
-        # print user.nickname
-        # print user.password
-        form = TinicubeUserEditForm(initial={'email': user.email, 'nickname': user.nickname})
+        form = TinicubeUserEditForm(
+            initial={'email': user.email, 'nickname': user.nickname})
         d = {
             'form': form,
         }
-        return render_to_response('member/info.html', d, RequestContext(request))
+        return render_to_response('member/info.html', d,
+                                  RequestContext(request))
+
 
 @login_required
 def password_change(request):
@@ -237,33 +275,45 @@ def password_change(request):
             # request한 user와 새로 들어온 form의 Password로 인증
             print user.email
             print form.cleaned_data['original_password']
-            user = authenticate(username=user.email, password=form.cleaned_data['original_password'])
+            user = authenticate(
+                username=user.email,
+                password=form.cleaned_data['original_password'])
             if user is not None:
                 new_password = form.cleaned_data['new_password']
-                new_password_confirm = form.cleaned_data['new_password_confirm']
+                new_password_confirm = form.cleaned_data[
+                    'new_password_confirm']
                 if new_password == new_password_confirm:
                     user.set_password(new_password)
                     user.save()
                     d = {'return_status': 'success', 'user': user}
-                    return render_to_response('member/passwordchange_success.html', d, RequestContext(request))
+                    return render_to_response(
+                        'member/passwordchange_success.html',
+                        d, RequestContext(request))
                 else:
                     error_msg = u'새 비밀번호와 비밀번호 확인이 일치하지 않습니다'
                     d = {'return_status': 'failed', 'reason': error_msg}
-                    return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))    
+                    return render_to_response(
+                        'member/passwordchange_failed.html',
+                        d, RequestContext(request))
             else:
                 # 이 부분은 message띄우면서 입력정보로 form다시 띄워주기
                 error_msg = u'기존 비밀번호를 확인해주세요'
                 d = {'return_status': 'failed', 'reason': error_msg}
-                return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))
+                return render_to_response(
+                    'member/passwordchange_failed.html',
+                    d, RequestContext(request))
         else:
             error_msg = u'비밀번호 변경 양식의 내용이 올바르지 않습니다'
-            return render_to_response('member/passwordchange_failed.html', d, RequestContext(request))
+            return render_to_response(
+                'member/passwordchange_failed.html',
+                d, RequestContext(request))
     else:
         form = TinicubeUserPasswordChangeForm()
         d = {
             'form': form,
         }
-        return render_to_response('member/passwordchange.html', d, RequestContext(request))
+        return render_to_response('member/passwordchange.html', d,
+                                  RequestContext(request))
 
 @csrf_exempt
 @login_required
@@ -273,7 +323,7 @@ def add_to_favorites(request):
     _id = request.POST.get('id', None)
     if user is None or \
         _id is None or \
-        _type is None or not request.is_ajax():
+            _type is None or not request.is_ajax():
         return HttpResponse('{}', content_type="application/json")
 
     d = {
@@ -302,11 +352,13 @@ def add_to_favorites(request):
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
+
 @login_required
 def get_favorites(request):
     user = request.user
     if user is None or not request.is_ajax():
-        return HttpResponse('{ "success": false }', content_type="application/json")
+        return HttpResponse('{ "success": false }',
+                            content_type="application/json")
 
     d = {
         'success': False,
@@ -333,6 +385,7 @@ def get_favorites(request):
 
     return HttpResponse(json.dumps(d), content_type="application/json")
 
+
 @login_required
 def delete_account(request):
     if request.method != 'POST' or not request.is_ajax():
@@ -350,4 +403,3 @@ def delete_account(request):
     else:
         d = {'success': True, 'message': '계정이 삭제되었습니다.'}
     return HttpResponse(json.dumps(d), content_type="application/json")
-

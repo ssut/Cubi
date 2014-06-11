@@ -30,7 +30,8 @@ class SplitInputWidget(forms.MultiWidget):
 
     def value_from_datadict(self, data, files, name):
         value_list = [
-            widget.value_from_datadict(data, files, name + '_%s' % i) for i, widget in enumerate(self.widgets)
+            widget.value_from_datadict(data, files, name + '_%s' % i)
+            for i, widget in enumerate(self.widgets)
         ]
         return_str = ''
         for i in range(self.item_number):

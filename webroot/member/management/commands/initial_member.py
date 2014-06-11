@@ -49,6 +49,7 @@ user_list = [
         'access_token': '000',
     },
 ]
+
 def create_member():
     print '\n== Member모델 초기 데이터 설정 시작 ==\n'
     for user_dict in user_list:
@@ -67,7 +68,6 @@ def create_member():
             user_instance.save()
 
         print user_instance.email, created
-
 
     print '\n== Member모델 초기 데이터 설정 완료 ==\n'
 

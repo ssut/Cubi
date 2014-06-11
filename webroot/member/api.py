@@ -1,8 +1,11 @@
-#-*- coding: utf-8 -*-
-from django.template import RequestContext
+# -*- coding: utf-8 -*-
+import json
+
+import django.core.exceptions
+
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
-import django.core.exceptions
+from django.template import RequestContext
 
 # Session
 from django.contrib.sessions.backends.db import SessionStore
@@ -23,10 +26,10 @@ except ImportError:
 from django.contrib.auth import authenticate, login
 
 from tinicube.functions import return_failed_json, return_success_json
+
 from author.models import AuthorInfo
 from work.models import Work
 
-import json
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -74,20 +77,19 @@ def login(request):
 
         return HttpResponse(json.dumps(data), content_type='application/json')
 
-
-
 @csrf_exempt
 @require_http_methods(["POST"])
 def signup(request):
     try:
-        email = request.POST.get("email",None)
-        password = request.POST.get("password",None)
-        nickname = request.POST.get("nickname","큐비독자")
+        email = request.POST.get("email", None)
+        password = request.POST.get("password", None)
+        nickname = request.POST.get("nickname", "큐비독자")
         # check absense of password, email
-        if None in [ email, password]:
+        if None in [email, password]:
             raise exceptions.FieldError
 
-        new_user = TinicubeUser.objects.create_user("1",email,"","",email,'M','','',nickname, password)
+        args = ["1", email, "", "", email, 'M', '', '', nickname, password]
+        new_user = TinicubeUser.objects.create_user(*args)
         data = {
             'user_data': new_user.json()
         }
@@ -98,11 +100,9 @@ def signup(request):
         data['session_key'] = session_key
         return HttpResponse(json.dumps(data), content_type='application/json')
     except:
-        return HttpResponse(json.dumps(
-                    {"return_status":"failed",
-                        "reason":"error in creating user"
-                            }), content_type='application/json')
-
-
-
-
+        result = {
+            "return_status": "failed",
+            "reason": "error in creating user"
+        }
+        return HttpResponse(json.dumps(result),
+                            content_type='application/json')

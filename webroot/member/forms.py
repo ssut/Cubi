@@ -1,6 +1,6 @@
-#-*- coding: utf-8 -*-
-from django.forms import ModelForm
+# -*- coding: utf-8 -*-
 from django import forms
+from django.forms import ModelForm
 
 from member.models import *
 from member.widgets import SplitInputWidget

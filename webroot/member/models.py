@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-from django.db import models
+import datetime
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.utils.timezone import utc
 
 from tinicube.functions import day_to_string, minute_to_string
 from tinicube.functions import imageinfo
 
-from django.utils.timezone import utc
-
 from author.models import AuthorInfo
 
-import datetime
 
 TYPE_GENDER_CHOICES = (
     ('M', '남자'),
@@ -23,11 +23,18 @@ TYPE_MEMBER_CHOICES = (
 )
 
 class TinicubeUserManager(BaseUserManager):
-    def create_default_user(self, username, nickname, password, type='2', first_name='Admin', last_name='Cubi', email='Cubi@Cubi.in', gender='M', tel='000', access_token='000'):
-        user = self.create_user(type=type, username=username, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
+    def create_default_user(self, username, nickname, password, type='2',
+                            first_name='Admin', last_name='Cubi',
+                            email='Cubi@Cubi.in', gender='M', tel='000',
+                            access_token='000'):
+        user = self.create_user(
+            type=type, username=username, first_name=first_name,
+            last_name=last_name, email=email, gender=gender, tel=tel,
+            access_token=access_token, password=password)
         return user
 
-    def create_user(self, type, username, first_name, last_name, email, gender, tel, access_token, nickname="없음", password=None):
+    def create_user(self, type, username, first_name, last_name, email,
+                    gender, tel, access_token, nickname="없음", password=None):
         user = self.model(
             type=type,
             username=username,
@@ -44,13 +51,19 @@ class TinicubeUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, password, email, username, type='2', first_name='Admin', last_name='Cubi', gender='M', tel='000', access_token='000', ):
-        user = self.create_user(type=type, username=email, first_name=first_name, last_name=last_name, email=email, gender=gender, tel=tel, access_token=access_token, password=password)
+    def create_superuser(self, password, email, username, type='2',
+                         first_name='Admin', last_name='Cubi', gender='M',
+                         tel='000', access_token='000'):
+        user = self.create_user(
+            type=type, username=email, first_name=first_name,
+            last_name=last_name, email=email, gender=gender, tel=tel,
+            access_token=access_token, password=password)
         user.is_staff = True
         user.is_active = True
         user.is_superuser = True
         user.save(using=self.db)
         return user
+
 
 class TinicubeUser(AbstractUser):
     # 이미 있는 것
@@ -58,20 +71,23 @@ class TinicubeUser(AbstractUser):
     # password, groups, user_permissions,
     # is_staff, is_active, is_superuser,
     # last_login, date_joined
-    type = models.CharField("회원 타입", max_length=1, choices=TYPE_MEMBER_CHOICES, db_index=True)
+    type = models.CharField("회원 타입", max_length=1,
+                            choices=TYPE_MEMBER_CHOICES, db_index=True)
     nickname = models.CharField("닉네임", max_length=20, blank=True)
-    gender = models.CharField("성별", max_length=1, choices=TYPE_GENDER_CHOICES, blank=True)
+    gender = models.CharField(
+        "성별", max_length=1, choices=TYPE_GENDER_CHOICES, blank=True)
     tel = models.CharField("연락처", max_length=14, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     access_token = models.CharField("페이스북 엑세스 토큰", max_length=255, blank=True)
 
-
     # 즐겨찾기, ManyToMany로 연결
-    # favorites = models.ManyToManyField('work.Work', related_name='user_by_favorites', blank=True)
+    # favorites = models.ManyToManyField('work.Work',
+    #               related_name='user_by_favorites', blank=True)
     # favorites = models.
     # 자신의 작품, ManyToMany로 연결
-    own_works = models.ManyToManyField('work.Work', related_name='user_by_own_works', blank=True)
+    own_works = models.ManyToManyField(
+        'work.Work', related_name='user_by_own_works', blank=True)
 
     objects = TinicubeUserManager()
 
@@ -89,7 +105,7 @@ class TinicubeUser(AbstractUser):
             'tel': self.tel,
             'created': minute_to_string(self.created),
         }
-        if self.type == '2' :
+        if self.type == '2':
             if AuthorInfo.objects.filter(user=self).exists():
                 dict['author_info'] = AuthorInfo.objects.get(user=self).json()
         return dict
@@ -133,9 +149,11 @@ class TinicubeUser(AbstractUser):
         from work.models import Work
         if isinstance(inst, Work):
             print self, inst
-            return UserWorkFavorites.objects.filter(user=self, work=inst).exists()
+            return UserWorkFavorites.objects.filter(
+                user=self, work=inst).exists()
         elif isinstance(inst, TinicubeUser):
-            return UserAuthorFavorites.objects.create(user=self, author=inst).exists()
+            return UserAuthorFavorites.objects.create(
+                user=self, author=inst).exists()
 
         return True
 
@@ -153,7 +171,8 @@ class TinicubeUser(AbstractUser):
         if isinstance(inst, Work):
             favorite = UserWorkFavorites.objects.create(user=self, work=inst)
         elif isinstance(inst, TinicubeUser):
-            favorite = UserAuthorFavorites.objects.create(user=self, author=inst)
+            favorite = UserAuthorFavorites.objects.create(
+                user=self, author=inst)
 
         return favorite
 
@@ -189,16 +208,19 @@ class TinicubeUser(AbstractUser):
 
 class UserWorkFavorites(models.Model):
     from work.models import Work
-    user = models.ForeignKey(TinicubeUser, related_name='work_favorites_by_user')
+    user = models.ForeignKey(
+        TinicubeUser, related_name='work_favorites_by_user')
     work = models.OneToOneField(Work, related_name='work_favorites_by_work')
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.work)
 
+
 class UserAuthorFavorites(models.Model):
-    user = models.ForeignKey(TinicubeUser, related_name='author_favorites_by_user')
-    author = models.ForeignKey(TinicubeUser, related_name='author_favorites_by_author')
+    user = models.ForeignKey(
+        TinicubeUser, related_name='author_favorites_by_user')
+    author = models.ForeignKey(
+        TinicubeUser, related_name='author_favorites_by_author')
 
     def __unicode__(self):
         return u'%s - %s' % (self.user, self.author)
-
