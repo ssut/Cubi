@@ -7,6 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+
     url(r'^django_admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
