@@ -1,8 +1,10 @@
-#-*- coding: utf-8 -*-
-from django.template import RequestContext
+# -*- coding: utf-8 -*-
+import json
+
+from django.db.models import Avg
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
-from django.db.models import Avg
+from django.template import RequestContext
 
 # decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -22,14 +24,10 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
-# other
-import json
-
-from tinicube.settings import MEDIA_URL
 from tinicube.functions import return_failed_json, return_success_json
+from tinicube.settings import MEDIA_URL
+
 from work.models import *
-
-
 
 
 '''
@@ -45,7 +43,9 @@ from work.models import *
 @csrf_exempt
 def recent_update_chapter_list(request):
     chapters = Chapter.objects.all().order_by('-created')[:5]
-    data = { 'chapters': [chapter.json() for chapter in chapters], }
+    data = {
+        'chapters': [chapter.json() for chapter in chapters]
+    }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 # 신규 Work 목록
@@ -53,7 +53,9 @@ def recent_update_chapter_list(request):
 @csrf_exempt
 def new_work_list(request):
     works = Work.objects.all().order_by('-created')[:3]
-    data = { 'works': [work.json() for work in works], }
+    data = {
+        'works': [work.json() for work in works]
+    }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 # 인기 Work 목록
@@ -61,7 +63,9 @@ def new_work_list(request):
 @csrf_exempt
 def popular_work_list(request):
     works = Work.objects.all().order_by('-created')[:5]
-    data = { 'works': [work.json() for work in works], }
+    data = {
+        'works': [work.json() for work in works]
+    }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 # 신규 Author 목록
@@ -69,7 +73,9 @@ def popular_work_list(request):
 @csrf_exempt
 def new_author_list(request):
     authors = User.objects.filter(type='2').order_by('date_joined')[:3]
-    data = { 'authors': [author.json() for author in authors], }
+    data = {
+        'authors': [author.json() for author in authors]
+    }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 # 인기 Author 목록
@@ -77,7 +83,9 @@ def new_author_list(request):
 @csrf_exempt
 def popular_author_list(request):
     authors = User.objects.filter(type='2').order_by('date_joined')[:5]
-    data = { 'authors': [author.json() for author in authors], }
+    data = {
+        'authors': [author.json() for author in authors]
+    }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 '''
@@ -258,7 +266,8 @@ def chapter_comment_list(request):
     work_id = int(query_dict['work_id'])
     chapter_id = int(query_dict['chapter_id'])
 
-    comments = ChapterComment.objects.filter(chapter__id=chapter_id).filter(chapter__work__id=work_id)
+    comments = ChapterComment.objects.filter(chapter__id=chapter_id) \
+        .filter(chapter__work__id=work_id)
 
     data = {
         'comments': [comment.json() for comment in comments],
@@ -285,7 +294,8 @@ def chapter_comment_add(request):
         work = Work.objects.get(id=work_id)
         chapter = Chapter.objects.get(work=work, id=chapter_id)
 
-        comment_instance = ChapterComment(chapter=chapter, author=user, content=content)
+        comment_instance = ChapterComment(
+            chapter=chapter, author=user, content=content)
         comment_instance.save()
         return return_success_json()
     else:
@@ -316,7 +326,7 @@ def chapter_comment_del(request):
             return return_success_json()
         else:
             return return_failed_json('request user is not comment\'s author')
-        
+
     else:
         return return_failed_json('Not Matching User')
 
@@ -359,12 +369,15 @@ def chapter_rating_add(request):
         work = Work.objects.get(id=work_id)
         chapter = Chapter.objects.get(work=work, id=chapter_id)
 
-        if ChapterRating.objects.filter(chapter=chapter).filter(author=user).exists():
-            rating_instance = ChapterRating.objects.get(chapter=chapter, author=user)
+        if ChapterRating.objects.filter(chapter=chapter) \
+                .filter(author=user).exists():
+            rating_instance = ChapterRating.objects.get(
+                chapter=chapter, author=user)
             rating_instance.score = rating
             rating_instance.save()
         else:
-            rating_instance = ChapterRating.objects.create(chapter=chapter, author=user, score=rating)
+            rating_instance = ChapterRating.objects.create(
+                chapter=chapter, author=user, score=rating)
             rating_instance.save()
         return return_success_json()
     else:

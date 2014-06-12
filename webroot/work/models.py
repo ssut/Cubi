@@ -1,19 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
-from django.db import models
+
 from datetime import datetime
 
-# Custom user model
-# try:
-#     from django.contrib.auth import get_user_model
-#     User = get_user_model()
-# except ImportError:
-#     from django.contrib.auth.models import User
-from member.models import TinicubeUser as User
+from django.db import models
 
 from tinicube.functions import day_to_string, minute_to_string, time_to_string
 from tinicube.functions import imageinfo
 from tinicube.settings import MEDIA_URL
+
+from member.models import TinicubeUser as User
 
 # Upload path
 path_work = 'work/'
@@ -29,14 +25,9 @@ def get_path(work_instance, filename):
     path = os.path.join(today_str, path_work, extra_path, filename)
     return path
 
-
 # 사용하지 않음
 path_image = 'image/'
 path_image_work = os.path.join(path_image)
-# path_image_chapter = os.path.join(path_image, 'chapter')
-# path_image_chapter_cover = os.path.join(path_image_chapter, 'cover')
-# path_image_chapter_thumbnail = os.path.join(path_image_chapter, 'thumbnail')
-# path_image_content = os.path.join(path_image, 'content')
 
 # Dynamic upload path
 def get_work_cover_path(work_instance, filename):
@@ -45,27 +36,35 @@ def get_work_thumbnail_path(work_instance, filename):
     path = '%s'
 
 def get_image_chapter_cover_path(chapter_instance, filename):
-    path1 = os.path.join(path_image_chapter_cover, str(chapter_instance.work.id))
+    path1 = os.path.join(path_image_chapter_cover,
+                         str(chapter_instance.work.id))
     path2 = os.path.join(path1, filename)
     return path2
 
 def get_image_chapter_thumbnail_path(chapter_instance, filename):
-    path1 = os.path.join(path_image_chapter_thumbnail, str(chapter_instance.work.id))
+    path1 = os.path.join(path_image_chapter_thumbnail,
+                         str(chapter_instance.work.id))
     path2 = os.path.join(path1, filename)
     return path2
 
 def get_image_content_path(content_instance, filename):
-    path1 = os.path.join(path_image_content, str(content_instance.chapter.work.id))
+    path1 = os.path.join(path_image_content,
+                         str(content_instance.chapter.work.id))
     path2 = os.path.join(path1, str(content_instance.chapter.id))
     path3 = os.path.join(path2, filename)
     return path3
 
 class IntegerRangeField(models.IntegerField):
-    def __init__(self, verbose_name=None, name=None, min_value=None, max_value=None, **kwargs):
+    def __init__(self, verbose_name=None, name=None, min_value=None,
+                 max_value=None, **kwargs):
         self.min_value, self.max_value = min_value, max_value
         models.IntegerField.__init__(self, verbose_name, name, **kwargs)
+
     def formfield(self, **kwargs):
-        defaults = {'min_value': self.min_value, 'max_value':self.max_value}
+        defaults = {
+            'min_value': self.min_value,
+            'max_value': self.max_value
+        }
         defaults.update(kwargs)
         return super(IntegerRangeField, self).formfield(**defaults)
 
@@ -76,7 +75,8 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return u'%s%s Comment(%s)' % (self.author.last_name, self.author.first_name, self.created)
+        return u'%s%s Comment(%s)' % (
+            self.author.last_name, self.author.first_name, self.created)
 
     def json(self):
         return {
@@ -102,7 +102,8 @@ class Rating(models.Model):
     score = models.IntegerField(choices=RATING_CHOICES)
 
     def __unicode__(self):
-        return u'%s%s Rating(%d)' % (self.author.last_name, self.author.first_name, self.score)
+        return u'%s%s Rating(%d)' % (
+            self.author.last_name, self.author.first_name, self.score)
 
     def json(self):
         return {
@@ -127,6 +128,7 @@ Work(작품)
 # 작품 카테고리
 class WorkCategory(models.Model):
     title = models.CharField(max_length=100)
+
     def __unicode__(self):
         return self.title
 
@@ -139,22 +141,35 @@ class Work(models.Model):
     title = models.CharField('작품명', max_length=200)
     description_simple = models.CharField('작품 한줄 설명', max_length=100)
     description_full = models.TextField('작품 설명', blank=True)
-    market_android = models.CharField('안드로이드 마켓 주소', max_length=100, blank=True)
+    market_android = models.CharField(
+        '안드로이드 마켓 주소', max_length=100, blank=True)
     market_ios = models.CharField('iOS 마켓 주소', max_length=100, blank=True)
     created = models.DateTimeField('생성일자', auto_now_add=True)
-    
-    image_thumbnail_square = models.ImageField('정사각형 썸네일', upload_to=get_path, blank=True)
-    image_thumbnail_rectangle = models.ImageField('배너형태 썸네일', upload_to=get_path, blank=True)
-    image_cover_large = models.ImageField('웹에서 쓸 큰 커버이미지(작품목록 가장 상단)', upload_to=get_path, blank=True)
-    image_cover = models.ImageField('웹에서 쓸 커버이미지(작품목록 개별 작품 커버)', upload_to=get_path, blank=True)
 
-    mobile_cover_top = models.ImageField('모바일 ChapterList 커버이미지(637x421)', upload_to=get_path, blank=True)
-    mobile_cover_pager = models.ImageField('모바일 CoverImagePager 커버이미지(637x421, 제목 및 설명 필요)', upload_to=get_path, blank=True)
-    mobile_cover_small = models.ImageField('통합앱 메인화면 커버이미지(1080x240)', upload_to=get_path, blank=True)
-    mobile_loading_android = models.ImageField('안드로이드 로딩 이미지', upload_to=get_path, blank=True)
-    mobile_loading_ios = models.ImageField('iOS 로딩 이미지', upload_to=get_path, blank=True)
-    mobile_largeicon = models.ImageField('모바일 큰 아이콘(1024x1024 이상)', upload_to=get_path, blank=True)
-    mobile_smallicon = models.ImageField('모바일 작은 아이콘(안드144x144, iOS)', upload_to=get_path, blank=True)
+    image_thumbnail_square = models.ImageField('정사각형 썸네일',
+                                               upload_to=get_path, blank=True)
+    image_thumbnail_rectangle = models.ImageField(
+        '배너형태 썸네일', upload_to=get_path, blank=True)
+    image_cover_large = models.ImageField(
+        '웹에서 쓸 큰 커버이미지(작품목록 가장 상단)', upload_to=get_path, blank=True)
+    image_cover = models.ImageField(
+        '웹에서 쓸 커버이미지(작품목록 개별 작품 커버)', upload_to=get_path, blank=True)
+
+    mobile_cover_top = models.ImageField(
+        '모바일 ChapterList 커버이미지(637x421)', upload_to=get_path, blank=True)
+    mobile_cover_pager = models.ImageField(
+        '모바일 CoverImagePager 커버이미지(637x421, 제목 및 설명 필요)',
+        upload_to=get_path, blank=True)
+    mobile_cover_small = models.ImageField(
+        '통합앱 메인화면 커버이미지(1080x240)', upload_to=get_path, blank=True)
+    mobile_loading_android = models.ImageField(
+        '안드로이드 로딩 이미지', upload_to=get_path, blank=True)
+    mobile_loading_ios = models.ImageField(
+        'iOS 로딩 이미지', upload_to=get_path, blank=True)
+    mobile_largeicon = models.ImageField(
+        '모바일 큰 아이콘(1024x1024 이상)', upload_to=get_path, blank=True)
+    mobile_smallicon = models.ImageField(
+        '모바일 작은 아이콘(안드144x144, iOS)', upload_to=get_path, blank=True)
 
     last_upload = models.DateField('마지막 챕터 업데이트 날짜', blank=True, null=True)
     chapter_count = models.IntegerField('챕터 수', blank=True, null=True)
@@ -202,7 +217,8 @@ class Work(models.Model):
             'created': day_to_string(self.created),
 
             'image_thumbnail_square': imageinfo(self.image_thumbnail_square),
-            'image_thumbnail_rectangle': imageinfo(self.image_thumbnail_rectangle),
+            'image_thumbnail_rectangle':
+                imageinfo(self.image_thumbnail_rectangle),
             'image_cover_large': imageinfo(self.image_cover_large),
             'image_cover': imageinfo(self.image_cover),
 
@@ -223,7 +239,8 @@ class WorkComment(Comment):
     work = models.ForeignKey(Work)
 
     def __unicode__(self):
-        return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.work.title)
+        return u'%s%s - %s Comment' % (
+            self.author.last_name, self.author.first_name, self.work.title)
 
     def json(self):
         parent_dict = self.comment_ptr.json()
@@ -280,7 +297,8 @@ class Chapter(models.Model):
     def save(self, *args, **kwargs):
         super(Chapter, self).save(*args, **kwargs)
         self.work.chapter_count = self.work.chapter_by_work.count()
-        self.work.last_upload = self.work.chapter_by_work.order_by('-created').first().created
+        self.work.last_upload = self.work.chapter_by_work.order_by('-created') \
+            .first().created
         self.work.save()
 
 
@@ -289,7 +307,8 @@ class ChapterComment(Comment):
     chapter = models.ForeignKey(Chapter)
 
     def __unicode__(self):
-        return u'%s%s - %s Comment' % (self.author.last_name, self.author.first_name, self.chapter.title)
+        return u'%s%s - %s Comment' % (
+            self.author.last_name, self.author.first_name, self.chapter.title)
 
     def json(self):
         parent_dict = self.comment_ptr.json()
@@ -304,7 +323,9 @@ class ChapterRating(Rating):
     chapter = models.ForeignKey(Chapter)
 
     def __unicode__(self):
-        return u'%s%s - %s Rating(%d)' % (self.author.last_name, self.author.first_name, self.chapter.title, self.score)
+        return u'%s%s - %s Rating(%d)' % (
+            self.author.last_name, self.author.first_name,
+            self.chapter.title, self.score)
 
     def json(self):
         parent_dict = self.rating_ptr.json()
@@ -347,7 +368,8 @@ class ChapterQueue(models.Model):
 # last_run_result = 마지막 크롤링 성공 여부
 # enabled = 켤지 끌지
 class ChapterPeriodicQueue(models.Model):
-    target = models.CharField(max_length=10, choices=ChapterQueue.TARGET_CHOICES)
+    target = models.CharField(
+        max_length=10, choices=ChapterQueue.TARGET_CHOICES)
     user = models.ForeignKey(User)
     comic_number = models.IntegerField()
     every_hour = IntegerRangeField(min_value=0, max_value=23, db_index=True)
@@ -366,15 +388,21 @@ class ChapterPeriodicQueue(models.Model):
 class Content(models.Model):
     chapter = models.ForeignKey(Chapter)
     sequence = models.IntegerField(default=0)
+
     def __unicode__(self):
-        return u'%s - %s (%d)' % (self.chapter.work.title, self.chapter.title, self.sequence)
+        return u'%s - %s (%d)' % (
+            self.chapter.work.title, self.chapter.title, self.sequence)
 
 class Image(Content):
     image = models.ImageField(upload_to=get_image_content_path)
+
     def __unicode__(self):
-        return u'%s - %s (Image, %d)' % (self.chapter.work.title, self.chapter.title, self.sequence)
+        return u'%s - %s (Image, %d)' % (
+            self.chapter.work.title, self.chapter.title, self.sequence)
 
 class Text(Content):
     text = models.TextField(blank=True)
+
     def __unicode__(self):
-        return u'%s - %s (Text, %d)' % (self.chapter.work.title, self.chapter.title, self.sequence)
+        return u'%s - %s (Text, %d)' % (
+            self.chapter.work.title, self.chapter.title, self.sequence)

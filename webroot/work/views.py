@@ -1,14 +1,16 @@
-#-*- coding: utf-8 -*-
-import json
+# -*- coding: utf-8 -*-
 import StringIO
+import json
 
-from datetime import datetime
-from PIL import Image as PIL_Image
 
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
-from django.core.urlresolvers import reverse
+
+from datetime import datetime
+
+from PIL import Image as PIL_Image
 
 from tinicube.functions import day_to_string
 from tinicube.settings import MEDIA_URL
@@ -27,7 +29,8 @@ def work_list(request):
         'works': works,
     }
 
-    return render_to_response('work/work_list.html', d, RequestContext(request))
+    return render_to_response('work/work_list.html', d,
+                              RequestContext(request))
 
 def chapter_list(request, work_id):
     work = Work.objects.get(id=work_id)
@@ -38,7 +41,8 @@ def chapter_list(request, work_id):
         'chapters': chapters,
     }
 
-    return render_to_response('work/chapter_list.html', d, RequestContext(request))
+    return render_to_response('work/chapter_list.html', d,
+                              RequestContext(request))
 
 def chapter_view(request, chapter_id):
     chapter = Chapter.objects.get(id=chapter_id)
@@ -46,7 +50,8 @@ def chapter_view(request, chapter_id):
     images = Image.objects.filter(chapter=chapter)
     user = request.user
 
-    rating = chapter.avg_rating['rating'] if 'rating' in chapter.avg_rating else '0'
+    rating = chapter.avg_rating['rating'] \
+        if 'rating' in chapter.avg_rating else '0'
     tmp_rating = rating
     rating_str = ''
     for i in range(int(rating)):
@@ -64,28 +69,33 @@ def chapter_view(request, chapter_id):
         'avg_rating': rating,
         'rating_str': rating_str,
         'user_rated': False,
-        'comments': ChapterComment.objects.filter(chapter=chapter).order_by('-created')
+        'comments':
+        ChapterComment.objects.filter(chapter=chapter).order_by('-created')
     }
 
     if user.is_authenticated():
-        rating = ChapterRating.objects.filter(chapter=chapter, author=user).exists()
+        rating = ChapterRating.objects.filter(
+            chapter=chapter, author=user).exists()
         if rating:
             d['user_rated'] = True
 
-    return render_to_response('work/chapter_view.html', d, RequestContext(request))
+    return render_to_response('work/chapter_view.html', d,
+                              RequestContext(request))
 
 def add_chapter_rating(request, chapter_id):
     chapter = Chapter.objects.get(id=chapter_id)
     user = request.user
 
-    if chapter and not ChapterRating.objects.filter(chapter=chapter, author=user).exists():
+    if chapter and not ChapterRating.objects.filter(
+            chapter=chapter, author=user).exists():
         rating = ChapterRating.objects.create(
             author=user,
             score=int(request.POST.get('rating', '')),
             chapter=chapter
         )
         url = request.META.get('HTTP_REFERER')
-        return HttpResponse('<script> location.replace("' + url + '") </script>')
+        resp = "<script> location.replace('{0}') </script>".format(url)
+        return HttpResponse(resp)
 
 def add_chapter_comment(request, chapter_id):
     chapter = Chapter.objects.get(id=chapter_id)
@@ -99,7 +109,8 @@ def add_chapter_comment(request, chapter_id):
             chapter=chapter
         )
         url = '/chapter/view/' + str(chapter.id)
-        return HttpResponse('<script> location.replace("' + url + '") </script>')
+        resp = "<script> location.replace('{0}') </script>".format(url)
+        return HttpResponse(resp)
 
 def update_chapter(request):
     if request.method == 'POST':
@@ -112,7 +123,8 @@ def update_chapter(request):
 
         if t == 'update':
             d = {}
-            queue = ChapterQueue.objects.filter(target=work.work_target,
+            queue = ChapterQueue.objects.filter(
+                target=work.work_target,
                 comic_number=work.work_num,
                 chapter_number=chapter.reg_no,
                 is_checked=False)
@@ -135,7 +147,8 @@ def update_chapter(request):
             chapter.public = not chapter.public
             chapter.save()
             d = {
-                'message': (u'공개 설정되었습니다.' if chapter.public else u'비공개 설정되었습니다.'),
+                'message': (u'공개 설정되었습니다.'
+                            if chapter.public else u'비공개 설정되었습니다.'),
                 'public': chapter.public,
             }
             return HttpResponse(json.dumps(d), content_type='application/json')
