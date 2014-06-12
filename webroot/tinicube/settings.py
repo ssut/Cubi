@@ -131,8 +131,8 @@ if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'tinicube_db',
-            'USER': 'tinicube_user',
+            'NAME': 'tinicube',
+            'USER': 'tinicube',
             'PASSWORD': 'gksdud1!',
             'HOST': '',
         }
