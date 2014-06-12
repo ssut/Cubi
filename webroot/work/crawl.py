@@ -207,7 +207,7 @@ def get_croplist(images):
             log.debug('%10sCrop Image every 2000px start' % (''))
             while img.size[1] > 0:
                 if img.size[1] > 2000:
-                    log.debug('%12sRemain height > 2000', % (''))
+                    log.debug('%12sRemain height > 2000' % (''))
                     crop_height = 2000
                 else:
                     log.debug('%12sRemain height < 2000, value:%s' % (
