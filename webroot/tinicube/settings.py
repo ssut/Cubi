@@ -4,12 +4,15 @@ import sys
 
 import djcelery
 
-HOST = 'localhost:8000'
+# HOST = 'localhost:8000'
+HOST = 'www.tinicube.com'
+ALLOWED_HOSTS = ['*']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
 if 'DJANGO_PRODUCTION' in os.environ:
     DEBUG = TEMPLATE_DEBUG = False
+TMP_STAGE = True if 'STAGE' in os.environ else False
 
 BROKER_URL = "django://"
 CELERY_IMPORTS = ('work.tasks', )
@@ -21,7 +24,7 @@ STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT_PATH = os.path.join(BASE_DIR, 'static_root')
 
 # 서비스용, 로컬 분리
-if not DEBUG:
+if not DEBUG or TMP_STAGE:
     MEDIA_PATH = '/srv/www/tinicube_upload'
 else:
     MEDIA_PATH = os.path.join(BASE_DIR, 'media')
@@ -49,7 +52,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 
 SECRET_KEY = '+hr^u0snco1ma=zb5*uvuvk-0*#up+nw4z*pwt)h9ws&aa_+2)'
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+#STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE_CSS = {
     'master': {
         'source_filenames': (
@@ -64,7 +67,6 @@ PIPELINE_CSS = {
 # SITE_URL = 'http://localhost:8000'
 DEFAULT_PROFILE_IMAGE = STATIC_URL + 'img/default_profile.png'
 
-ALLOWED_HOSTS = []
 
 # Raven (sentry)
 RAVEN_DSN = "http://072c38e9bf5747cd883eef67d08d9dda" \
@@ -87,7 +89,7 @@ INSTALLED_APPS = (
     'kombu.transport.django',
     'djcelery',
     'registration',
-    'pipeline',
+    # 'pipeline',
 
     'member',
     'board',
@@ -127,7 +129,7 @@ FACEBOOK_API_SECRET = 'ba79942815fda6f882c626762cf964ed'
 ROOT_URLCONF = 'tinicube.urls'
 WSGI_APPLICATION = 'tinicube.wsgi.application'
 
-if not DEBUG:
+if not DEBUG or TMP_STAGE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
