@@ -1,46 +1,46 @@
 # -*- coding: utf-8 -*-
+import logging
+import os
+import re
+import urllib
+import urllib2
+
 from django.conf import settings
+from django.utils.timezone import now
+
 from crawler import daum_leaguetoon as DaumLeaguetoon
 from crawler.naver_webtoon import NaverWebtoon
 
 # 통신 및 정규식, 파서
-import urllib, urllib2
 from bs4 import BeautifulSoup
-import re
 
-from datetime import datetime
-from django.utils.timezone import now
 
-# 이미지 처리
-from PIL import Image as PIL_Image
 from cStringIO import StringIO
-import os
+from datetime import datetime
+from logging import handlers
+
+from PIL import Image as PIL_Image
 
 # Log
 cur_path = os.path.dirname(os.path.abspath(__file__))
 base_path = os.path.dirname(cur_path)
 
 # 서비스용, 로컬 분리
-print 'os.uname() :', os.uname()[0]
-if os.uname()[0] == 'Linux' or os.uname()[0] == u'Linux':
+if not settings.DEBUG:
     log_file_path = '/srv/www/tinicube_logger.txt'
 else:
     log_file_path = os.path.join(base_path, 'logger.txt')
 
-
-import logging
-from logging import handlers
 
 log = logging.getLogger('MyLogger')
 log.setLevel(logging.DEBUG)
 # 콘솔 출력과 파일 출력을 같이 사용
 conh = logging.StreamHandler()
 conh.setLevel(logging.DEBUG)
-fileh = handlers.RotatingFileHandler(log_file_path, maxBytes=1024, backupCount=0) # 로그 로테이션을 사용
+fileh = handlers.RotatingFileHandler(
+    log_file_path, maxBytes=1024, backupCount=0)  # 로그 로테이션을 사용
 log.addHandler(conh)
 log.addHandler(fileh)
-
-
 
 REAL_PATH = ''
 FIELD_PATH = ''
@@ -70,7 +70,7 @@ def make_directory():
     today_str = today.strftime('%Y%m%d')
     REAL_PATH = os.path.join(MEDIA_PATH, today_str, 'work', 'webtoon')
     FIELD_PATH = os.path.join(today_str, 'work', 'webtoon')
-    
+
     if not os.path.exists(REAL_PATH):
         os.makedirs(REAL_PATH)
 
@@ -90,7 +90,7 @@ def get_work(comic_number, user, type):
         comic_info = NaverWebtoon().info(comic_number)
     elif type == ChapterQueue.DAUM:
         comic_info = DaumLeaguetoon.info(comic_number)
-    
+
     comic_title = comic_info['title']
     comic_title_image = comic_info['title_image']
     comic_author_name = comic_info['author']
@@ -99,7 +99,8 @@ def get_work(comic_number, user, type):
 
     work_category, work_category_created = WorkCategory.objects.get_or_create(
         title=u'웹툰')
-    work, work_created = Work.objects.get_or_create(work_num=comic_number,
+    work, work_created = Work.objects.get_or_create(
+        work_num=comic_number,
         work_target=type,
         category=work_category,
         title=comic_title,
@@ -118,12 +119,13 @@ def make_chapter(chapter_dict, work, type):
     chapter_thumbnail = chapter_dict['thumbnail']
     chapter_date = chapter_dict['date']
 
-    chapter_instance, chapter_created = Chapter.objects.get_or_create(reg_no=chapter_number, work=work)
+    chapter_instance, chapter_created = Chapter.objects.get_or_create(
+        reg_no=chapter_number, work=work)
     if not chapter_created:
         pass
     else:
         # ImageField에 저장될 thumbnail이름
-        filename = u'%s_%s_thumbnail.jpg' % ( work.id, chapter_number )
+        filename = u'%s_%s_thumbnail.jpg' % (work.id, chapter_number)
         fieldpath = get_field_path(filename)
         # 다운로드 받을 전체 경로(MEDIA_PATH포함)
         filepath = get_save_path(filename)
@@ -141,7 +143,9 @@ def make_chapter(chapter_dict, work, type):
     return chapter_instance, chapter_created
 
 def save_chapter_contents(chapter_instance, work, images, type):
-    log.debug('- Save Chapter Contents (Work:%s, ChapterNum:%s, ImagesNum:%s, Type:%s) -' % (work, str(chapter_instance.reg_no), len(images), type))
+    log.debug("- Save Chapter Contents"
+              " (Work:%s, ChapterNum:%s, ImagesNum:%s, Type:%s) -" %
+              (work, str(chapter_instance.reg_no), len(images), type))
     chapter_number = chapter_instance.reg_no
     crop_list = get_croplist(images)
 
@@ -149,27 +153,27 @@ def save_chapter_contents(chapter_instance, work, images, type):
     for i, image in enumerate(crop_list):
         log.debug(' Crop List[%s] Process')
 
+        ext = "jpg"
         # 파일명 지정 (GIF, 그외)
         if image.format == 'GIF':
-            filename = u'%s_%s_%02d_%02d.gif' % ( work.id, chapter_number, 0, i + 1 )
-        else:
-            filename = u'%s_%s_%02d_%02d.jpg' % ( work.id, chapter_number, 0, i + 1 )
+            ext = "gif"
+        filename = u'%s_%s_%02d_%02d.%s' % (
+            work.id, chapter_number, 0, i + 1, ext)
 
         log.debug('  Current Image(FileName:%s) Instance create' % (filename))
         fieldpath = get_field_path(filename)
         filepath = get_save_path(filename)
-        
+
         # 이미지 저장 (GIF, 그외)
         if image.format == 'GIF':
             image.save(filepath, 'GIF')
         else:
             image.save(filepath, 'JPEG', quality=90)
 
-        image_instance = Image(chapter=chapter_instance, sequence=i, image=fieldpath)
+        image_instance = Image(chapter=chapter_instance,
+                               sequence=i, image=fieldpath)
         image_instance.save()
         log.debug('  Current Image(FileName:%s) Instance saved' % (filename))
-
-
 
 def get_croplist(images):
     log.debug('  - Get Croplist (ImagesNum:%s) -' % (len(images)))
@@ -178,32 +182,36 @@ def get_croplist(images):
     image_width, image_height = 0, []
     # StringIO 에 담겨져있는 이미지를 PIL 이미지로 바꿔서 리스트에 저장
     for i, image in enumerate(images):
-        log.debug('      Current Image[%s] Process start' % (i))
+        log.debug('%06sCurrent Image[%s] Process start' % ('', i))
         try:
             img = PIL_Image.open(images[i])
-            log.debug('        Current Image[%s] Open success' % (i))
+            log.debug('%08sCurrent Image[%s] Open success' % ('', i))
         except Exception, e:
-            log.debug('        Current Image[%s] Open failed' % (i))
+            log.debug('%08sCurrent Image[%s] Open failed' % ('', i))
             pass
 
         if img.format == 'GIF':
-            log.debug('        Current Image[%s] format is %s' % (i, img.format))
-            log.debug('        GIF File crop skip')
+            log.debug('%08sCurrent Image[%s] format is %s' % (
+                '', i, img.format))
+            log.debug('%08sGIF File crop skip' % (''))
             crop_list.append(img)
         else:
             if img.mode != 'RGB':
-                log.debug('        Current Image[%s] mode is %s' % (i, img.mode))
-                log.debug('        Current Image[%s] mode is not RGB' % (i))
-                # img = img.convert('RGB')
-                log.debug('        Current Image[%s] mode convert to RGB' % (i))
+                log.debug('%08sCurrent Image[%s] mode is %s' % (
+                    '', i, img.mode))
+                log.debug('%08sCurrent Image[%s] mode is not RGB' % (
+                    '', i))
+                log.debug('%08sCurrent Image[%s] mode convert to RGB' % (
+                    '', i))
 
-            log.debug('          Crop Image every 2000px start')
+            log.debug('%10sCrop Image every 2000px start' % (''))
             while img.size[1] > 0:
                 if img.size[1] > 2000:
-                    log.debug('            Remain height > 2000')
+                    log.debug('%12sRemain height > 2000', % (''))
                     crop_height = 2000
                 else:
-                    log.debug('            Remain height < 2000, value:%s' % (img.size[1]))
+                    log.debug('%12sRemain height < 2000, value:%s' % (
+                        '', img.size[1]))
                     crop_height = img.size[1]
 
                 box1 = (0, 0, img.size[0], crop_height)
@@ -211,16 +219,21 @@ def get_croplist(images):
 
                 box2 = (0, crop_height, img.size[0], img.size[1])
                 img = img.crop(box2)
-                log.debug('              Crop Image, Remain height:%s' % (img.size[1]))
-            log.debug('          Crop Image every 2000px end')
+                log.debug('%14sCrop Image, Remain height:%s' % (
+                    '', img.size[1]))
+            log.debug('%10sCrop Image every 2000px end' % (''))
 
     log.debug('      Current Image[%s] Process end\n' % (i))
     return crop_list
 
-# 웹툰 크롤링
-# TYPE: ChapterQueue.NAVER, ChapterQueue.DAUM
-# crawl(type=ChapterQueue.TYPE, comic_number=i32, user=User): 크롤되지 않은 모든 웹툰을 크롤링함
-# crawl(type=ChapterQueue.TYPE, comic_number=i32, chapter_number=i32, user=User): 한 화만 선택헤서 크롤링함
+"""
+웹툰 크롤링
+TYPE: ChapterQueue.NAVER, ChapterQueue.DAUM
+crawl(type=ChapterQueue.TYPE, comic_number=i32, user=User):
+    크롤되지 않은 모든 웹툰을 크롤링함
+crawl(type=ChapterQueue.TYPE, comic_number=i32, chapter_number=i32, user=User):
+    한 화만 선택헤서 크롤링함
+"""
 def crawl(*args, **kargs):
     # 웹툰 Work 생성
     type = kargs['type']
@@ -233,7 +246,7 @@ def crawl(*args, **kargs):
     # 디렉토리 생성
     make_directory()
     args_len = len(kargs)
-    if args_len == 3: # 크롤되지 않은 모든 웹툰 크롤링
+    if args_len == 3:  # 크롤되지 않은 모든 웹툰 크롤링
         # Chapter List 가져오기
         if type == ChapterQueue.NAVER:
             chapter_list = NaverWebtoon().list(comic_number)
@@ -242,15 +255,17 @@ def crawl(*args, **kargs):
 
         last_result = False
         for chapter in chapter_list:
-            if not Chapter.objects.filter(reg_no=chapter['no'], work=work).exists():
+            if not Chapter.objects.filter(
+                    reg_no=chapter['no'], work=work).exists():
                 try:
-                    last_result = crawl(type=type, comic_number=comic_number,
+                    last_result = crawl(
+                        type=type, comic_number=comic_number,
                         chapter_number=chapter['no'], user=user)
                 except:
                     pass
 
         return last_result
-    elif args_len == 4: # 한 화만 선택해서 크롤링
+    elif args_len == 4:  # 한 화만 선택해서 크롤링
         chapter_number = kargs['chapter_number']
         # Chapter Dictionary(detail) 가져오기
         if type == ChapterQueue.NAVER:
@@ -261,7 +276,8 @@ def crawl(*args, **kargs):
         # Chapter 생성
         cur_chapter, chapter_created = make_chapter(chapter_dict, work, type)
         if chapter_created:
-            save_chapter_contents(cur_chapter, work, chapter_dict['images'], type)
+            save_chapter_contents(cur_chapter, work, chapter_dict['images'],
+                                  type)
             return True
         else:
             return False
