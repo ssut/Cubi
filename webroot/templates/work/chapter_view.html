@@ -53,6 +53,8 @@
 <h4 class="p left h45 font pt18 color-white">
 	<a href="./" class="p no-line color-white">tinicube</a>
 	<span class="p hide color-wet-asphalt"><b>{{ work.title }}</b><span>&nbsp;:&nbsp;{{ chapter.title }}</span></span>
+
+	<button class="update-chapter ladda-button ladda-small" onclick="prompt('Ctrl + C 를 눌러서 복사하세요.', 'http://www.tinicube.com{% url 'chapter_view' chapter.id %}')" data-color="blue" data-style="zoom-in" data-size="xs" style="zoom: 0.8"><span class="ladda-label">링크 복사</span></button>
 </h4>
 {% endblock %}
 {% block hcontent %}
