@@ -268,8 +268,11 @@ def chapter_comment_list(request):
 
     comments = ChapterComment.objects.filter(chapter__id=chapter_id) \
         .filter(chapter__work__id=work_id)
+    chapter = Chapter.objects.get(id=chapter_id)
+
 
     data = {
+        'chapter_avg_rating': chapter.avg_rating,
         'comments': [comment.json() for comment in comments],
     }
 
@@ -280,6 +283,7 @@ def chapter_comment_list(request):
 @csrf_exempt
 def chapter_comment_add(request):
     query_dict = request.POST
+    print query_dict
     session_key = query_dict['session_key']
     username = query_dict['username']
     work_id = int(query_dict['work_id'])
@@ -297,7 +301,15 @@ def chapter_comment_add(request):
         comment_instance = ChapterComment(
             chapter=chapter, author=user, content=content)
         comment_instance.save()
-        return return_success_json()
+        
+        # 성공적으로 댓글 등록 후 해당 Chapter의 댓글 목록 리턴
+        comments = ChapterComment.objects.filter(chapter__id=chapter_id) \
+            .filter(chapter__work__id=work_id).order_by('-created')
+        data = {
+            'return_status': 'success',
+            'comments': [comment.json() for comment in comments],
+        }
+        return HttpResponse(json.dumps(data), content_type='application/json')
     else:
         return return_failed_json('Not Matching User')
 
@@ -334,6 +346,7 @@ def chapter_comment_del(request):
 @csrf_exempt
 def chapter_rating(request):
     query_dict = request.POST
+    username = query_dict['username']
     work_id = int(query_dict['work_id'])
     chapter_id = int(query_dict['chapter_id'])
 
@@ -344,11 +357,20 @@ def chapter_rating(request):
     ratings = ChapterRating.objects.filter(chapter=chapter)
     avg_rating = ratings.aggregate(Avg('score'))['score__avg']
     if avg_rating:
-        dict['rating'] = avg_rating
+        dict['avg_rating'] = avg_rating
         dict['rating_number'] = ratings.count()
     else:
-        dict['rating'] = 0.0
+        dict['avg_rating'] = 0.0
         dict['rating_number'] = 0
+
+    # 해당 유저가 평가한 별점 있는지 확인, 있으면 True와 cur_user_rating추가해서 보냄 / 없으면 False만
+    user = User.objects.get(username=username)
+    if ChapterRating.objects.filter(chapter=chapter).filter(author=user).exists():
+        dict['exist'] = True
+        cur_user_rating = ChapterRating.objects.filter(chapter=chapter).get(author=user)
+        dict['cur_user_rating'] = cur_user_rating.score
+    else:
+        dict['exist'] = False
 
     return HttpResponse(json.dumps(dict), content_type='application/json')
 
@@ -356,6 +378,7 @@ def chapter_rating(request):
 @csrf_exempt
 def chapter_rating_add(request):
     query_dict = request.POST
+    print query_dict
     session_key = query_dict['session_key']
     username = query_dict['username']
     work_id = int(query_dict['work_id'])
@@ -379,6 +402,16 @@ def chapter_rating_add(request):
             rating_instance = ChapterRating.objects.create(
                 chapter=chapter, author=user, score=rating)
             rating_instance.save()
-        return return_success_json()
+
+
+        # 평점 분석
+        ratings = ChapterRating.objects.filter(chapter=chapter)
+        avg_rating = ratings.aggregate(Avg('score'))['score__avg']
+        dict = {
+            'return_status': 'success',
+            'avg_rating': avg_rating,
+            'rating': rating,
+        }
+        return HttpResponse(json.dumps(dict), content_type='application/json')
     else:
         return return_failed_json('Not Matching User')

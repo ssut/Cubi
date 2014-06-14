@@ -269,10 +269,10 @@ class Chapter(models.Model):
         ratings = ChapterRating.objects.filter(chapter=self)
         avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
         if avg_rating:
-            dict['rating'] = round(avg_rating / 2.0, 1)
+            dict['avg_rating'] = round(avg_rating / 2.0, 1)
             dict['count'] = ratings.count()
         else:
-            dict['rating'] = 0.0
+            dict['avg_rating'] = 0.0
             dict['count'] = 0
         return dict
 
@@ -292,6 +292,8 @@ class Chapter(models.Model):
             'thumbnail_large': imageinfo(self.thumbnail_large),
             'cover': imageinfo(self.cover),
             'cover_large': imageinfo(self.cover_large),
+            'public': self.public,
+            'description': self.description,
         }
 
     def save(self, *args, **kwargs):
