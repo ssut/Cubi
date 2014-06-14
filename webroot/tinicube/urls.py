@@ -14,6 +14,9 @@ urlpatterns = patterns(
     url(r'^index/$', 'structure.views.index', name='index'),
     url(r'^$', 'structure.views.temp', name='temp'),
 
+    url(r'^terms/$', 'structure.views.terms', name='terms'),
+    url(r'^privacy/$', 'structure.views.privacy', name='privacy'),
+
     # 작품 목록
     url(r'^work/list/$', 'work.views.work_list', name='work_list'),
     # 챕터 목록

@@ -42,3 +42,9 @@ def author_list(request):
     }
     return render_to_response('index/author_list.html', d,
                               RequestContext(request))
+
+def terms(request):
+    return render_to_response('terms.html')
+
+def privacy(request):
+    return render_to_response('privacy.html')
