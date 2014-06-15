@@ -146,6 +146,28 @@ class Work(models.Model):
     market_ios = models.CharField('iOS 마켓 주소', max_length=100, blank=True)
     created = models.DateTimeField('생성일자', auto_now_add=True)
 
+    '''
+    image_thumbnail_square
+        작품 썸네일 (정사각형)        [400x400]
+    image_thumbnail_rectangle
+        작품 썸네일 (배너형)          [440x120]
+    image_cover_large
+        전체 작품 목록 쇼케이스        [900x345]
+    image_cover
+        전체 작품 목록 배너형 썸네일    [290x145]
+
+    mobile_cover_top
+        모바일 ChapterList 커버이미지   [1080x714]
+    mobile_cover_pager
+        모바일 통합 앱 CoverPager 이미지 [1080x714, 제목 및 설명 글자 포함]
+    mobile_cover_small
+        모바일 통합 앱 커버이미지         [1080x240]
+
+    mobile_loading_android, mobile_loading_ios
+        모바일 로딩 이미지
+    mobile_largeicon, mobile_smalliocn
+        모바일 아이콘 이미지
+    '''
     image_thumbnail_square = models.ImageField('정사각형 썸네일',
                                                upload_to=get_path, blank=True)
     image_thumbnail_rectangle = models.ImageField(
@@ -253,6 +275,18 @@ class WorkComment(Comment):
 
 # 챕터(각 작품의 1,2,3화....)
 class Chapter(models.Model):
+    '''
+    thumbnail
+        챕터 썸네일      [400x235]
+        
+    챕터 썸네일 외에는 선택사항
+    thumbnail_large
+        더 큰 썸네일      [800x470]
+    cover
+        챕터 커버 이미지   [600x350]
+    cover_large
+        더 큰 커버       [1200x700]
+    '''
     reg_no = models.IntegerField()
     work = models.ForeignKey(Work, related_name='chapter_by_work')
     title = models.CharField(max_length=200)
