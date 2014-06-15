@@ -263,9 +263,9 @@ def addchapter(request, work_id):
             html = """
             <script>
             alert("작품이 등록됐습니다.");
-            location.replace("{0}");
+            location.replace("/chapter/list/{0}/");
             </script>
-            """.format(ref)
+            """.format(work.id)
             return HttpResponse(html)
     else:
         d = {
