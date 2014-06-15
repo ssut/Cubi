@@ -30,7 +30,16 @@ from tinicube.functions import return_failed_json, return_success_json
 from author.models import AuthorInfo
 from work.models import Work
 
-
+'''
+author_info
+    작가정보
+login
+    로그인
+signup
+    회원가입
+all_author_list
+    모든 작가 리스트
+'''
 @csrf_exempt
 @require_http_methods(["POST"])
 def author_info(request):
@@ -47,7 +56,6 @@ def author_info(request):
         'works': [work.json() for work in works],
     }
     return HttpResponse(json.dumps(dict), content_type='application/json')
-
 
 @csrf_exempt
 def login(request):
@@ -106,3 +114,27 @@ def signup(request):
         }
         return HttpResponse(json.dumps(result),
                             content_type='application/json')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def all_author_list(request):
+    query_dict = request.POST
+    authors = User.objects.filter(type='2').all().order_by('-date_joined')
+
+    data = {
+        'authors': [author.json() for author in authors],
+    }
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def favorite_author_list(request):
+    query_dict = request.POST
+    username = query_dict['username']
+    cur_user = User.objects.get(username=username)
+    cur_user_favorites = cur_user.author_favorites
+
+    data = {
+        'authors': [favorite.author.json() for favorite in cur_user_favorites],
+    }
+    return HttpResponse(json.dumps(data), content_type='application/json')

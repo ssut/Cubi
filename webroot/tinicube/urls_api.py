@@ -10,6 +10,8 @@ urlpatterns = patterns(
     url(r'^login/$', 'login'),
     url(r'^signup/$', 'signup'),
     url(r'^author_info/$', 'author_info'),
+    url(r'^all_author_list/$', 'all_author_list'),
+    url(r'^favorite_author_list/$', 'favorite_author_list'),
 )
 
 urlpatterns += patterns(
