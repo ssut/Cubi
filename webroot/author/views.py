@@ -163,6 +163,62 @@ def addwork_info(request):
         return render_to_response('author/addwork_info.html', d,
                                   RequestContext(request))
 
+def editwork(request, work_id):
+    work = Work.objects.get(id=work_id)
+
+    print work.image_thumbnail_square
+    if not work:
+        return Http404()
+    if request.method == 'POST':
+        ref = request.META.get('HTTP_REFERER', '')
+        try:
+            t = request.POST.get('title', '')
+            dl = request.POST.get('desc_lite', '')
+            df = request.POST.get('desc_full', '')
+
+            work.title = t if t else work.title
+            work.description_simple = dl if dl else work.description_simple
+            work.description_full = df if df else work.description_full
+
+            def image_set(_name):
+                if _name in request.FILES:
+                    f = request.FILES[_name]
+                    setattr(work, _name, f)
+
+            image_set('image_thumbnail_square')
+            image_set('image_thumbnail_rectangle')
+            image_set('image_cover_large')
+            image_set('image_cover')
+            image_set('mobile_cover_top')
+            image_set('mobile_cover_pager')
+            image_set('mobile_cover_small')
+            image_set('mobile_largeicon')
+            image_set('mobile_smallicon')
+
+            work.save()
+        except Exception, e:
+            html = """
+            <script>
+            alert("작품정보 수정 오류: {0}");
+            history.go(-1);
+            </script>
+            """.format(e)
+            return HttpResponse(html)
+        else:
+            html = """
+            <script>
+            alert("작품정보가 수정됐습니다.");
+            location.replace("{0}");
+            </script>
+            """.format(ref)
+            return HttpResponse(html)
+    else:
+        d = {
+            'work': work
+        }
+        return render_to_response('author/edit_work.html', d,
+                                  RequestContext(request))
+    pass
 
 def addchapter(request, work_id):
     pass

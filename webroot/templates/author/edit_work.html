@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block hcontent %}
+<section class="artwork-modify">
+	<section class="p w900 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt">작품 정보 관리</h1>
+	</section>
+	<section class="info p w900 box-align-center m-top15 edge-top-silver">
+		<form method="post" action="{% url 'author:editwork' work.id %}" enctype="multipart/form-data">
+		{% csrf_token %}
+			<ul class="p no-list no-margin">
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">작품명</span></section>
+					<section class="p right w600">
+						<input class="p font pt9" name="name" maxlength="40" value="{{ work.title }}">
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">설명</span></section>
+					<section class="p right w600">
+						<input class="p font pt9" name="desc_lite" maxlength="80" value="{{ work.description_simple }}">
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">긴 설명</span></section>
+					<section class="p right w600">
+						<textarea class="p font pt9" name="desc_full">{{ work.description_full }}</textarea>
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">작품 썸네일 정사각형 이미지 <span class="p font pt11 color-asbestos">(400x400)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="image_thumbnail_square" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button type="button" class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.image_thumbnail_square %}
+						<img src="{{ work.image_thumbnail_square.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">작품 썸네일 배너형 이미지<span class="p font pt11 color-asbestos">(440x120)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="image_thumbnail_rectangle" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.image_thumbnail_rectangle %}
+						<img src="{{ work.image_thumbnail_rectangle.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">전체 작품 목록 쇼케이스 이미지<span class="p font pt11 color-asbestos">(900×345)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="image_cover_large" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.image_cover_large %}
+						<img src="{{ work.image_cover_large.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">전체 작품 목록 썸네일 이미지<span class="p font pt11 color-asbestos">(290×145)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="image_cover" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.image_cover %}
+						<img src="{{ work.image_cover.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">모바일 커버 이미지<span class="p font pt11 color-asbestos">(1080x714)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="mobile_cover_top" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.mobile_cover_top %}
+						<img src="{{ work.mobile_cover_top.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">모바일 통합 앱 커버 이미지<span class="p font pt11 color-asbestos">(1080x714)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="mobile_cover_pager" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.mobile_cover_pager %}
+						<img src="{{ work.mobile_cover_pager.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">모바일 통합 앱 커버 이미지<span class="p font pt11 color-asbestos">(1080x240)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="mobile_cover_small" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.mobile_cover_small %}
+						<img src="{{ work.mobile_cover_small.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">애플리케이션 큰 아이콘<span class="p font pt11 color-asbestos">(1024x1024)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="mobile_largeicon" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.mobile_largeicon %}
+						<img src="{{ work.mobile_largeicon.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">애플리케이션 작은 아이콘<span class="p font pt11 color-asbestos">(144x144)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="mobile_smallicon" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button class="p left font pt9 weight-bold">파일 선택</button>
+						{% if work.mobile_smallicon %}
+						<img src="{{ work.mobile_smallicon.url }}" alt="">
+						{% endif %}
+					</section>
+				</li>
+			</ul>
+			<section class="p text-align-center">
+				<button type="submit" class="p font pt10 weight-thin peter-river color-white">수정</button>
+			</section>
+		</form>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+$('form li button').each(function() {
+	$(this).click(function() {
+		$(this).attr('type', 'button');
+		var r = $(this).parent().find('input[readonly]');
+		$(this).parent().find('input:file').change(function() {
+			if(this.files.length > 0) {
+				var f = this.files[0];
+				if(f.type.indexOf('image/') == -1) {
+					alert('이미지를 선택해주세요.');
+					$(this).val('');
+				} else {
+					r.val(f.name);
+				}
+			}
+		});
+		$(this).parent().find('input:file').click();
+	});
+});
+
+$('form input:file').attr('accept', 'image/*');
+$('form img').each(function() {
+	var i = new Image();
+	i.src = $(this).attr('src');
+	$(this).attr('width', '100%');
+	$(this).parent().append('<div style="text-align: center">SIZE: ' + i.width + 'x' + i.height + '</div>');
+});
+</script>
+{% endblock %}
