@@ -442,10 +442,10 @@ body > section.chapter nav ul:first-child li {
   overflow: hidden;
 }
 body > section.chapter nav ul:first-child li a {
-  padding-left: 120px;
+  padding-left: 90px;
 }
 body > section.chapter nav ul:first-child li a img {
-  width: 105px;
+  width: 76px;
   height: 45px;
   top: 0;
   left: 0;
@@ -457,7 +457,7 @@ body > section.chapter nav ul:first-child li a b {
   line-height: 35px;
 }
 body > section.chapter nav ul:first-child li a b > span {
-  margin-top: -10px;
+  margin-top: -5px;
 }
 body > section.chapter nav ul:nth-child(2) {
   display: inline-block;
