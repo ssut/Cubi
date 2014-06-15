@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block hcontent %}
+<section class="artwork-register">
+	<section class="p w900 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt">작품 등록</h1>
+	</section>
+	<section class="info p w900 box-align-center m-top15 p-top15 edge-top-silver">
+		<section class="p w400 box-align-center m-top15 p-top15">
+			<section><b class="p left font pt14 weight-thin">작품명</b>
+				<input id="name" type="text" placeholder="작품명을 입력하세요" class="p right font pt9">
+				<section class="p clear"></section>
+			</section>
+			<section><b class="p left font pt14 weight-thin">설명</b>
+				<input id="desc" type="text" placeholder="짧은 설명을 입력하세요" class="p right font pt9">
+				<section class="p clear"></section>
+			</section>
+			<section class="p text-align-center">
+				<button class="p font pt10 weight-thin peter-river color-white">추가</button>
+			</section>
+		</section>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+var csrfToken = $("{% csrf_token %}").val();
+$('section.artwork-register button').click(function() {
+	$.ajax({
+		url: '{% url 'author:addwork' %}',
+		type: 'POST',
+		data: {
+			name: $('#name').val(),
+			desc: $('#desc').val(),
+			csrfmiddlewaretoken: csrfToken
+		},
+		beforeSend: function() {
+			$('section.artwork-register input').attr('disabled', 'disabled');
+		},
+		success: function(result) {
+			if(result.success) {
+				alert('새로운 작품이 추가되었습니다.');
+				location.replace('{% url 'author:index' %}');
+			} else {
+				alert('모든 폼을 채워주세요.');
+			}
+
+			$('section.artwork-register input').removeAttr('disabled');
+		}
+	});
+});
+</script>
+{% endblock %}

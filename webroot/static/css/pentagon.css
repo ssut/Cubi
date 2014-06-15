@@ -147,7 +147,7 @@ a img {
   border: 0;
 }
 
-input {
+input, textarea {
   -webkit-user-select: initial;
 }
 
