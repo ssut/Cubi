@@ -272,7 +272,7 @@ def chapter_comment_list(request):
 
 
     data = {
-        'chapter_avg_rating': chapter.avg_rating,
+        'rating': chapter.avg_rating,
         'comments': [comment.json() for comment in comments],
     }
 
@@ -358,10 +358,10 @@ def chapter_rating(request):
     avg_rating = ratings.aggregate(Avg('score'))['score__avg']
     if avg_rating:
         dict['avg_rating'] = avg_rating
-        dict['rating_number'] = ratings.count()
+        dict['rating_count'] = ratings.count()
     else:
         dict['avg_rating'] = 0.0
-        dict['rating_number'] = 0
+        dict['rating_count'] = 0
 
     # 해당 유저가 평가한 별점 있는지 확인, 있으면 True와 cur_user_rating추가해서 보냄 / 없으면 False만
     user = User.objects.get(username=username)
@@ -383,7 +383,7 @@ def chapter_rating_add(request):
     username = query_dict['username']
     work_id = int(query_dict['work_id'])
     chapter_id = int(query_dict['chapter_id'])
-    rating = int(query_dict['rating'])
+    rating = float(query_dict['rating'])
 
     s = SessionStore(session_key=session_key)
 
@@ -411,6 +411,7 @@ def chapter_rating_add(request):
             'return_status': 'success',
             'avg_rating': avg_rating,
             'rating': rating,
+            'rating_count': ratings.count()
         }
         return HttpResponse(json.dumps(dict), content_type='application/json')
     else:

@@ -277,6 +277,10 @@ class Chapter(models.Model):
             dict['count'] = 0
         return dict
 
+    @property
+    def comment_count(self):
+        return ChapterComment.objects.filter(chapter=self).count()
+
     def __unicode__(self):
         return self.title
 
@@ -296,6 +300,7 @@ class Chapter(models.Model):
             'cover_large': imageinfo(self.cover_large),
             'public': self.public,
             'description': self.description,
+            'comment_count': self.comment_count,
         }
 
     def save(self, *args, **kwargs):
