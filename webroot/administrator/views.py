@@ -20,7 +20,6 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 
-from author.models import WaitConvert
 from work import crawl as crawler
 from work.models import *
 
@@ -35,14 +34,6 @@ def index(request):
     return render_to_response('administrator/index.html',
                               RequestContext(request))
 
-
-def wait_convert_list(request):
-    waiting_list = WaitConvert.objects.all().order_by('-created')
-    d = {
-        'waiting_list': waiting_list,
-    }
-    return render_to_response('administrator/wait_convert_list.html', d,
-                              RequestContext(request))
 
 
 def convert(request, user_id, boolean):
