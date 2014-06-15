@@ -208,8 +208,11 @@ class Work(models.Model):
     def thumbnail_url(self):
         chapters = Chapter.objects.filter(work=self).order_by('-reg_no')
         if len(chapters) > 0:
-            chapter = chapters[0]
-            return chapter.thumbnail.url
+            if chapters[0].thumbnail:
+                chapter = chapters[0]
+                return chapter.thumbnail.url
+            else:
+                return '/static/img/_.no.image.png'
         else:
             return '/static/img/_.no.image.png'
 
@@ -282,7 +285,7 @@ class Chapter(models.Model):
     '''
     thumbnail
         챕터 썸네일      [400x235]
-        
+
     챕터 썸네일 외에는 선택사항
     thumbnail_large
         더 큰 썸네일      [800x470]
@@ -302,14 +305,13 @@ class Chapter(models.Model):
     public = models.BooleanField(default=True)
     description = models.TextField(blank=True, max_length=150)
 
-    def __init__(self, *args):
-        self._avg_rating = None
-        super(Chapter, self).__init__(*args)
-
     @property
     def avg_rating(self):
-        if self._avg_rating:
-            return self._avg_rating
+        try:
+            if self._avg_rating:
+                return self._avg_rating
+        except:
+            self._avg_rating = {}
 
         dict = {}
         ratings = ChapterRating.objects.filter(chapter=self)
@@ -335,6 +337,13 @@ class Chapter(models.Model):
             dict['rating_str'] = u'○○○○○'
         self._avg_rating = dict
         return dict
+
+    @property
+    def thumbnail_url(self):
+        if self.thumbnail:
+            return self.thumbnail.url
+        else:
+            return '/static/img/_.no.image.png'
 
     @property
     def comment_count(self):

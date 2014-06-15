@@ -8,10 +8,12 @@ from django.template import RequestContext
 
 from datetime import datetime
 from textwrap import dedent as trim
+from cStringIO import StringIO
 
 from author.forms import AddworkForm
 from author.models import AuthorInfo
 from work.models import *
+from work.crawl import make_directory, save_chapter_contents
 from member.models import TinicubeUser as User
 
 REAL_PATH = ''
@@ -166,7 +168,6 @@ def addwork_info(request):
 def editwork(request, work_id):
     work = Work.objects.get(id=work_id)
 
-    print work.image_thumbnail_square
     if not work:
         return Http404()
     if request.method == 'POST':
@@ -218,10 +219,61 @@ def editwork(request, work_id):
         }
         return render_to_response('author/edit_work.html', d,
                                   RequestContext(request))
-    pass
 
 def addchapter(request, work_id):
-    pass
+    work = Work.objects.get(id=work_id)
+
+    if not work:
+        return Http404()
+    if request.method == 'POST':
+        ref = request.POST.get('HTTP_REFERER', '')
+        try:
+            t = request.POST.get('title', '')
+            d = request.POST.get('desc', '')
+
+            if t == '' or d == '':
+                raise ValueError(u'모든 폼을 채워주세요.')
+
+            i = Chapter.objects.filter(work=work).count() + 1
+            chapter = Chapter.objects.create(
+                reg_no=i, work=work, title=t, description=d)
+
+            images = []
+            for filename, f in request.FILES.iteritems():
+                if filename and f.name and f.name != '' and len(f) > 0:
+                    io = StringIO()
+                    io.write(f.read())
+                    io.seek(0)
+
+                images.append(io)
+
+            make_directory()
+            save_chapter_contents(chapter, work, images, None)
+        except Exception, e:
+            html = """
+            <script>
+            alert("작품정보 수정 오류: {0}");
+            history.go(-1);
+            </script>
+            """.format(e)
+            import traceback
+            traceback.print_exc()
+            return HttpResponse(html)
+        else:
+            html = """
+            <script>
+            alert("작품이 등록됐습니다.");
+            location.replace("{0}");
+            </script>
+            """.format(ref)
+            return HttpResponse(html)
+    else:
+        d = {
+            'work': work
+        }
+        return render_to_response('author/add_chapter.html', d,
+                                  RequestContext(request))
+
 
 '''
 Author - ChapterList (작가의 작품목록에서 작품 클릭시 이쪽으로 넘어옴)
