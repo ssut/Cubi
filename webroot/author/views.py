@@ -1,7 +1,9 @@
 # -*- encoding: utf-8 -*-
 import json
+import StringIO as oStringIO
 
 from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
 from django.template import RequestContext
@@ -9,6 +11,8 @@ from django.template import RequestContext
 from datetime import datetime
 from textwrap import dedent as trim
 from cStringIO import StringIO
+
+from PIL import Image as PIL_Image
 
 from author.forms import AddworkForm
 from author.models import AuthorInfo
@@ -42,6 +46,50 @@ def info(request, author_id):
             'works': works,
         }
         return render_to_response('author/info.html', d)
+
+def update(request):
+    if request.method == 'POST':
+        author_info = AuthorInfo.objects.get(user=request.user)
+        d = {
+            'success': False,
+            'message': '',
+        }
+        t = request.POST.get('type', '')
+
+        if t == 'thumbnail':
+            image = request.FILES.get('image', '')
+            try:
+                io = StringIO()
+                for chunk in image.chunks():
+                    io.write(chunk)
+                io.seek(0)
+                im = PIL_Image.open(io)
+                im.thumbnail((64, 64), PIL_Image.ANTIALIAS)
+
+                tmp = oStringIO.StringIO()
+                im.save(tmp, 'JPEG')
+
+                tmp_file = InMemoryUploadedFile(tmp, None, 'foo.jpg',
+                                                'image/jepg', tmp.len, None)
+                author_info.profile_image = tmp_file
+                author_info.save()
+            except Exception, e:
+                d['message'] = str(e)
+            else:
+                d['success'] = True
+                d['message'] = author_info.profile_image.url
+        elif t == 'description':
+            val = request.POST.get('value', '')
+            try:
+                author_info.introduce_simple = val
+                author_info.save()
+            except Exception, e:
+                d['message'] = str(e)
+            else:
+                d['success'] = True
+
+        return HttpResponse(json.dumps(d), content_type='application/json')
+
 
 # 작품 업로드 약관 동의
 def agreement(request):

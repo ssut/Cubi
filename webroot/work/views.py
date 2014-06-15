@@ -94,7 +94,7 @@ def add_chapter_rating(request, chapter_id):
             chapter=chapter
         )
         url = request.META.get('HTTP_REFERER')
-        resp = "<script> location.replace('{0}') </script>".format(url)
+        resp = "<script> location.replace('{0}#bottom') </script>".format(url)
         return HttpResponse(resp)
 
 def add_chapter_comment(request, chapter_id):
