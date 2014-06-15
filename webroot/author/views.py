@@ -65,7 +65,7 @@ def agreement(request):
 def index(request):
     user = request.user
     if user.type != '2':
-        return redirect('author:introduce')
+        return redirect('author:agreement')
     else:
         author_info = AuthorInfo.objects.get(user=user)
         works = Work.objects.filter(author=user)
