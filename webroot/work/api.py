@@ -270,7 +270,6 @@ def chapter_comment_list(request):
         .filter(chapter__work__id=work_id)
     chapter = Chapter.objects.get(id=chapter_id)
 
-
     data = {
         'rating': chapter.avg_rating,
         'comments': [comment.json() for comment in comments],
