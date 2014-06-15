@@ -59,3 +59,7 @@ somain.iml
 workspace.xml
 
 /webroot/logger.txt
+
+# Celery
+celerybeat*
+nohup.out
