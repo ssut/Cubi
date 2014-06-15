@@ -13,6 +13,10 @@
 				<button class="ladda-button ladda-small" data-color="blue" data-style="zoom-in" data-size="xs" onclick="location.href='{% url 'author:info' work.author.id %}'"><span class="ladda-label">작가정보</span></button>
 				<button id="add_to_favorites" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">즐겨찾기 추가</span></button>
 				{% endif %}
+
+				{% if work.author == user %}
+				<button onclick="location.href = '{% url 'author:addchapter' work.id %}'" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">챕터 추가</span></button>
+				{% endif %}
 				</div>
 			</article>
 		</section>
@@ -21,11 +25,7 @@
 			{% for chapter in chapters %}
 				{% if chapter.public or chapter.work.author == user %}
 					<li class="p edge-top-silver">
-					<a href="{% url 'chapter_view' chapter.id %}" class="p no-line layer-relative show h100p font pt12">
-						<img src="{{ chapter.thumbnail.url }}" alt="" class="p layer">
-						<b class="p color-midnight-blue">{{ chapter.title }}</b>
-						<span class="p right font pt10 color-asbestos">{{ chapter.created|date:"Y/m/d" }}</span>
-					</a>
+					<a href="{% url 'chapter_view' chapter.id %}" class="p no-line layer-relative show h100p font pt12"><img src="{{ chapter.thumbnail.url }}" alt="" class="p layer"><b class="p left color-midnight-blue">{{ chapter.title }}<br><span class="p show font pt8 color-asbestos">{{ chapter.created|date:"Y-m-d" }}</span></b><span class="p right font pt8 color-wet-asphalt weight-bold">{{ chapter.avg_rating.avg_rating }}<span class="p p font pt12 color-emerald">&nbsp;{{ chapter.avg_rating.rating_str }}</span></span></a>
 					{% if chapter.work.author == user %}
 					<div>
 					<button class="update-chapter-thumbnail ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs">

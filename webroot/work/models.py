@@ -268,17 +268,38 @@ class Chapter(models.Model):
     public = models.BooleanField(default=True)
     description = models.TextField(blank=True, max_length=150)
 
+    def __init__(self, *args):
+        self._avg_rating = None
+        super(Chapter, self).__init__(*args)
+
     @property
     def avg_rating(self):
+        if self._avg_rating:
+            return self._avg_rating
+
         dict = {}
         ratings = ChapterRating.objects.filter(chapter=self)
         avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
         if avg_rating:
             dict['avg_rating'] = avg_rating
             dict['count'] = ratings.count()
+
+            tmp_rating = rating = avg_rating / 2
+            rating_str = u''
+            for i in range(int(rating)):
+                rating_str += u'●'
+                tmp_rating -= 1
+            if tmp_rating > 0:
+                rating_str += u'◐'
+            for i in range(5 - len(rating_str)):
+                rating_str += u'○'
+
+            dict['rating_str'] = rating_str
         else:
             dict['avg_rating'] = 0.0
             dict['count'] = 0
+            dict['rating_str'] = u'○○○○○'
+        self._avg_rating = dict
         return dict
 
     @property

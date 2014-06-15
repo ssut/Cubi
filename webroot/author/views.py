@@ -163,6 +163,10 @@ def addwork_info(request):
         return render_to_response('author/addwork_info.html', d,
                                   RequestContext(request))
 
+
+def addchapter(request, work_id):
+    pass
+
 '''
 Author - ChapterList (작가의 작품목록에서 작품 클릭시 이쪽으로 넘어옴)
     작품의 모든 챕터 보여줌
