@@ -109,7 +109,7 @@ def add_chapter_comment(request, chapter_id):
             chapter=chapter
         )
         url = '/chapter/view/' + str(chapter.id)
-        resp = "<script> location.replace('{0}') </script>".format(url)
+        resp = "<script> location.replace('{0}#bottom') </script>".format(url)
         return HttpResponse(resp)
 
 def update_chapter(request):

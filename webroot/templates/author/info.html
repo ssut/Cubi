@@ -21,8 +21,9 @@
 		<section class="item p m-top15 p-top15">
 			<section class="cover p left"><img src="{{ work.thumbnail_url }}" alt="" width="290" height="145"></section>
 			<article class="p right layer-relative">
-				<h2 class="p font weight-thin pt14"><a href="{% url 'chapter_list' work.id %}">{{ work.title }}</a></h2><span class="p font pt9 color-asbestos">{{ work.description }}</span>
-				<div class="p layer font pt11 color-wet-asphalt"><span>총 연재 횟수 : {{ work.chapters.count }}회 /&nbsp;</span>{% if work.avg_rating.count > 0 %}<span>평균 별점 점수 : {{ work.avg_rating.rating }}점</span>{% endif %}</div>
+				<h2 class="p font weight-thin pt14"><a href="{% url 'chapter_list' work.id %}" class="p no-line color-wet-asphalt">{{ work.title }}</a></h2><span class="p font pt9 color-asbestos">{{ work.description }}</span>
+				<div class="p layer font pt11 color-wet-asphalt"><span>총 연재 횟수 : {{ work.chapters.count }}회 /&nbsp;</span>{% if work.avg_rating.count > 0 %}<span>평균 별점 점수 : {{ work.avg_rating.rating }}점</span>{% endif %}
+				{% if work.chapters|length > 0 %}/&nbsp;마지막 연재: {{ work.chapters.last.created|date:'Y/m/d' }}{% endif %}</div>
 			</article>
 			{% if 1 == 2 %}
 			<section class="status p clear p-top15">

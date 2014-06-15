@@ -14,7 +14,7 @@
 		<p class="p clear font pt10 color-asbestos">{{ author_info.introduce_full }}</p>
 	</section>
 	<section class="list-head p w900 m-top15 p-top15 box-align-center">
-		<h1 class="p font pt16 weight-thin color-wet-asphalt left">나의 작품 목록</h1>
+		<h1 class="p font pt16 weight-thin color-wet-asphalt left">나의 작품 목록　</h1>
 		<button class="p font pt9 color-white right" onclick="location.href = '{% url 'author:addwork' %}'">작품 추가</button>
 	</section>
 	<section class="list p w900 box-align-center m-top15 p-top15 edge-top-silver">
@@ -22,7 +22,7 @@
 		<section class="item p m-top15 p-top15">
 			<section class="cover p left"><img src="{{ work.thumbnail_url }}" alt="" width="290" height="145"></section>
 			<article class="p right layer-relative">
-				<h2 class="p font weight-thin pt14"><a href="{% url 'chapter_list' work.id %}">{{ work.title }}</a></h2><span class="p font pt9 color-asbestos">{{ work.description }}</span>
+				<h2 class="p font weight-thin pt14"><a href="{% url 'chapter_list' work.id %}" class="p no-line color-wet-asphalt">{{ work.title }}</a></h2><span class="p font pt9 color-asbestos">{{ work.description }}</span>
 				<div class="p layer font pt11 color-wet-asphalt"><span>총 연재 횟수 : {{ work.chapters.count }}회 /&nbsp;</span>{% if work.avg_rating.count > 0 %}<span>평균 별점 점수 : {{ work.avg_rating.rating }}점</span>{% endif %}</div>
 			</article>
 			{% if 1 == 2 %}
