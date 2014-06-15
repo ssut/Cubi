@@ -173,14 +173,14 @@ class Work(models.Model):
     image_thumbnail_rectangle = models.ImageField(
         '배너형태 썸네일', upload_to=get_path, blank=True)
     image_cover_large = models.ImageField(
-        '웹에서 쓸 큰 커버이미지(작품목록 가장 상단)', upload_to=get_path, blank=True)
+        'WorkList상단 돌아가는 큰 이미지 [900x345]', upload_to=get_path, blank=True)
     image_cover = models.ImageField(
-        '웹에서 쓸 커버이미지(작품목록 개별 작품 커버)', upload_to=get_path, blank=True)
+        'WorkList각 작품의 Cover [400x200]', upload_to=get_path, blank=True)
 
     mobile_cover_top = models.ImageField(
-        '모바일 ChapterList 커버이미지(637x421)', upload_to=get_path, blank=True)
+        '모바일 챕터 리스트 상단 이미지 [1080x480]', upload_to=get_path, blank=True)
     mobile_cover_pager = models.ImageField(
-        '모바일 CoverImagePager 커버이미지(637x421, 제목 및 설명 필요)',
+        '모바일 챕터 리스트 상단 이미지 [1080x480] 제목 및 설명 포함',
         upload_to=get_path, blank=True)
     mobile_cover_small = models.ImageField(
         '통합앱 메인화면 커버이미지(1080x240)', upload_to=get_path, blank=True)
@@ -206,15 +206,19 @@ class Work(models.Model):
 
     @property
     def thumbnail_url(self):
-        chapters = Chapter.objects.filter(work=self).order_by('-reg_no')
-        if len(chapters) > 0:
-            if chapters[0].thumbnail:
-                chapter = chapters[0]
-                return chapter.thumbnail.url
-            else:
-                return '/static/img/_.no.image.png'
+        if self.image_cover:
+            return self.image_cover.url
         else:
             return '/static/img/_.no.image.png'
+        # chapters = Chapter.objects.filter(work=self).order_by('-reg_no')
+        # if len(chapters) > 0:
+        #     if chapters[0].thumbnail:
+        #         chapter = chapters[0]
+        #         return chapter.thumbnail.url
+        #     else:
+        #         return '/static/img/_.no.image.png'
+        # else:
+        #     return '/static/img/_.no.image.png'
 
     @property
     def avg_rating(self):

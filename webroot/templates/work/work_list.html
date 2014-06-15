@@ -20,8 +20,8 @@
 		<section class="p w290 {% if forloop.counter|divisibleby:1 and not forloop.counter|divisibleby:3 %}left{% endif %}{% if forloop.counter|divisibleby:2 %} m-horizon15{% endif %}{% if forloop.counter|divisibleby:3 %}right{% endif %}">
 			<h3 class="p m-bottom15 font pt12 weight-semibold h20">
 				<a href="{% url 'chapter_list' work.id %}" class="p no-line color-black left line-h20">{{ work.title }}</a>
-				<a href="{% url 'chapter_list' work.id %}" class="p no-line color-asbestos font pt10 right line-h20">{{ work.author }}</a></h3>
-			<a href="{% url 'chapter_list' work.id %}"><img src="{{ work.thumbnail_url }}" alt="{{ work.title }}"></a>
+				<a href="{% url 'chapter_list' work.id %}" class="p no-line color-asbestos font pt10 right line-h20">{{ work.author.nickname }}</a></h3>
+			<a href="{% url 'chapter_list' work.id %}"><img style="width: 100%;" src="{{ work.thumbnail_url }}" alt="{{ work.title }}"></a>
 			<p class="p p-top15 font">{{ work.description }}</p>
 		</section>
 		{% if forloop.counter|divisibleby:3 or forloop.last %}
