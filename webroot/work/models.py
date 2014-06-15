@@ -189,7 +189,7 @@ class Work(models.Model):
             chapter = chapters[0]
             return chapter.thumbnail.url
         else:
-            return ''
+            return '/static/img/_.no.image.png'
 
     @property
     def avg_rating(self):
