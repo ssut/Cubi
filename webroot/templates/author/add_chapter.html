@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block hcontent %}
+<section class="chapter-add">
+	<section class="p w900 box-align-center">
+		<h1 class="p font pt16 weight-thin color-wet-asphalt">챕터 등록</h1>
+	</section>
+	<section class="info p w900 box-align-center m-top15 edge-top-silver">
+		<form method="post" action="{% url 'author:addchapter' work.id %}" enctype="multipart/form-data">
+		{% csrf_token %}
+			<ul class="p no-list no-margin">
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">작품명</span></section>
+					<section class="p right w600">
+						<input readonly="readonly" class="p font pt9" value="{{ work.title }}">
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">챕터 제목</span></section>
+					<section class="p right w600">
+						<input class="p font pt9" name="title" placeholder="제목" required>
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">만화<span class="p font pt11 color-asbestos">(멀티 업로드, 가로 최대 1000 픽셀)</span></span></section>
+					<section class="p right w600">
+						<input type="file" name="manga0" class="p hide">
+						<input readonly="readonly" class="p font pt9 left">
+						<button type="button" class="p left font pt9 weight-bold">파일 선택</button>
+					</section>
+				</li>
+				<li class="p clear">
+					<section class="p left w300"><span class="p font pt11 color-wet-asphalt">작가의 말</span></section>
+					<section class="p right w600">
+						<input class="p font pt9" name="desc">
+					</section>
+				</li>
+			</ul>
+			<section class="p text-align-center">
+				<button type="submit" class="p font pt10 weight-thin peter-river color-white">등록</button>
+			</section>
+		</form>
+	</section>
+	<script>declare(_not_index)</script>
+	<section class="p clear"></section>
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+var n = 0;
+var form = '<section class="p right w600"> \
+	<input type="file" name="manga{n}" class="p hide" multiple> \
+	<input readonly="readonly" class="p font pt9 left"> \
+	<button type="button" class="p left font pt9 weight-bold">파일 선택</button> \
+</section>';
+$(document).on('click', 'form li button', function() {
+	$(this).parent().find('input:file').click();
+});
+$(document).on('change', 'form li input:file', function() {
+	var r = $(this).parent().find('input[readonly]'),
+	pp = $(this).parent().parent();
+	if(this.files.length > 0) {
+		var f = this.files[0];
+		if(f.type.indexOf('image/') == -1) {
+			alert('이미지를 선택해주세요.');
+			$(this).val('');
+		} else {
+			r.val(f.name);
+			d = form.replace('{n}', ++n);
+			$(pp).append(d);
+		}
+	}
+});
+
+$('form input:file').attr('accept', 'image/*');
+</script>
+{% endblock %}
