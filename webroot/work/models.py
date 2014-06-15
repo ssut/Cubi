@@ -270,7 +270,7 @@ class Chapter(models.Model):
         ratings = ChapterRating.objects.filter(chapter=self)
         avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
         if avg_rating:
-            dict['avg_rating'] = round(avg_rating / 2.0, 1)
+            dict['avg_rating'] = avg_rating
             dict['count'] = ratings.count()
         else:
             dict['avg_rating'] = 0.0

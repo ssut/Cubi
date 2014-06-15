@@ -85,19 +85,19 @@
 							{% csrf_token %}
 						</form>
 						{% if not user_rated and user.is_authenticated %}
-						<section id="rating" class="p left">●●◐○○<b>2.5</b></section>
+						<section id="rating" class="p left">●●◐○○<b>5</b></section>
 						<nav class="p layer">
 							<ul class="p no-list no-margin">
-								<li><a><span>●●●●●</span><b>5.0</b></a></li>
-								<li><a><span>●●●●◐</span><b>4.5</b></a></li>
-								<li><a><span>●●●●○</span><b>4.0</b></a></li>
-								<li><a><span>●●●◐○</span><b>3.5</b></a></li>
-								<li><a><span>●●●○○</span><b>3.0</b></a></li>
-								<li><a><span>●●◐○○</span><b>2.5</b></a></li>
-								<li><a><span>●●○○○</span><b>2.0</b></a></li>
-								<li><a><span>●◐○○○</span><b>1.5</b></a></li>
-								<li><a><span>●○○○○</span><b>1.0</b></a></li>
-								<li><a><span>◐○○○○</span><b>0.5</b></a></li>
+								<li><a><span>●●●●●</span><b>10</b></a></li>
+								<li><a><span>●●●●◐</span><b>9</b></a></li>
+								<li><a><span>●●●●○</span><b>8</b></a></li>
+								<li><a><span>●●●◐○</span><b>7</b></a></li>
+								<li><a><span>●●●○○</span><b>6</b></a></li>
+								<li><a><span>●●◐○○</span><b>5</b></a></li>
+								<li><a><span>●●○○○</span><b>4</b></a></li>
+								<li><a><span>●◐○○○</span><b>3</b></a></li>
+								<li><a><span>●○○○○</span><b>2</b></a></li>
+								<li><a><span>◐○○○○</span><b>1</b></a></li>
 							</ul>
 						</nav>
 						<a href="javascript:$('#rating_form').submit()" class="p font pt9 no-line color-white right">주기</a>
@@ -197,7 +197,7 @@
 
 	var rating = $('#rating');
 	$('#rating_form').submit(function() {
-		var r = parseInt(parseFloat(rating.find('b').text()) * 2.0);
+		var r = parseInt(parseFloat(rating.find('b').text()));
 		var input = $('<input type="hidden" name="rating">').val(r);
 		$(this).append(input);
 	});

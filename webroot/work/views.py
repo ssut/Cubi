@@ -50,9 +50,9 @@ def chapter_view(request, chapter_id):
     images = Image.objects.filter(chapter=chapter)
     user = request.user
 
-    rating = chapter.avg_rating['rating'] \
-        if 'rating' in chapter.avg_rating else '0'
-    tmp_rating = rating
+    original_rating = rating = chapter.avg_rating['avg_rating'] \
+        if 'avg_rating' in chapter.avg_rating else '0'
+    tmp_rating = rating = rating / 2
     rating_str = ''
     for i in range(int(rating)):
         rating_str += u'●'
@@ -66,7 +66,7 @@ def chapter_view(request, chapter_id):
         'work': work,
         'images': images,
         'media_url': MEDIA_URL,
-        'avg_rating': rating,
+        'avg_rating': original_rating,
         'rating_str': rating_str,
         'user_rated': False,
         'comments':
