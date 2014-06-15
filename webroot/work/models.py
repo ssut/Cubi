@@ -91,11 +91,11 @@ class Comment(models.Model):
 class Rating(models.Model):
     # generate choices: tuple([(i, (i / 2.0)) for i in range(1, 11)])
     RATING_CHOICES = (
-        (1, 0.5), (2, 1.0),
-        (3, 1.5), (4, 2.0),
-        (5, 2.5), (6, 3.0),
-        (7, 3.5), (8, 4.0),
-        (9, 4.5), (10, 5.0)
+        (1, 1), (2, 2),
+        (3, 3), (4, 4),
+        (5, 5), (6, 6),
+        (7, 7), (8, 8),
+        (9, 9), (10, 10)
     )
     author = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
