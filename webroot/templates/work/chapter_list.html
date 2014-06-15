@@ -15,6 +15,8 @@
 				{% endif %}
 
 				{% if work.author == user %}
+				&nbsp;&nbsp;
+				<button onclick="location.href = '{% url 'author:editwork' work.id %}'" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">정보 수정</span></button>
 				<button onclick="location.href = '{% url 'author:addchapter' work.id %}'" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">챕터 추가</span></button>
 				{% endif %}
 				</div>
