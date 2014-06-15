@@ -91,11 +91,11 @@ class Comment(models.Model):
 class Rating(models.Model):
     # generate choices: tuple([(i, (i / 2.0)) for i in range(1, 11)])
     RATING_CHOICES = (
-        (1, 0.5), (2, 1.0),
-        (3, 1.5), (4, 2.0),
-        (5, 2.5), (6, 3.0),
-        (7, 3.5), (8, 4.0),
-        (9, 4.5), (10, 5.0)
+        (1, 1), (2, 2),
+        (3, 3), (4, 4),
+        (5, 5), (6, 6),
+        (7, 7), (8, 8),
+        (9, 9), (10, 10)
     )
     author = models.ForeignKey(User)
     created = models.DateTimeField(auto_now_add=True)
@@ -134,8 +134,8 @@ class WorkCategory(models.Model):
 
 # 작품
 class Work(models.Model):
-    work_num = models.IntegerField(blank=True)
-    work_target = models.CharField(max_length=10)
+    work_num = models.IntegerField(blank=True, null=True)
+    work_target = models.CharField(max_length=10, blank=True)
     category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
     title = models.CharField('작품명', max_length=200)
@@ -206,8 +206,12 @@ class Work(models.Model):
 
     @property
     def thumbnail_url(self):
-        chapter = Chapter.objects.filter(work=self).order_by('-reg_no')[0]
-        return chapter.thumbnail.url
+        chapters = Chapter.objects.filter(work=self).order_by('-reg_no')
+        if len(chapters) > 0:
+            chapter = chapters[0]
+            return chapter.thumbnail.url
+        else:
+            return '/static/img/_.no.image.png'
 
     @property
     def avg_rating(self):
@@ -298,17 +302,38 @@ class Chapter(models.Model):
     public = models.BooleanField(default=True)
     description = models.TextField(blank=True, max_length=150)
 
+    def __init__(self, *args):
+        self._avg_rating = None
+        super(Chapter, self).__init__(*args)
+
     @property
     def avg_rating(self):
+        if self._avg_rating:
+            return self._avg_rating
+
         dict = {}
         ratings = ChapterRating.objects.filter(chapter=self)
         avg_rating = ratings.aggregate(models.Avg('score'))['score__avg']
         if avg_rating:
-            dict['avg_rating'] = round(avg_rating / 2.0, 1)
+            dict['avg_rating'] = avg_rating
             dict['count'] = ratings.count()
+
+            tmp_rating = rating = avg_rating / 2
+            rating_str = u''
+            for i in range(int(rating)):
+                rating_str += u'●'
+                tmp_rating -= 1
+            if tmp_rating > 0:
+                rating_str += u'◐'
+            for i in range(5 - len(rating_str)):
+                rating_str += u'○'
+
+            dict['rating_str'] = rating_str
         else:
             dict['avg_rating'] = 0.0
             dict['count'] = 0
+            dict['rating_str'] = u'○○○○○'
+        self._avg_rating = dict
         return dict
 
     @property

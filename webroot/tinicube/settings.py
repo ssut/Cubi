@@ -42,6 +42,11 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 )
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+)
+
 STATIC_URL = '/static/'
 STATIC_ROOT = STATIC_ROOT_PATH
 MEDIA_ROOT = MEDIA_PATH
@@ -76,6 +81,8 @@ RAVEN_CONFIG = {
 }
 
 INSTALLED_APPS = (
+    'grappelli',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

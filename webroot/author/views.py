@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+import json
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
@@ -79,60 +81,39 @@ def index(request):
 '''
 def addwork(request):
     if request.method == 'POST':
-        form = AddworkForm(request.POST, request.FILES)
-        print form
-        if form.is_valid():
-            type = form.cleaned_data['type']
-            title = form.cleaned_data['title']
-            genre = form.cleaned_data['genre']
-            introduce = form.cleaned_data['introduce']
-            work_num = form.cleaned_data['work_num']
-            image_cover = form.cleaned_data['image_cover']
-            image_thumbnail = form.cleaned_data['image_thumbnail']
-            image_loading = form.cleaned_data['image_loading']
-            image_largeicon = form.cleaned_data['image_largeicon']
-            image_smallicon = form.cleaned_data['image_smallicon']
-
-            # print dir(image_cover.file)
-            name, ext = os.path.splitext(image_cover.name)
-            print name
-            print ext
-
-            if type == 'webtoon_naver':
-                work_category = WorkCategory.objects.get(title=u'웹툰')
-            elif type == 'webtoon_daum':
-                work_category = WorkCategory.objects.get(title=u'웹툰')
-
-            # Work Instance생성
-            user = request.user
-            work_instance = Work(
-                category=work_category, author=user, title=title,
-                description=introduce, work_num=work_num)
-            work_instance.save()
-
-            # Work 인스턴스에 이미지 저장
-            work_instance.cover = image_cover
-            work_instance.image_loading = image_loading
-            work_instance.image_largeicon = image_largeicon
-            work_instance.image_smallicon = image_smallicon
-            work_instance.save()
-
+        name, desc = request.POST.get('name', ''), request.POST.get('desc', '')
+        if name == '' or desc == '':
             d = {
-                'title': title,
+                'success': False,
+                'message': u'모든 폼을 채워주세요.'
             }
+            return HttpResponse(json.dumps(d), content_type="application/json")
 
-            return render_to_response('author/addwork_success.html', d,
-                                      RequestContext(request))
+        if Work.objects.filter(title=name).exists():
+            d = {
+                'success': False,
+                'message': u'이미 존재하는 작품명입니다.'
+            }
+            return HttpResponse(json.dumps(d), content_type="application/json")
 
-        else:
-            error_msg = u'업로드 데이터가 잘못되었습니다'
-            d = {'return_status': 'failed', 'reason': error_msg}
-            return render_to_response('author/addwork_failed.html', d,
-                                      RequestContext(request))
+        # Work Instance생성
+        user = request.user
+        category = WorkCategory.objects.get(title=u'웹툰')
+        work_instance = Work(
+            title=name,
+            category=category,
+            work_num=-1,
+            description_simple=desc,
+            author=user)
+        work_instance.save()
+
+        if work_instance:
+            d = {
+                'success': True
+            }
+            return HttpResponse(json.dumps(d), content_type="applicaiton/json")
     else:
-        form = AddworkForm()
-        d = {'form': form}
-        return render_to_response('author/addwork.html', d,
+        return render_to_response('author/add_work.html',
                                   RequestContext(request))
 
 # 작품 업로드 1 - 타입 선택 (웹툰, 만화, 소설 등)
@@ -181,6 +162,10 @@ def addwork_info(request):
         d = {'form': form}
         return render_to_response('author/addwork_info.html', d,
                                   RequestContext(request))
+
+
+def addchapter(request, work_id):
+    pass
 
 '''
 Author - ChapterList (작가의 작품목록에서 작품 클릭시 이쪽으로 넘어옴)

@@ -1181,6 +1181,105 @@ body > section.authors > section.p.item:nth-child(2) section > span.thumbnail {
 body > section.authors > section.p.item:nth-child(3) section > span.thumbnail {
   background-image: url(../img/__.author_list_picture_03_beforeblue.png);
 }
+body > section.artwork-register > section:nth-child(2) > section > section {
+  margin-bottom: 15px;
+}
+body > section.artwork-register > section:nth-child(2) > section > section b, body > section.artwork-register > section:nth-child(2) > section > section input {
+  height: 35px;
+}
+body > section.artwork-register > section:nth-child(2) > section > section b {
+  display: inline-block;
+  width: 70px;
+  padding-left: 5px;
+  border-bottom: solid 1px #95a5a6;
+  line-height: 35px;
+}
+body > section.artwork-register > section:nth-child(2) > section > section input {
+  width: 325px;
+  border: 0;
+  border-bottom: solid 1px #95a5a6;
+  background: transparent;
+}
+body > section.artwork-register > section:nth-child(2) > section > section input:focus {
+  height: 35px;
+  border-bottom: solid 1px #2980b9;
+}
+body > section.artwork-register > section:nth-child(2) > section > section button {
+  cursor: pointer;
+  width: 55px;
+  height: 30px;
+  border: 0;
+  border-radius: 5px;
+  transition: background 0.125s linear;
+}
+body > section.artwork-register > section:nth-child(2) > section > section button:hover {
+  background: #2980b9;
+}
+body > section.artwork-modify li, body > section.chapter-add li {
+  height: 45px;
+  border-top: solid 1px #95a5a6;
+}
+body > section.artwork-modify li:first-child, body > section.chapter-add li:first-child {
+  border-top-width: 0;
+}
+body > section.artwork-modify li span.p, body > section.chapter-add li span.p {
+  padding-left: 10px;
+  line-height: 45px;
+}
+body > section.artwork-modify input, body > section.chapter-add input {
+  width: 510px;
+  height: 25px;
+  margin: 10px 0;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 5px 0 0 5px;
+  background: rgba(255, 255, 255, 0.75);
+}
+body > section.artwork-modify button, body > section.chapter-add button {
+  cursor: pointer;
+  width: 70px;
+  height: 25px;
+  margin: 10px 0;
+  border: 0;
+  border-radius: 0 5px 5px 0;
+  background: #3498db;
+  color: white;
+  transition: background 0.125s linear;
+}
+body > section.artwork-modify button:hover, body > section.chapter-add button:hover {
+  background: #2980b9;
+}
+body > section.artwork-modify li:first-child input, body > section.artwork-modify li:nth-child(2) input, body > section.chapter-add li:first-child input, body > section.chapter-add li:nth-child(2) input {
+  width: 580px;
+  border-radius: 5px;
+}
+body > section.artwork-modify li:nth-child(3), body > section.chapter-add li:nth-child(3) {
+  height: 90px;
+}
+body > section.artwork-modify li:nth-child(3) textarea, body > section.chapter-add li:nth-child(3) textarea {
+  width: 580px;
+  max-width: 580px;
+  height: 60px;
+  max-height: 60px;
+  margin: 10px 0;
+  padding: 5px;
+  border: 0;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.75);
+}
+body > section.artwork-modify li:last-child, body > section.chapter-add li:last-child {
+  border-bottom: solid 1px #95a5a6;
+}
+body > section.artwork-modify > section:nth-child(2) > section > button, body > section.chapter-add > section:nth-child(2) > section > button {
+  border-radius: 5px;
+}
+body > section.chapter-add li:nth-child(3) {
+  height: 45px;
+}
+body > section.chapter-add li:nth-child(4) input {
+  width: 580px;
+  border-radius: 5px;
+}
 body > section.notice article > section:first-child {
   height: 40px;
   padding: 0 10px;
