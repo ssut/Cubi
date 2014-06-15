@@ -162,9 +162,14 @@ $('form li button').each(function() {
 $('form input:file').attr('accept', 'image/*');
 $('form img').each(function() {
 	var i = new Image();
+	var self = $(this);
+	self.attr('max-width', '100%');
 	i.src = $(this).attr('src');
-	$(this).attr('width', '100%');
-	$(this).parent().append('<div style="text-align: center">SIZE: ' + i.width + 'x' + i.height + '</div>');
+	i.onload = function() {
+		if(i.width > 0 && i.height > 0) {
+			self.parent().append('<div style="text-align: center">SIZE: ' + i.width + 'x' + i.height + '</div>');
+		}
+	}
 });
 </script>
 {% endblock %}
