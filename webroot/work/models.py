@@ -134,8 +134,8 @@ class WorkCategory(models.Model):
 
 # 작품
 class Work(models.Model):
-    work_num = models.IntegerField(blank=True)
-    work_target = models.CharField(max_length=10)
+    work_num = models.IntegerField(blank=True, null=True)
+    work_target = models.CharField(max_length=10, blank=True)
     category = models.ForeignKey(WorkCategory)
     author = models.ForeignKey(User)
     title = models.CharField('작품명', max_length=200)
@@ -184,8 +184,12 @@ class Work(models.Model):
 
     @property
     def thumbnail_url(self):
-        chapter = Chapter.objects.filter(work=self).order_by('-reg_no')[0]
-        return chapter.thumbnail.url
+        chapters = Chapter.objects.filter(work=self).order_by('-reg_no')
+        if len(chapters) > 0:
+            chapter = chapters[0]
+            return chapter.thumbnail.url
+        else:
+            return ''
 
     @property
     def avg_rating(self):
