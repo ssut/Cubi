@@ -7,9 +7,10 @@
 		<h1 class="p font pt16 weight-thin color-wet-asphalt">작가 정보</h1>
 	</section>
 	<section class="info p w900 box-align-center m-top15 p-top15 edge-top-silver">
-		<section class="thumbnail p left">{% if author_info.profile_image %}<img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64">{% endif %}</section>
+		<input type="file" id="profile_uploader" accept="image/*" class="p hide">
+		<section class="thumbnail p left" style="cursor: pointer" id="img">{% if author_info.profile_image %}<img src="{{ author_info.profile_image.url }}" alt="" width="64" height="64">{% endif %}</section>
 		<article class="p right">
-			<h2 class="p font pt14 weight-thin color-wet-asphalt">{{ author_info.nickname }}</h2><span class="p font pt9 color-asbestos">{{ author_info.introduce_simple }}</span>
+			<h2 class="p font pt14 weight-thin color-wet-asphalt">{{ author_info.nickname }}</h2><span class="p font pt9 color-asbestos" id="comment">{% if author_info.introduce_simple %}{{ author_info.introduce_simple }}{% else %}작가 설명이 없습니다.{% endif %}</span>
 		</article>
 		<p class="p clear font pt10 color-asbestos">{{ author_info.introduce_full }}</p>
 	</section>
@@ -73,4 +74,70 @@
 	<script>declare(_not_index)</script>
 	<section class="p clear"></section>
 </section>
+{% endblock %}
+
+{% block script %}
+<script>
+var csrfToken = $("{% csrf_token %}").val();
+$('#img').click(function() {
+	var f = $('#profile_uploader');
+	f.click();
+});
+
+$('#profile_uploader').change(function() {
+	var file = this.files[0];
+	var data = new FormData();
+	if(!file) { return; }
+	data.append('csrfmiddlewaretoken', csrfToken);
+	data.append('type', 'thumbnail');
+	data.append('image', file);
+
+	$.ajax({
+		url: '{% url 'author:update_info' %}',
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		type: 'POST',
+		success: function(data) {
+			if(data.success) {
+				alert('프로필 이미지가 변경되었습니다.');
+				if($(this).find('img')) {
+					$('#img img').attr('src', data.message);
+				} else {
+					var append = '<img src="' + data.message + '" alt="" width="64" height="64">';
+					$('#img').append(append);
+				}
+			} else {
+				alert(data.message);
+			}
+		}
+	});
+});
+
+$('#comment').css('cursor', 'pointer').click(function() {
+	var p = prompt('변경할 설명을 입력하세요.', $(this).text());
+	if(p != '' && p != $(this).text()) {
+		var data = {
+			csrfmiddlewaretoken: csrfToken,
+			type: 'description',
+			value: p
+		};
+		$.ajax({
+			url: '{% url 'author:update_info' %}',
+			data: data,
+			type: 'POST',
+			context: this,
+			success: function(data) {
+				if(data.success) {
+					alert('작가 설명이 변경되었습니다.');
+					$(this).text(p);
+				} else {
+					alert(data.message);
+				}
+			}
+		});
+	}
+});
+</script>
 {% endblock %}

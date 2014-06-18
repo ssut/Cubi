@@ -11,7 +11,7 @@
 				<div class="p layer">
 				{% if user.is_authenticated %}
 				<button class="ladda-button ladda-small" data-color="blue" data-style="zoom-in" data-size="xs" onclick="location.href='{% url 'author:info' work.author.id %}'"><span class="ladda-label">작가정보</span></button>
-				<button id="add_to_favorites" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">즐겨찾기 추가</span></button>
+				<button id="add_to_favorites" class="ladda-button ladda-small" data-id="{{ work.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label"><img src="{% static 'img/icon.favorite.png' %}" width="10" height="10" alt=""> 즐겨찾기 추가</span></button>
 				{% endif %}
 
 				{% if work.author == user %}

@@ -12,6 +12,7 @@ urlpatterns = patterns(
     url(r'^introduce/$', 'introduce', name='introduce'),
     url(r'^agreement/$', 'agreement', name='agreement'),
     url(r'^index/$', 'index', name='index'),
+    url(r'^update/$', 'update', name='update_info'),
     url(r'^work/add/$', 'addwork', name='addwork'),
     url(r'^work/(\d+)/edit', 'editwork', name='editwork'),
     url(r'^work/(\d+)/add_chapter', 'addchapter', name='addchapter'),
