@@ -56,3 +56,6 @@ def terms(request):
 
 def privacy(request):
     return render_to_response('privacy.html')
+
+def error(request):
+    return render_to_response('error.html')
