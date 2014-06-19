@@ -2,42 +2,50 @@
 {% load staticfiles %}
 
 {% block header %}
-<section class="p show">
-            <h1 class="p font weight-thin pt36 spacing-small color-white text-shadow">티니큐브와 함께하세요</h1>
-            <article class="p font pt10 color-white">그냥 함께해라 ㅡㅡ 확씨 팍씨 막씨</article>
-          </section>
-          <section class="p hide">
-            <h1 class="p font weight-thin pt36 spacing-small color-white text-shadow">2p</h1>
-            <article class="p font pt10 color-white">2p context</article>
-          </section>
-          <section class="p hide">
-            <h1 class="p font weight-thin pt36 spacing-small color-white text-shadow">3p</h1>
-            <article class="p font pt10 color-white">3p context</article>
-          </section>
+<section class="p show" style="background-image:url('{% static 'img/hero_01.png' %}')">
+	<h1 class="p font weight-thin pt36 spacing-small color-white text-shadow">tinicube와 함께 하세요</h1>
+	<article class="p font pt10 color-white">
+tinicube는 아마추어 작가들과 함께하는 오픈 콘텐츠 마켓입니다.<br>
+누구나 참여해서 작품을 게시하고, 작가들과 소통할 수 있는 공간을 제공합니다.</article>
+</section>
+<section class="p hide" style="background-image:url('{% static 'img/hero_03.png' %}')">
+	<h1 class="p font weight-thin pt36 spacing-small color-white text-shadow">수익을 창출합니다</h1>
+	<article class="p font pt10 color-white">
+tinicube에서는 연재하시는 작품에서 광고 수익을 창출하여 지급합니다.<br>
+지금까지 무료로 연재하던 작품에서 수익을 얻을 수 있습니다.</article>
+</section>
+<section class="p hide" style="background-image:url('{% static 'img/hero_02.png' %}')">
+	<h1 class="p font weight-thin pt36 spacing-small color-white text-shadow">작품 개별 애플리케이션</h1>
+	<article class="p font pt10 color-white">
+tinicube는 작가님들의 작품 각각에 <br>개별 애플리케이션 제작 서비스를 제공합니다.<br>
+개별앱으로 작가님들은 자신의 작품을 추가적으로 홍보할 수 있고, <br>독자들은 자신이 좋아하는 작품을 쉽게 감상할 수 있습니다.</article>
+</section>
 {% endblock %}
 
 
 {% block hcontent %}
 <section class="index">
-	<h1 class="p font pt22 weight-thin text-align-center color-wet-asphalt">Start with<span>&nbsp;tinicube</span></h1>
+	<h1 class="p font pt22 weight-thin text-align-center color-wet-asphalt">tinicube<span>&nbsp;</span></h1>
 	<section class="p w900 box-align-center m-top15 p-top15 edge-top-silver">
 		<section class="p left w445 font pt11 line-h180p">
-			<h3 class="p m-bottom15 font pt12 weight-semibold">tinicube &amp; artworks</h3>
-			<p>설명 솰롸솰롸</p>
-			<p class="p box w425 font pt10">중요한거</p>
-			<p>함께하면 조흔점</p>
+			<!-- <h3 class="p m-bottom15 font pt12 weight-semibold">공지사항 & FAQ</h3> -->
+			<p>공지사항</p>
+			{% for notice in notices %}
+			<p class="p box w425 font pt10">{{ notice.title }}</p>
+			{% endfor %}
+			
+			<!-- <p>함께하면 조흔점</p>
 			<ul class="p red-bullet">
 				<li>조흔점1</li>
 				<li>조흔점2</li>
 				<li>조흔점3</li>
-			</ul>
+			</ul> -->
 		</section>
 		<section class="p right w440">
 			<ul class="p no-list no-margin w440">
-				<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
-				<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
-				<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
-				<li class="p h120 m-top15 layer-relative font"><img src="#" alt="" class="p layer"><span class="p layer">작가 이름</span><span class="p layer font weight-bold pt11">작품 이름</span></li>
+				{% for work in works %}
+				<li class="p h120 m-top15 layer-relative font"><img src="{{ work.mobile_cover_url }}" alt="" class="p layer"><span class="p layer">{{ work.author.nickname }}</span><span class="p layer font weight-bold pt11">{{ work.title }}</span></li>
+				{% endfor %}
 			</ul>
 		</section>
 	</section>

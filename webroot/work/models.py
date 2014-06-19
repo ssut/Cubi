@@ -171,6 +171,20 @@ class Work(models.Model):
         return self.chapters_manager.all()
 
     @property
+    def mobile_cover_url(self):
+        if self.mobile_cover_small:
+            return self.mobile_cover_small.url
+        else:
+            return '/static/img/_.no.image.png'
+
+    @property
+    def cover_url(self):
+        if self.image_cover:
+            return self.image_cover.url
+        else:
+            return '/static/img/_.no.image.png'
+
+    @property
     def thumbnail_url(self):
         if self.image_cover:
             return self.image_cover.url

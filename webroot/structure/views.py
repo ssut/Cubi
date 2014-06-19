@@ -10,13 +10,21 @@ except ImportError:
     from django.contrib.auth.models import User
 
 from work.models import *
+from board.models import Notice
 
 
 def temp(request):
     return render_to_response('index/temp.html')
 
 def index(request):
-    return render_to_response('index/index.html', RequestContext(request))
+    recent_works = Work.objects.all().order_by('-created')[:5]
+    recent_notices = Notice.objects.all().order_by('-created')[:10]
+
+    d = {
+        'works': recent_works,
+        'notices': recent_notices,
+    }
+    return render_to_response('index/index.html', d, RequestContext(request))
 
 def about(request):
     return render_to_response('about.html')
