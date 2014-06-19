@@ -70,7 +70,7 @@ def update(request):
                 im.save(tmp, 'JPEG')
 
                 tmp_file = InMemoryUploadedFile(tmp, None, 'foo.jpg',
-                                                'image/jepg', tmp.len, None)
+                                                'image/jpeg', tmp.len, None)
                 author_info.profile_image = tmp_file
                 author_info.save()
             except Exception, e:

@@ -2,7 +2,7 @@
 import StringIO
 import json
 
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, render_to_response, redirect
@@ -165,7 +165,17 @@ def update_chapter(request):
                 io.seek(0)
                 im = PIL_Image.open(io)
                 im.thumbnail((210, 90), PIL_Image.ANTIALIAS)
-                im.save(chapter.thumbnail.path, 'JPEG')
+                if chapter.thumbnail:
+                    im.save(chapter.thumbnail.path, 'JPEG')
+                else:
+                    tmp = StringIO.StringIO()
+                    im.save(tmp, 'JPEG')
+
+                    tmp_file = InMemoryUploadedFile(
+                        tmp, None, 'foo.jpg', 'image/jpeg', tmp.len, None)
+                    chapter.thumbnail = tmp_file
+                chapter.save()
+
             except Exception, e:
                 d['message'] = str(e)
             else:
