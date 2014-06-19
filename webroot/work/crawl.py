@@ -26,10 +26,11 @@ cur_path = os.path.dirname(os.path.abspath(__file__))
 base_path = os.path.dirname(cur_path)
 
 # 서비스용, 로컬 분리
-if not settings.DEBUG:
-    log_file_path = '/srv/www/tinicube_logger.txt'
-else:
-    log_file_path = os.path.join(base_path, 'logger.txt')
+# if settings.DEBUG is False:
+#     log_file_path = '/srv/www/tinicube_logger.txt'
+# else:
+#     log_file_path = os.path.join(base_path, 'logger.txt')
+log_file_path = '/tmp/tinicube_logger.txt'
 
 
 log = logging.getLogger('MyLogger')
