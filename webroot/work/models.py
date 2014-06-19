@@ -12,47 +12,13 @@ from tinicube.settings import MEDIA_URL
 from member.models import TinicubeUser as User
 
 # Upload path
-path_work = 'work/'
-def get_path(work_instance, filename):
+def get_path(instance, filename):
     today = datetime.today()
     today_str = today.strftime('%Y%m%d')
-    if work_instance.category == WorkCategory.objects.get(title=u'웹툰'):
-        extra_path = 'webtoon/'
-    else:
-        extra_path = ''
 
-    print type
-    path = os.path.join(today_str, path_work, extra_path, filename)
-    return path
+    path = os.path.join(today_str, filename)
+    return path    
 
-# 사용하지 않음
-path_image = 'image/'
-path_image_work = os.path.join(path_image)
-
-# Dynamic upload path
-def get_work_cover_path(work_instance, filename):
-    path = '%s'
-def get_work_thumbnail_path(work_instance, filename):
-    path = '%s'
-
-def get_image_chapter_cover_path(chapter_instance, filename):
-    path1 = os.path.join(path_image_chapter_cover,
-                         str(chapter_instance.work.id))
-    path2 = os.path.join(path1, filename)
-    return path2
-
-def get_image_chapter_thumbnail_path(chapter_instance, filename):
-    path1 = os.path.join(path_image_chapter_thumbnail,
-                         str(chapter_instance.work.id))
-    path2 = os.path.join(path1, filename)
-    return path2
-
-def get_image_content_path(content_instance, filename):
-    path1 = os.path.join(path_image_content,
-                         str(content_instance.chapter.work.id))
-    path2 = os.path.join(path1, str(content_instance.chapter.id))
-    path3 = os.path.join(path2, filename)
-    return path3
 
 class IntegerRangeField(models.IntegerField):
     def __init__(self, verbose_name=None, name=None, min_value=None,
@@ -475,7 +441,7 @@ class Content(models.Model):
             self.chapter.work.title, self.chapter.title, self.sequence)
 
 class Image(Content):
-    image = models.ImageField(upload_to=get_image_content_path)
+    image = models.ImageField(upload_to=get_path)
 
     def __unicode__(self):
         return u'%s - %s (Image, %d)' % (

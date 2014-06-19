@@ -77,8 +77,8 @@
 	<section class="p edge-top-silver m-top15 clouds" id="bottom">
 		<section class="p w900 box-align-center p-top15">
 			<section class="p left h100 layer-relative">
-				<h4 class="p font weight-regular pt12">작가의 말<span class="p font weight-thin pt12 color-asbestos">&nbsp;({{ work.author }})</span></h4>
-				<p>{{ work.author.authorinfo_by_user.all.0.introduce_simple }}</p>
+				<h4 class="p font weight-regular pt12">작가의 말<span class="p font weight-thin pt12 color-asbestos">&nbsp;({{ work.author.nickname }})</span></h4>
+				<p>{{ chapter.description }}</p>
 				<section class="p layer">
 					<section class="p font left peter-river color-white pt9 layer-relative">
 						<form method="post" id="rating_form" action="{% url "add_chapter_rating" chapter.id %}">

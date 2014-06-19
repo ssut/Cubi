@@ -6,7 +6,7 @@
 	<section class="p w900 box-align-center">
 		<section class="p layer-relative"><img src="{{ work.thumbnail_url }}" alt="" class="p w400 h200 layer">
 			<article class="p font layer-relative">
-			<h2>{{ work.title }}<span class="p show font pt10">{{ work.author }}</span></h2>
+			<h2>{{ work.title }}<span style="padding-top: 5px;" class="p show font pt10">{{ work.author.nickname }}</span></h2>
 				<p>{{ work.description }}</p>
 				<div class="p layer">
 				{% if user.is_authenticated %}
