@@ -5,7 +5,10 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns(
+urlpatterns = patterns('',
+    url(r'^version/$', 'tinicube.api.version'),
+)
+urlpatterns += patterns(
     'member.api',
     url(r'^login/$', 'login'),
     url(r'^signup/$', 'signup'),

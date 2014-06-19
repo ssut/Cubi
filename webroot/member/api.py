@@ -119,7 +119,7 @@ def signup(request):
 @require_http_methods(["POST"])
 def all_author_list(request):
     query_dict = request.POST
-    authors = User.objects.filter(type='2').all().order_by('-date_joined')
+    authors = User.objects.filter(type='2').filter(is_superuser=False).order_by('-date_joined')
 
     data = {
         'authors': [author.json() for author in authors],
