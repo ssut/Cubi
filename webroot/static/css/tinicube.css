@@ -321,6 +321,52 @@ header > .p:nth-child(2) > .p nav ul li a.selected {
   color: #2980b9;
 }
 
+html[noie] body > section.artworks > section:first-child > section:first-child {
+  -webkit-perspective: 2000px;
+  -moz-perspective: 2000px;
+  -ms-perspective: 2000px;
+  -o-perspective: 2000px;
+  perspective: 2000px;
+}
+html[noie] body > section.artworks > section:first-child > section:first-child > section {
+  -webkit-transition: -webkit-transform 1.5s;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: translateZ(-259.8px);
+  -moz-transition: -moz-transform 1.5s;
+  -moz-transform-style: preserve-3d;
+  -moz-transform: translateZ(-259.8px);
+  -ms-transition: -ms-transform 1.5s;
+  -ms-transform-style: preserve-3d;
+  -ms-transform: translateZ(-259.8px);
+  -o-transition: -o-transform 1.5s;
+  -o-transform-style: preserve-3d;
+  -o-transform: translateZ(-259.8px);
+  transition: transform 1.5s;
+  transform-style: preserve-3d;
+  transform: translateZ(-259.8px);
+}
+html[noie] body > section.artworks > section:first-child > section:first-child > section section {
+  -webkit-transform: translateZ(259.8px);
+  -moz-transform: translateZ(259.8px);
+  -ms-transform: translateZ(259.8px);
+  -o-transform: translateZ(259.8px);
+  transform: translateZ(259.8px);
+}
+html[noie] body > section.artworks > section:first-child > section:first-child > section section:nth-child(2) {
+  -webkit-transform: rotateY(120deg) translateZ(259.8px);
+  -moz-transform: rotateY(120deg) translateZ(259.8px);
+  -ms-transform: rotateY(120deg) translateZ(259.8px);
+  -o-transform: rotateY(120deg) translateZ(259.8px);
+  transform: rotateY(120deg) translateZ(259.8px);
+}
+html[noie] body > section.artworks > section:first-child > section:first-child > section section:nth-child(3) {
+  -webkit-transform: rotateY(240deg) translateZ(259.8px);
+  -moz-transform: rotateY(240deg) translateZ(259.8px);
+  -ms-transform: rotateY(240deg) translateZ(259.8px);
+  -o-transform: rotateY(240deg) translateZ(259.8px);
+  transform: rotateY(240deg) translateZ(259.8px);
+}
+
 body > section {
   padding: 25px 0 116px;
 }
@@ -341,51 +387,6 @@ body > section.index > section:nth-child(2) > .p.right li span {
 }
 body > section.index > section:nth-child(2) > .p.right li span:nth-child(2) {
   bottom: 35px;
-}
-body > section.artworks > section:first-child > section:first-child {
-  -webkit-perspective: 2000px;
-  -moz-perspective: 2000px;
-  -ms-perspective: 2000px;
-  -o-perspective: 2000px;
-  perspective: 2000px;
-}
-body > section.artworks > section:first-child > section:first-child > section {
-  -webkit-transition: -webkit-transform 1.5s;
-  -webkit-transform-style: preserve-3d;
-  -webkit-transform: translateZ(-259.8px);
-  -moz-transition: -moz-transform 1.5s;
-  -moz-transform-style: preserve-3d;
-  -moz-transform: translateZ(-259.8px);
-  -ms-transition: -ms-transform 1.5s;
-  -ms-transform-style: preserve-3d;
-  -ms-transform: translateZ(-259.8px);
-  -o-transition: -o-transform 1.5s;
-  -o-transform-style: preserve-3d;
-  -o-transform: translateZ(-259.8px);
-  transition: transform 1.5s;
-  transform-style: preserve-3d;
-  transform: translateZ(-259.8px);
-}
-body > section.artworks > section:first-child > section:first-child > section section {
-  -webkit-transform: translateZ(259.8px);
-  -moz-transform: translateZ(259.8px);
-  -ms-transform: translateZ(259.8px);
-  -o-transform: translateZ(259.8px);
-  transform: translateZ(259.8px);
-}
-body > section.artworks > section:first-child > section:first-child > section section:nth-child(2) {
-  -webkit-transform: rotateY(120deg) translateZ(259.8px);
-  -moz-transform: rotateY(120deg) translateZ(259.8px);
-  -ms-transform: rotateY(120deg) translateZ(259.8px);
-  -o-transform: rotateY(120deg) translateZ(259.8px);
-  transform: rotateY(120deg) translateZ(259.8px);
-}
-body > section.artworks > section:first-child > section:first-child > section section:nth-child(3) {
-  -webkit-transform: rotateY(240deg) translateZ(259.8px);
-  -moz-transform: rotateY(240deg) translateZ(259.8px);
-  -ms-transform: rotateY(240deg) translateZ(259.8px);
-  -o-transform: rotateY(240deg) translateZ(259.8px);
-  transform: rotateY(240deg) translateZ(259.8px);
 }
 body > section.artworks > section:nth-child(2) > section > a {
   display: block;
@@ -442,10 +443,10 @@ body > section.chapter nav ul:first-child li {
   overflow: hidden;
 }
 body > section.chapter nav ul:first-child li a {
-  padding-left: 90px;
+  padding-left: 120px;
 }
 body > section.chapter nav ul:first-child li a img {
-  width: 76px;
+  width: 105px;
   height: 45px;
   top: 0;
   left: 0;
@@ -457,7 +458,7 @@ body > section.chapter nav ul:first-child li a b {
   line-height: 35px;
 }
 body > section.chapter nav ul:first-child li a b > span {
-  margin-top: -5px;
+  margin-top: -10px;
 }
 body > section.chapter nav ul:nth-child(2) {
   display: inline-block;

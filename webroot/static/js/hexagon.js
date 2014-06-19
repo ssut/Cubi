@@ -116,7 +116,10 @@
   glob(function() {
     $('html').attr('agent', hex.env.agent);
     $('html').attr('version', hex.env.ver);
-    return $('html').attr('os', hex.env.os);
+    $('html').attr('os', hex.env.os);
+    if (hex.env.agent !== 'ie') {
+      return $('html').attr('noie', 'noie');
+    }
   });
 
   def('define', function(args) {
