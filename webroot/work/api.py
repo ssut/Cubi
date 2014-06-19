@@ -37,6 +37,8 @@ from work.models import *
     popular_work_list : 인기 Work 목록
     new_author_list : 신규 Author 목록
     popular_author_list : 인기 Author 목록
+
+    all_work_list : 모든 Work 목록
 '''
 # 최근 업데이트 Chapter 목록
 @require_http_methods(["POST"])
@@ -88,9 +90,19 @@ def popular_author_list(request):
     }
     return HttpResponse(json.dumps(data), content_type='application/json')
 
+# 모든 Work 목록
+@require_http_methods(["POST"])
+@csrf_exempt
+def all_work_list(request):
+    works = Work.objects.all().order_by('-created')
+    data = {
+        'works': [work.json() for work in works]
+    }
+    return HttpResponse(json.dumps(data), content_type='application/json')
 '''
 Work
     work_list : Work 목록
+    work_list_favorite : 즐겨찾는 Work 목록
     work_comment_list : 댓글 목록
     work_comment_add : 댓글 추가
     work_comment_del : 댓글 삭제
@@ -105,6 +117,22 @@ def work_list(request):
 
     data = {
         'works': [work.json() for work in works],
+    }
+
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+# 즐겨찾는 작품 목록
+@require_http_methods(["POST"])
+@csrf_exempt
+def work_list_favorite(request):
+    query_dict = request.POST
+    print query_dict
+    username = query_dict['username']
+    user = User.objects.get(username=username)
+    work_favorites = user.work_favorites
+
+    data = {
+        'works': [work_favorite.work.json() for work_favorite in work_favorites],
     }
 
     return HttpResponse(json.dumps(data), content_type='application/json')
