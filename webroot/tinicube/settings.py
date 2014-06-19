@@ -25,7 +25,7 @@ STATIC_ROOT_PATH = os.path.join(BASE_DIR, 'static_root')
 
 # 서비스용, 로컬 분리
 if not DEBUG or TMP_STAGE:
-    MEDIA_PATH = '/srv/www/tinicube_upload'
+    MEDIA_PATH = '/var/www/tinicube-media'
 else:
     MEDIA_PATH = os.path.join(BASE_DIR, 'media')
 

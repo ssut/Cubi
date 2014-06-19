@@ -17,7 +17,7 @@ def get_path(instance, filename):
     today_str = today.strftime('%Y%m%d')
 
     path = os.path.join(today_str, filename)
-    return path    
+    return path
 
 
 class IntegerRangeField(models.IntegerField):

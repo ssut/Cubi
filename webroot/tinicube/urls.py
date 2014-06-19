@@ -5,6 +5,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+handler404 = 'structure.views.error'
 urlpatterns = patterns(
     '',
 

@@ -128,7 +128,11 @@
   hex.set('artworksConstant', 450 / Math.tan(Math.PI / 3));
 
   def('artworksToggle', function(args) {
-    $('body > section.artworks > section:first-child > section:first-child > section').css('transform', 'translateZ(-' + (hex.get('artworksConstant')) + 'px) rotateY(-' + (hex.get('artworksIterator')) + 'deg)');
+    if ($('[noie]').length) {
+      $('body > section.artworks > section:first-child > section:first-child > section').css('transform', 'translateZ(-' + (hex.get('artworksConstant')) + 'px) rotateY(-' + (hex.get('artworksIterator')) + 'deg)');
+    } else {
+      $('body > section.artworks > section:first-child > section:first-child > section > section').fadeOut().eq(hex.get('artworksIterator') % 360 / 120).fadeIn();
+    }
     return hex.set('artworksIterator', (hex.get('artworksIterator')) + 120);
   });
 
@@ -140,6 +144,12 @@
       if ($('body').height() < $(document).height() && !$('body').hasClass('chapter-view')) {
         return $('html, body').height('100%');
       }
+    });
+  });
+
+  hex.define('artworks', function() {
+    return glob(function() {
+      return $('body').addClass('not-index');
     });
   });
 
@@ -198,6 +208,16 @@
       } else {
         return $(this).html('즐겨찾기 추가');
       }
+    });
+  });
+
+  def('back', function() {
+    return history.back();
+  });
+
+  glob(function() {
+    return $('body > section.my_artwork > section.list-head button').click(function() {
+      return location.href = 'artwork_register.html';
     });
   });
 

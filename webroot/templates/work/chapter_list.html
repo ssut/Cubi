@@ -36,7 +36,9 @@
 							<input type="button" class="ladda-label" value="이미지 변경">
 						</div>
 					</button>
+					{% if chapter.reg_no %}
 					<button class="update-chapter ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">갱신</span></button>
+					{% endif %}
 					<button class="update-chapter-public ladda-button ladda-small" data-id="{{ chapter.id }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">{% if chapter.public %}비{% endif %}공개</span></button>
 					<button class="update-chapter-comment ladda-button ladda-small" data-id="{{ chapter.id }}" data-comment="{{ chapter.description }}" data-color="blue" data-style="zoom-in" data-size="xs"><span class="ladda-label">작가 한마디 수정</span></button>
 					</div>
