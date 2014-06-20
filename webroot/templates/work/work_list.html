@@ -8,9 +8,9 @@
 		<section class="p w900 h345 layer-relative">
 			<section class="p w900 h345 layer">
 				{% for work in works %}
-				{% if work.image_cover_large %}
-				<section class="p alizarin w900 h345 layer"><img src="{{ work.image_cover_large.url }}"></section>
-				{% endif %}
+					{% if work.image_cover_large %}
+					<section class="p alizarin w900 h345 layer"><img src="{{ work.image_cover_large.url }}"></section>
+					{% endif %}
 				{% endfor %}
 			</section>
 		</section>
