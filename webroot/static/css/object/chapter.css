@@ -41,3 +41,7 @@ button.update-chapter-thumbnail div input[type="button"] {
 textarea, input {
 	-webkit-user-select: initial !important;
 }
+
+body > section.chapter nav ul:first-child li a img { width: 76px !important }
+body > section.chapter nav ul:first-child li a {
+padding-left: 95px !important }
