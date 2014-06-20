@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+import grp
 import logging
 import os
+import pwd
 import re
 import urllib
 import urllib2
@@ -74,6 +76,13 @@ def make_directory():
 
     if not os.path.exists(REAL_PATH):
         os.makedirs(REAL_PATH)
+        if not DEBUG:
+            try:
+                uid = pwd.getpwnam('www-data').pw_uid
+                gid = grp.getgrnam('www-data').gr_gid
+                os.chown(REAL_PATH, uid, gid)
+            except:
+                pass
 
 # make_directory에서 지정된 전역변수 path를 이용, MEDIA_PATH를 포함한 저장할 파일명의 path를 반환
 def get_save_path(filename):

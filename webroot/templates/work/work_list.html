@@ -2,14 +2,16 @@
 {% load staticfiles %}
 {% load divisible %}
 
-{% block content %}
+{% block hcontent %}
 <section class="artworks">
 	<section class="p w900 h345 box-align-center m-top15">
 		<section class="p w900 h345 layer-relative">
 			<section class="p w900 h345 layer">
-				<section class="p alizarin w900 h345 layer"><img src="{% static 'img/_.sample01.png' %}"></section>
-				<section class="p emerald w900 h345 layer"><img src="{% static 'img/_.sample02.png' %}"></section>
-				<section class="p amethyst w900 h345 layer"><img src="{% static 'img/_.sample03.png' %}"></section>
+				{% for work in works %}
+					{% if work.image_cover_large %}
+					<section class="p alizarin w900 h345 layer"><img src="{{ work.image_cover_large.url }}"></section>
+					{% endif %}
+				{% endfor %}
 			</section>
 		</section>
 	</section>
