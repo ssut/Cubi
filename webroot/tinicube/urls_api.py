@@ -5,13 +5,16 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns(
+urlpatterns = patterns('',
+    url(r'^version/$', 'tinicube.api.version'),
+)
+urlpatterns += patterns(
     'member.api',
     url(r'^login/$', 'login'),
     url(r'^signup/$', 'signup'),
-    url(r'^author_info/$', 'author_info'),
-    url(r'^all_author_list/$', 'all_author_list'),
-    url(r'^favorite_author_list/$', 'favorite_author_list'),
+    url(r'^author/info/$', 'author_info'),
+    url(r'^author/list/$', 'all_author_list'),
+    url(r'^author/list/favorite/$', 'favorite_author_list'),
 )
 
 urlpatterns += patterns(
@@ -23,6 +26,7 @@ urlpatterns += patterns(
     url(r'^tinicube/author/poplist/$', 'popular_author_list'),
 
     url(r'^work/list/$', 'work_list'),
+    url(r'^work/list/favorite/$', 'work_list_favorite'),
     url(r'^work/comment/list/$', 'work_comment_list'),
     url(r'^work/comment/add/$', 'work_comment_add'),
     url(r'^work/comment/del/$', 'work_comment_del'),
